@@ -1,0 +1,162 @@
+{
+  "lessons": [
+    {
+      "id": "lesson-01",
+      "title": "Pengantar Islam dan Sains",
+      "course": "Islam dan Sains",
+      "description": "Memahami ruang perjumpaan agama dan ilmu pengetahuan.",
+      "url": "media/pengantar-islam-dan-sains.html"
+    },
+    {
+      "id": "lesson-02",
+      "title": "Pengantar Ekonometrika",
+      "course": "Ekonometrika",
+      "description": "Mengenal pertanyaan, bukti, dan pemodelan ekonometrika.",
+      "url": "media/pengantar-ekonometrika-final.html"
+    },
+    {
+      "id": "lesson-03",
+      "title": "Pengantar Sistem Informasi Manajemen",
+      "course": "Sistem Informasi Manajemen",
+      "description": "Membedakan aplikasi, informasi, dan sistem untuk keputusan.",
+      "url": "media/media-pembelajaran-pengantar-sim.html"
+    },
+    {
+      "id": "lesson-04",
+      "title": "Islam dan Sains · Pertemuan 1–3",
+      "course": "Islam dan Sains",
+      "description": "Media presentasi dan diskusi untuk tiga pertemuan.",
+      "url": "media/islam-dan-sains-tiga-pertemuan.html"
+    },
+    {
+      "id": "lesson-05",
+      "title": "Sistem Informasi Manajemen · Materi lengkap",
+      "course": "Sistem Informasi Manajemen",
+      "description": "Media pembelajaran dari data hingga keputusan.",
+      "url": "media/sistem-informasi-manajemen-lengkap.html"
+    },
+    {
+      "id": "lesson-06",
+      "title": "Kontrak Perkuliahan 2026 Ganjil",
+      "course": "Perkuliahan",
+      "description": "Aturan, pengalaman belajar, dan mekanisme penilaian.",
+      "url": "media/kontrak-perkuliahan-2026-ganjil.html"
+    },
+    {
+      "id": "lesson-07",
+      "title": "Metodologi Penelitian Kuantitatif · Bagian 2",
+      "course": "Metodologi Penelitian Kuantitatif",
+      "description": "Variabel, instrumen, populasi, dan pengambilan sampel.",
+      "url": "media/metodologi-penelitian-kuantitatif-bagian-2.html"
+    },
+    {
+      "id": "lesson-08",
+      "title": "Metodologi Penelitian Kuantitatif · Bagian 1",
+      "course": "Metodologi Penelitian Kuantitatif",
+      "description": "Dari topik dan celah penelitian hingga pilihan metode.",
+      "url": "media/metodologi-penelitian-kuantitatif-bagian-1.html"
+    },
+    {
+      "id": "lesson-09",
+      "title": "Pengantar Metodologi Penelitian Kuantitatif",
+      "course": "Metodologi Penelitian Kuantitatif",
+      "description": "Mengubah masalah nyata menjadi pertanyaan penelitian.",
+      "url": "media/pengantar-metodologi-penelitian-kuantitatif.html"
+    },
+    {
+      "id": "lesson-10",
+      "title": "Islam dan Sains · Pertemuan 5–7",
+      "course": "Islam dan Sains",
+      "description": "Ilmu, metode, dan ekosistem peradaban.",
+      "url": "media/islam-sains-pertemuan-5-7.html"
+    },
+    {
+      "id": "lesson-11",
+      "title": "Usul Fikih · Pertemuan 5–7",
+      "course": "Usul Fikih",
+      "description": "Sumber hukum yang diperselisihkan kehujahannya.",
+      "url": "media/usul-fikih-pertemuan-5-7.html"
+    },
+    {
+      "id": "lesson-12",
+      "title": "Islam dan Sains · Pertemuan 9–15",
+      "course": "Islam dan Sains",
+      "description": "Alam, kehidupan, dan tanggung jawab manusia.",
+      "url": "media/islam-sains-pertemuan-9-15.html"
+    }
+  ],
+  "evaluations": [
+    {
+      "id": "24c3e0e7-1949-469c-92a9-476eaff6abb6",
+      "title": "Usul Fikih · Tes Formatif 1",
+      "course": "Usul Fikih",
+      "wordpressSite": "https://najiblearningcenter.wordpress.com",
+      "postSlug": "rb-access-24c3e0e7-1949-469c-92a9-476eaff6abb6",
+      "encryptedFile": "data/24c3e0e7-1949-469c-92a9-476eaff6abb6.json",
+      "accessConfigured": false
+    },
+    {
+      "id": "28556bae-5bd8-4453-a101-da5d3d6fc2fc",
+      "title": "Ekonometrika · Evaluasi Materi Dasar",
+      "course": "Ekonometrika",
+      "wordpressSite": "https://najiblearningcenter.wordpress.com",
+      "postSlug": "rb-access-28556bae-5bd8-4453-a101-da5d3d6fc2fc",
+      "encryptedFile": "data/28556bae-5bd8-4453-a101-da5d3d6fc2fc.json",
+      "accessConfigured": false
+    },
+    {
+      "id": "7776338a-7af5-4570-93d5-4245c4dfd1e5",
+      "title": "Metodologi Penelitian Kuantitatif · Tes Formatif 2",
+      "course": "Metodologi Penelitian Kuantitatif",
+      "wordpressSite": "https://najiblearningcenter.wordpress.com",
+      "postSlug": "rb-access-7776338a-7af5-4570-93d5-4245c4dfd1e5",
+      "encryptedFile": "data/7776338a-7af5-4570-93d5-4245c4dfd1e5.json",
+      "accessConfigured": false
+    },
+    {
+      "id": "7a958c87-c8f4-450b-99d5-14833065cb41",
+      "title": "Islam dan Sains · Evaluasi Materi 1–3",
+      "course": "Islam dan Sains",
+      "wordpressSite": "https://najiblearningcenter.wordpress.com",
+      "postSlug": "rb-access-7a958c87-c8f4-450b-99d5-14833065cb41",
+      "encryptedFile": "data/7a958c87-c8f4-450b-99d5-14833065cb41.json",
+      "accessConfigured": false
+    },
+    {
+      "id": "a1bda74c-cdc6-4fc5-a3c6-3d92264a9ea9",
+      "title": "Metodologi Penelitian Kuantitatif · Evaluasi Bagian 1",
+      "course": "Metodologi Penelitian Kuantitatif",
+      "wordpressSite": "https://najiblearningcenter.wordpress.com",
+      "postSlug": "rb-access-a1bda74c-cdc6-4fc5-a3c6-3d92264a9ea9",
+      "encryptedFile": "data/a1bda74c-cdc6-4fc5-a3c6-3d92264a9ea9.json",
+      "accessConfigured": false
+    },
+    {
+      "id": "a78cdf39-0d29-4822-82ae-d54b9dc02a0a",
+      "title": "Islam dan Sains · Evaluasi Pertemuan 9–12",
+      "course": "Islam dan Sains",
+      "wordpressSite": "https://najiblearningcenter.wordpress.com",
+      "postSlug": "rb-access-a78cdf39-0d29-4822-82ae-d54b9dc02a0a",
+      "encryptedFile": "data/a78cdf39-0d29-4822-82ae-d54b9dc02a0a.json",
+      "accessConfigured": false
+    },
+    {
+      "id": "0f57761c-70e9-4c95-a191-dad25bd3602e",
+      "title": "Islam dan Sains · Evaluasi Pertemuan 5–7",
+      "course": "Islam dan Sains",
+      "wordpressSite": "https://najiblearningcenter.wordpress.com",
+      "postSlug": "rb-access-0f57761c-70e9-4c95-a191-dad25bd3602e",
+      "encryptedFile": "data/0f57761c-70e9-4c95-a191-dad25bd3602e.json",
+      "accessConfigured": false
+    },
+    {
+      "id": "37951d24-0e43-4283-9ca5-3cb1997631e4",
+      "title": "Sistem Informasi Manajemen · Evaluasi Materi 1–3",
+      "course": "Sistem Informasi Manajemen",
+      "wordpressSite": "https://najiblearningcenter.wordpress.com",
+      "postSlug": "rb-access-37951d24-0e43-4283-9ca5-3cb1997631e4",
+      "encryptedFile": "data/37951d24-0e43-4283-9ca5-3cb1997631e4.json",
+      "accessConfigured": false
+    }
+  ]
+}

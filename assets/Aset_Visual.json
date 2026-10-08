@@ -1,0 +1,28 @@
+{
+  "date": "2026-10-07",
+  "mode": "generate",
+  "assets": [
+    {
+      "file": "header-najib.png",
+      "origin": "Foto lampiran pengguna; dipakai tanpa mengubah isinya."
+    },
+    {
+      "file": "logo-najib.png",
+      "origin": "Gambar hasil generasi AI",
+      "transparent_background": true,
+      "prompt": "Create a refined, compact personal education website logo icon for Najib Learning Center. A single elegant capital N, constructed from confident clean gold strokes, subtly integrated with the outline of an open book. Flat vector-like geometry, polished editorial identity, high contrast when placed on a near-black website. Warm gold #E5BD62, a very small restrained deep red accent at the book hinge. No full site name, no additional words, no mockup, no gradients, no shadows, no 3D. Transparent background. Centered square composition with generous transparent padding. Icon must remain clear at 48px. Professional, scholarly, personal, contemporary."
+    },
+    {
+      "file": "ilustrasi-catatan.png",
+      "origin": "Gambar hasil generasi AI",
+      "transparent_background": false,
+      "prompt": "Create a premium editorial photograph illustration for a personal Indonesian scholar's journal website. Landscape 3:2 composition. A rich near-black writing desk with a beautiful blank ivory notebook open in the foreground, a gold fountain pen laid diagonally on the right page, a closed black cloth book beneath, and one restrained oxblood red ribbon bookmark. Warm subtle gold light from the upper left illuminates the paper edges. Deep black background, elegant realistic materials, intimate quiet atmosphere, refined high contrast black and gold with very small red detail. Composition concentrated at center and lower half, dark breathing room around objects. No people, no hands, no letters, no written text, no labels, no logos, no watermarks."
+    },
+    {
+      "file": "ilustrasi-ilmu.png",
+      "origin": "Gambar hasil generasi AI",
+      "transparent_background": false,
+      "prompt": "Create a refined landscape 3:2 educational editorial illustration for an Indonesian university learning website. Deep matte black and charcoal background. An elegant open book in the lower middle sends fine luminous warm gold lines upward into a few abstract connected geometric points, a smooth statistical curve, and subtle outlined circles. A small muted red line provides one accent. Clean confident composition, sophisticated geometric 3D paper-like forms with restrained cinematic lighting, warm gold #E5BD62, ivory paper, almost black background. Not busy, not childish, not neon. No people, no text, no words, no numbers, no logos, no watermarks. Objects separated clearly with generous negative space. Looks beautiful alongside a real portrait in a black and gold scholarly blog."
+    }
+  ]
+}

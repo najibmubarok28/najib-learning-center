@@ -1,0 +1,6 @@
+*.xml
+private/
+source-evaluations/
+*key*
+*kunci*
+*password*
