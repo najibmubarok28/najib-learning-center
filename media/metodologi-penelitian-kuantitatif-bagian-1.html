@@ -1,0 +1,1674 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#120e0a">
+  <meta name="color-scheme" content="dark">
+  <title>Metodologi Penelitian Kuantitatif — Bagian 1 | Najib Mubarok, M.Sc.</title>
+  <style>
+    :root {
+      --bg: #120e0a;
+      --bg-2: #1a130d;
+      --panel: #211810;
+      --panel-2: #2b2016;
+      --panel-3: #342719;
+      --gold: #d5a84d;
+      --gold-2: #f0c875;
+      --gold-3: #8e682e;
+      --cream: #f5ead7;
+      --cream-2: #d8c7aa;
+      --muted: #b6a68e;
+      --line: rgba(240, 200, 117, .21);
+      --teal: #76aa98;
+      --blue: #7f9ec6;
+      --red: #c67161;
+      --purple: #9c82b7;
+      --green: #93b66e;
+      --shadow: 0 24px 70px rgba(0, 0, 0, .38);
+      --ease: cubic-bezier(.2, .82, .2, 1);
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 15% 15%, rgba(213, 168, 77, .09), transparent 28%),
+        radial-gradient(circle at 86% 84%, rgba(118, 170, 152, .07), transparent 26%),
+        #090705;
+      color: var(--cream);
+      font-family: Aptos, Inter, "Segoe UI", Helvetica, Arial, sans-serif;
+    }
+
+    button, a { font: inherit; }
+    button { color: inherit; }
+
+    button:focus-visible,
+    a:focus-visible {
+      outline: 4px solid rgba(240, 200, 117, .38);
+      outline-offset: 4px;
+    }
+
+    #shell {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+    }
+
+    #deck {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 1600px;
+      height: 900px;
+      transform: translate(-50%, -50%) scale(1);
+      transform-origin: center center;
+      overflow: hidden;
+      isolation: isolate;
+      background:
+        linear-gradient(135deg, rgba(255,255,255,.015), transparent 36%),
+        radial-gradient(circle at 8% 8%, rgba(213,168,77,.09), transparent 28%),
+        radial-gradient(circle at 92% 84%, rgba(118,170,152,.055), transparent 26%),
+        linear-gradient(145deg, #17110c 0%, #100c09 58%, #18120d 100%);
+      box-shadow: 0 32px 110px rgba(0,0,0,.62);
+    }
+
+    #deck::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      pointer-events: none;
+      opacity: .12;
+      background-image:
+        linear-gradient(rgba(240,200,117,.22) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(240,200,117,.17) 1px, transparent 1px);
+      background-size: 80px 80px;
+      mask-image: radial-gradient(circle at 50% 45%, black, transparent 82%);
+    }
+
+    #ambient {
+      position: absolute;
+      inset: 0;
+      z-index: 2;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    .ambient-orbit {
+      position: absolute;
+      width: 600px;
+      height: 600px;
+      border: 1px solid rgba(240,200,117,.09);
+      border-radius: 50%;
+      animation: ambient-spin 42s linear infinite;
+    }
+
+    .ambient-orbit.one { left: -370px; top: -330px; }
+    .ambient-orbit.two { right: -430px; bottom: -390px; animation-direction: reverse; animation-duration: 54s; }
+    .ambient-orbit::before,
+    .ambient-orbit::after {
+      content: "";
+      position: absolute;
+      border-radius: 50%;
+      background: var(--gold);
+      box-shadow: 0 0 28px rgba(213,168,77,.45);
+    }
+    .ambient-orbit::before { width: 7px; height: 7px; top: 47px; left: 93px; }
+    .ambient-orbit::after { width: 4px; height: 4px; right: 33px; top: 245px; }
+    @keyframes ambient-spin { to { transform: rotate(360deg); } }
+
+    .scene {
+      position: absolute;
+      inset: 0;
+      z-index: 5;
+      display: flex;
+      flex-direction: column;
+      visibility: hidden;
+      opacity: 0;
+      pointer-events: none;
+      padding: 58px 76px 94px;
+      transform: translateX(22px);
+    }
+
+    .scene.active {
+      visibility: visible;
+      opacity: 1;
+      pointer-events: auto;
+      transform: none;
+      animation: scene-in .42s ease both;
+    }
+
+    .scene.active.from-left { animation-name: scene-in-left; }
+
+    .scene.leaving-next,
+    .scene.leaving-prev {
+      visibility: visible;
+      pointer-events: none;
+      animation: scene-out .25s ease both;
+    }
+
+    .scene.leaving-prev { animation-name: scene-out-right; }
+
+    @keyframes scene-in {
+      from { opacity: 0; transform: translateX(28px); }
+      to { opacity: 1; transform: none; }
+    }
+    @keyframes scene-in-left {
+      from { opacity: 0; transform: translateX(-28px); }
+      to { opacity: 1; transform: none; }
+    }
+    @keyframes scene-out { to { opacity: 0; transform: translateX(-22px); } }
+    @keyframes scene-out-right { to { opacity: 0; transform: translateX(22px); } }
+
+    [data-anim] { opacity: 0; transform: translateY(18px); }
+    .scene.active [data-anim] {
+      animation: item-in .68s var(--ease) forwards;
+      animation-delay: var(--d, 80ms);
+    }
+    @keyframes item-in { to { opacity: 1; transform: none; } }
+
+    h1, h2, h3, h4, p { margin-top: 0; }
+    p { margin-bottom: 0; }
+    h1, h2, h3, h4 { text-wrap: balance; }
+
+    .kicker {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      width: fit-content;
+      margin-bottom: 13px;
+      color: var(--gold-2);
+      font-size: 17px;
+      font-weight: 800;
+      letter-spacing: .15em;
+      text-transform: uppercase;
+    }
+    .kicker::before { content: ""; width: 34px; height: 3px; border-radius: 99px; background: var(--gold); }
+
+    .scene h2 {
+      margin-bottom: 10px;
+      max-width: 1300px;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 47px;
+      line-height: 1.07;
+      letter-spacing: -.025em;
+      font-weight: 700;
+    }
+
+    .lead {
+      max-width: 1250px;
+      color: var(--cream-2);
+      font-size: 22px;
+      line-height: 1.42;
+    }
+
+    .accent { color: var(--gold-2); }
+    .teal { color: var(--teal); }
+    .red { color: var(--red); }
+    .muted { color: var(--muted); }
+
+    .scene-no {
+      position: absolute;
+      right: 72px;
+      top: 38px;
+      color: rgba(240,200,117,.07);
+      font: 800 110px/1 Georgia, serif;
+      letter-spacing: -.06em;
+      user-select: none;
+    }
+
+    .panel {
+      background: linear-gradient(150deg, rgba(46,34,22,.94), rgba(28,20,13,.93));
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      box-shadow: var(--shadow);
+    }
+
+    .note {
+      color: var(--muted);
+      font-size: 16px;
+      line-height: 1.35;
+    }
+
+    .citation {
+      color: #a89473;
+      font-size: 15px;
+      line-height: 1.35;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 32px;
+      padding: 6px 12px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(213,168,77,.07);
+      color: var(--gold-2);
+      font-size: 15px;
+      font-weight: 750;
+      letter-spacing: .02em;
+    }
+
+    .scene-footnote {
+      position: absolute;
+      left: 76px;
+      bottom: 66px;
+      color: #8f806a;
+      font-size: 14px;
+    }
+
+    /* COVER */
+    #s1 { padding: 64px 78px 88px; }
+    .cover-layout {
+      flex: 1;
+      display: grid;
+      grid-template-columns: 1.05fr .95fr;
+      gap: 56px;
+      align-items: center;
+    }
+    .cover-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 15px;
+      margin-bottom: 24px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(213,168,77,.07);
+      color: var(--gold-2);
+      font-size: 16px;
+      font-weight: 750;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+    }
+    .cover-chip i { width: 7px; height: 7px; border-radius: 50%; background: var(--gold-2); box-shadow: 0 0 16px var(--gold); }
+    .cover-title {
+      margin: 0 0 18px;
+      max-width: 780px;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 71px;
+      line-height: .98;
+      letter-spacing: -.035em;
+      font-weight: 700;
+    }
+    .cover-title span { display: block; color: var(--gold-2); font-size: .75em; margin-top: 12px; }
+    .cover-subtitle { color: var(--cream-2); font-size: 25px; line-height: 1.42; }
+    .cover-author { margin-top: 52px; display: flex; align-items: center; gap: 17px; }
+    .author-mark { width: 4px; height: 57px; border-radius: 9px; background: linear-gradient(var(--gold-2), var(--gold-3)); }
+    .cover-author strong { display: block; font-family: Georgia, serif; font-size: 23px; }
+    .cover-author span { display: block; margin-top: 5px; color: var(--muted); font-size: 17px; letter-spacing: .05em; }
+
+    .journey {
+      position: relative;
+      height: 620px;
+      display: grid;
+      place-items: center;
+    }
+    .journey-ring {
+      position: absolute;
+      width: 540px;
+      height: 540px;
+      border: 1px solid rgba(240,200,117,.21);
+      border-radius: 50%;
+      animation: ring-breathe 5s ease-in-out infinite;
+    }
+    .journey-ring::before,
+    .journey-ring::after {
+      content: "";
+      position: absolute;
+      inset: 54px;
+      border: 1px dashed rgba(240,200,117,.16);
+      border-radius: 50%;
+    }
+    .journey-ring::after { inset: 112px; border-style: solid; opacity: .7; }
+    @keyframes ring-breathe { 50% { transform: scale(1.035); opacity: .72; } }
+    .journey-core {
+      position: relative;
+      z-index: 3;
+      width: 185px;
+      height: 185px;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      background: radial-gradient(circle at 38% 35%, #5a4327, #23180e 68%);
+      border: 1px solid rgba(240,200,117,.43);
+      box-shadow: 0 0 70px rgba(213,168,77,.16), inset 0 0 40px rgba(240,200,117,.08);
+      text-align: center;
+      font: 700 24px/1.15 Georgia, serif;
+      color: var(--gold-2);
+    }
+    .journey-node {
+      position: absolute;
+      z-index: 4;
+      min-width: 143px;
+      padding: 13px 18px;
+      border: 1px solid var(--line);
+      border-radius: 15px;
+      background: rgba(31,23,15,.93);
+      box-shadow: 0 14px 34px rgba(0,0,0,.32);
+      color: var(--cream);
+      font-size: 17px;
+      font-weight: 760;
+      text-align: center;
+      animation: node-float 4.2s ease-in-out infinite;
+    }
+    .journey-node b { display: block; margin-bottom: 4px; color: var(--gold-2); font-size: 13px; letter-spacing: .12em; }
+    .journey-node.n1 { left: 5px; top: 75px; }
+    .journey-node.n2 { right: 8px; top: 75px; animation-delay: -.7s; }
+    .journey-node.n3 { right: -14px; top: 278px; animation-delay: -1.4s; }
+    .journey-node.n4 { right: 44px; bottom: 34px; animation-delay: -2.1s; }
+    .journey-node.n5 { left: 43px; bottom: 34px; animation-delay: -2.8s; }
+    .journey-node.n6 { left: -22px; top: 278px; animation-delay: -3.5s; }
+    @keyframes node-float { 50% { transform: translateY(-9px); border-color: rgba(240,200,117,.43); } }
+    .journey-tracer {
+      position: absolute;
+      z-index: 5;
+      width: 13px;
+      height: 13px;
+      left: calc(50% - 6px);
+      top: calc(50% - 270px);
+      border-radius: 50%;
+      background: var(--gold-2);
+      box-shadow: 0 0 26px var(--gold);
+      transform-origin: 6px 270px;
+      animation: tracer 8s linear infinite;
+    }
+    @keyframes tracer { to { transform: rotate(360deg); } }
+
+    /* SCENE 2 */
+    .ccte-board { margin-top: 20px; display: grid; grid-template-rows: 235px 210px; gap: 15px; }
+    .topic-bank { position: relative; padding: 18px 18px 14px; overflow: hidden; }
+    .bank-label { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+    .bank-label strong { font-size: 18px; }
+    .topic-list { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; }
+    .topic-card {
+      min-height: 73px;
+      padding: 10px 11px;
+      border: 1px solid rgba(240,200,117,.21);
+      border-radius: 13px;
+      background: linear-gradient(145deg, rgba(57,42,26,.96), rgba(36,26,17,.96));
+      color: var(--cream);
+      font-size: 15px;
+      font-weight: 690;
+      line-height: 1.22;
+      text-align: left;
+      cursor: pointer;
+      transition: border-color .2s, background .2s, box-shadow .2s;
+    }
+    .topic-card:hover { border-color: rgba(240,200,117,.58); box-shadow: 0 10px 26px rgba(0,0,0,.25); }
+    .topic-card small { display: block; margin-top: 4px; color: var(--muted); font-size: 12px; font-weight: 600; }
+    .ccte-bins { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+    .ccte-bin {
+      position: relative;
+      min-width: 0;
+      padding: 14px 14px 10px;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: rgba(27,20,13,.8);
+      overflow: hidden;
+    }
+    .ccte-bin::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 4px; background: var(--bin-color); opacity: .85; }
+    .ccte-bin h3 { margin: 0 0 5px; color: var(--bin-color); font: 700 21px/1 Georgia, serif; }
+    .ccte-bin p { color: var(--muted); font-size: 13px; line-height: 1.25; }
+    .bin-count { position: absolute; right: 12px; top: 11px; width: 30px; height: 30px; display: grid; place-items: center; border-radius: 50%; background: rgba(255,255,255,.055); font-size: 14px; font-weight: 800; }
+    .bin-items { margin-top: 10px; display: flex; flex-wrap: wrap; gap: 6px; max-height: 94px; overflow: hidden; }
+    .bin-pill { max-width: 100%; padding: 5px 8px; border: 1px solid rgba(240,200,117,.27); border-radius: 8px; background: rgba(255,255,255,.035); color: var(--cream-2); font-size: 12px; line-height: 1.18; }
+    .ccte-instruction { position: absolute; right: 76px; bottom: 67px; color: var(--gold-2); font-size: 14px; font-weight: 750; }
+
+    /* LENSES */
+    .lens-workspace { margin-top: 23px; flex: 1; display: grid; grid-template-columns: 460px 1fr; gap: 25px; min-height: 0; }
+    .lens-menu { display: grid; gap: 11px; align-content: start; }
+    .lens-button {
+      position: relative;
+      min-height: 79px;
+      padding: 14px 16px 14px 69px;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: rgba(39,29,19,.83);
+      text-align: left;
+      cursor: pointer;
+      transition: .25s ease;
+    }
+    .lens-button:hover,
+    .lens-button.active { border-color: rgba(240,200,117,.57); background: rgba(58,43,27,.92); transform: translateX(7px); }
+    .lens-button .num { position: absolute; left: 14px; top: 14px; width: 39px; height: 39px; display: grid; place-items: center; border-radius: 50%; background: rgba(213,168,77,.1); border: 1px solid var(--line); color: var(--gold-2); font: 700 18px Georgia, serif; }
+    .lens-button strong { display: block; font-size: 18px; line-height: 1.15; }
+    .lens-button span { display: block; margin-top: 5px; color: var(--muted); font-size: 14px; line-height: 1.25; }
+    .lens-display { position: relative; min-height: 465px; padding: 33px 36px; overflow: hidden; }
+    .lens-display::before { content: ""; position: absolute; inset: 0; background: radial-gradient(circle at var(--lens-x, 25%) var(--lens-y, 25%), rgba(240,200,117,.12), transparent 24%); transition: background .65s var(--ease); }
+    .lens-orb { position: absolute; left: 40px; top: 42px; width: 96px; height: 96px; border: 3px solid rgba(240,200,117,.63); border-radius: 50%; box-shadow: inset 0 0 35px rgba(213,168,77,.13), 0 0 26px rgba(213,168,77,.12); transition: transform .75s var(--ease), width .55s var(--ease), height .55s var(--ease); }
+    .lens-orb::after { content: ""; position: absolute; width: 55px; height: 8px; right: -40px; bottom: -15px; border-radius: 10px; background: var(--gold); transform: rotate(45deg); transform-origin: left center; }
+    .lens-content { position: relative; z-index: 2; margin-left: 150px; }
+    .lens-content .mini { color: var(--gold-2); font-size: 15px; font-weight: 800; letter-spacing: .11em; text-transform: uppercase; }
+    .lens-content h3 { margin: 10px 0 16px; font: 700 33px/1.1 Georgia, serif; }
+    .lens-content .case { min-height: 100px; padding: 17px 19px; border-left: 4px solid var(--gold); border-radius: 0 15px 15px 0; background: rgba(213,168,77,.07); color: var(--cream-2); font-size: 20px; line-height: 1.38; }
+    .lens-content .question { margin-top: 20px; padding-top: 18px; border-top: 1px solid var(--line); color: var(--cream); font-size: 21px; line-height: 1.38; }
+    .lens-content .question b { color: var(--teal); }
+
+    .domain-switch { display: flex; gap: 8px; margin: 19px 0 2px; }
+    .domain-switch button {
+      padding: 8px 13px;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: transparent;
+      color: var(--muted);
+      font-size: 14px;
+      font-weight: 750;
+      cursor: pointer;
+    }
+    .domain-switch button.active { color: var(--bg); background: var(--gold-2); border-color: var(--gold-2); }
+
+    /* LITERATURE MACHINE */
+    .lit-layout { margin-top: 24px; flex: 1; display: grid; grid-template-columns: 370px 1fr; gap: 26px; min-height: 0; }
+    .phenomenon-card { padding: 25px; align-self: stretch; position: relative; overflow: hidden; }
+    .phenomenon-card .overline { color: var(--teal); font-size: 15px; font-weight: 800; letter-spacing: .11em; text-transform: uppercase; }
+    .phenomenon-card h3 { margin: 14px 0 16px; font: 700 29px/1.16 Georgia, serif; }
+    .phenomenon-card p { color: var(--cream-2); font-size: 18px; line-height: 1.45; }
+    .raw-stamp { position: absolute; left: 24px; bottom: 25px; padding: 8px 12px; border: 1px dashed var(--red); border-radius: 8px; color: var(--red); font-size: 14px; font-weight: 800; transform: rotate(-3deg); }
+    .lit-machine { position: relative; padding: 25px 24px; overflow: hidden; }
+    .machine-track { position: relative; height: 108px; margin: 18px 15px 9px; }
+    .machine-track::before { content: ""; position: absolute; left: 4%; right: 4%; top: 51px; height: 4px; border-radius: 9px; background: linear-gradient(90deg, var(--gold-3), var(--gold-2), var(--teal)); opacity: .48; }
+    .machine-stations { position: relative; z-index: 2; display: grid; grid-template-columns: repeat(6, 1fr); gap: 7px; }
+    .station { display: grid; justify-items: center; gap: 8px; color: var(--muted); font-size: 14px; font-weight: 700; text-align: center; cursor: pointer; }
+    .station-dot { width: 50px; height: 50px; display: grid; place-items: center; border: 1px solid var(--line); border-radius: 50%; background: var(--panel); color: var(--gold-2); transition: .3s ease; }
+    .station.active .station-dot { background: var(--gold-2); color: var(--bg); transform: scale(1.12); box-shadow: 0 0 28px rgba(213,168,77,.28); }
+    .lit-token { position: absolute; z-index: 4; width: 25px; height: 25px; left: 0; top: 39px; border: 4px solid var(--bg); border-radius: 50%; background: var(--gold-2); box-shadow: 0 0 25px rgba(240,200,117,.72); transition: transform .8s var(--ease); pointer-events: none; }
+    .lit-output { min-height: 190px; margin-top: 10px; padding: 22px 25px; border: 1px solid var(--line); border-radius: 17px; background: rgba(0,0,0,.14); }
+    .lit-output .step { color: var(--gold-2); font-size: 15px; font-weight: 850; letter-spacing: .1em; text-transform: uppercase; }
+    .lit-output h3 { margin: 9px 0 11px; font: 700 28px/1.1 Georgia, serif; }
+    .lit-output p { color: var(--cream-2); font-size: 18px; line-height: 1.42; }
+    .source-strip { margin-top: 14px; display: flex; flex-wrap: wrap; gap: 7px; }
+    .source-strip .tag { min-height: 28px; font-size: 13px; }
+
+    /* TWO GAPS */
+    .gap-comparison { margin-top: 30px; flex: 1; display: grid; grid-template-columns: 1fr 210px 1fr; gap: 26px; align-items: stretch; min-height: 0; }
+    .gap-card { padding: 30px; position: relative; overflow: hidden; }
+    .gap-card .label { color: var(--gold-2); font-size: 15px; font-weight: 850; letter-spacing: .12em; text-transform: uppercase; }
+    .gap-card h3 { margin: 12px 0 19px; font: 700 34px/1.1 Georgia, serif; }
+    .gap-equation { display: grid; grid-template-columns: 1fr 44px 1fr; align-items: center; gap: 7px; min-height: 95px; }
+    .gap-state { padding: 15px 10px; border: 1px solid var(--line); border-radius: 12px; background: rgba(255,255,255,.025); text-align: center; font-size: 17px; font-weight: 750; line-height: 1.25; }
+    .gap-symbol { color: var(--red); font-size: 34px; text-align: center; }
+    .gap-card ul { margin: 20px 0 0; padding-left: 23px; color: var(--cream-2); font-size: 18px; line-height: 1.48; }
+    .gap-card li + li { margin-top: 7px; }
+    .gap-bridge { position: relative; display: grid; place-items: center; }
+    .bridge-line { width: 100%; height: 9px; border-radius: 10px; background: repeating-linear-gradient(90deg, var(--gold) 0 24px, transparent 24px 39px); opacity: .56; }
+    .bridge-lens { position: absolute; width: 77px; height: 77px; display: grid; place-items: center; border: 2px solid var(--gold-2); border-radius: 50%; background: var(--panel); color: var(--gold-2); font-size: 32px; box-shadow: 0 0 32px rgba(213,168,77,.22); animation: bridge-scan 4.8s ease-in-out infinite; }
+    @keyframes bridge-scan { 0%,100% { transform: translateX(-62px) rotate(-8deg); } 50% { transform: translateX(62px) rotate(8deg); } }
+    .gap-verdict { position: absolute; left: 50%; bottom: 108px; transform: translateX(-50%); width: 780px; padding: 14px 24px; border: 1px solid rgba(240,200,117,.34); border-radius: 999px; background: #261c12; text-align: center; color: var(--gold-2); font: 700 21px/1.2 Georgia, serif; }
+
+    /* FRICTION */
+    .friction-layout { margin-top: 20px; flex: 1; display: grid; grid-template-columns: 390px 1fr; gap: 24px; min-height: 0; }
+    .friction-tabs { display: grid; gap: 9px; align-content: start; }
+    .friction-tab {
+      padding: 14px 15px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: rgba(39,29,19,.82);
+      text-align: left;
+      cursor: pointer;
+      transition: .25s ease;
+    }
+    .friction-tab.active { transform: translateX(8px); border-color: rgba(240,200,117,.62); background: rgba(66,48,29,.94); }
+    .friction-tab b { color: var(--gold-2); font-size: 15px; letter-spacing: .04em; }
+    .friction-tab span { display: block; margin-top: 3px; color: var(--cream-2); font-size: 16px; line-height: 1.24; }
+    .friction-stage { position: relative; overflow: hidden; padding: 28px 31px; }
+    .friction-visual { position: relative; height: 205px; margin-bottom: 17px; }
+    .f-block { position: absolute; top: 45px; width: 245px; min-height: 112px; display: grid; place-items: center; padding: 17px; border: 1px solid var(--line); border-radius: 18px; background: rgba(255,255,255,.035); text-align: center; font-size: 19px; font-weight: 750; line-height: 1.27; transition: transform .75s var(--ease), opacity .5s ease, width .6s var(--ease), top .6s var(--ease); }
+    .f-block.real { left: 38px; border-color: rgba(118,170,152,.45); }
+    .f-block.lit { right: 38px; border-color: rgba(127,158,198,.45); }
+    .f-block small { display: block; margin-top: 6px; color: var(--muted); font-size: 13px; font-weight: 600; }
+    .friction-link { position: absolute; left: 315px; right: 315px; top: 98px; height: 6px; border-radius: 8px; background: var(--red); transform-origin: center; transition: .75s var(--ease); }
+    .friction-mark { position: absolute; left: 50%; top: 76px; transform: translateX(-50%); width: 52px; height: 52px; display: grid; place-items: center; border-radius: 50%; background: var(--panel); border: 2px solid var(--red); color: var(--red); font-size: 25px; font-weight: 850; transition: .6s var(--ease); }
+    .friction-copy { min-height: 185px; padding: 20px 23px; border: 1px solid var(--line); border-radius: 16px; background: rgba(0,0,0,.14); }
+    .friction-copy h3 { margin: 0 0 10px; font: 700 29px/1.1 Georgia, serif; color: var(--gold-2); }
+    .friction-copy p { color: var(--cream-2); font-size: 18px; line-height: 1.4; }
+    .route-chip { display: inline-flex; align-items: center; gap: 8px; margin-top: 14px; padding: 8px 13px; border-radius: 999px; background: rgba(118,170,152,.1); border: 1px solid rgba(118,170,152,.3); color: var(--teal); font-size: 15px; font-weight: 800; }
+
+    /* ROUTER */
+    .router { position: relative; flex: 1; margin-top: 22px; min-height: 0; }
+    .route-center {
+      position: absolute;
+      z-index: 4;
+      left: 50%; top: 49%;
+      width: 205px; height: 205px;
+      transform: translate(-50%,-50%);
+      display: grid; place-items: center;
+      padding: 22px;
+      border-radius: 50%;
+      border: 1px solid rgba(240,200,117,.48);
+      background: radial-gradient(circle at 35% 30%, #554028, #21170e 68%);
+      box-shadow: 0 0 70px rgba(213,168,77,.15);
+      text-align: center;
+      font: 700 26px/1.1 Georgia, serif;
+      color: var(--gold-2);
+    }
+    .route-center small { display: block; margin-top: 7px; color: var(--cream-2); font: 600 13px/1.2 Aptos, sans-serif; }
+    .route-card {
+      position: absolute;
+      width: 460px;
+      min-height: 177px;
+      padding: 22px 24px;
+      border: 1px solid var(--line);
+      border-radius: 19px;
+      background: rgba(38,28,18,.9);
+      cursor: pointer;
+      transition: transform .25s ease, border-color .25s, background .25s;
+    }
+    .route-card:hover,
+    .route-card.active { border-color: rgba(240,200,117,.58); background: rgba(57,42,26,.96); transform: scale(1.02); }
+    .route-card.r1 { left: 0; top: 0; }
+    .route-card.r2 { right: 0; top: 0; }
+    .route-card.r3 { left: 0; bottom: 0; }
+    .route-card.r4 { right: 0; bottom: 0; }
+    .route-card .type { color: var(--gold-2); font: 700 26px/1 Georgia, serif; }
+    .route-card .where { margin-top: 8px; color: var(--cream-2); font-size: 17px; line-height: 1.32; }
+    .route-card .example { margin-top: 9px; color: var(--muted); font-size: 14px; line-height: 1.3; }
+    .route-line { position: absolute; z-index: 1; left: 50%; top: 49%; width: 620px; height: 440px; transform: translate(-50%,-50%); pointer-events: none; }
+    .route-line line { stroke: rgba(240,200,117,.23); stroke-width: 3; stroke-dasharray: 10 12; }
+    .route-token { position: absolute; z-index: 7; left: calc(50% - 15px); top: calc(49% - 15px); width: 30px; height: 30px; border-radius: 50%; background: var(--gold-2); border: 5px solid #2d2115; box-shadow: 0 0 25px rgba(240,200,117,.75); transition: transform .85s var(--ease); pointer-events: none; }
+    .router-warning { position: absolute; z-index: 8; left: 50%; bottom: 5px; transform: translateX(-50%); width: 630px; padding: 9px 16px; border-radius: 999px; background: #15100b; border: 1px solid var(--line); color: var(--muted); font-size: 14px; text-align: center; }
+
+    /* PROBLEM FORMULA */
+    .problem-layout { margin-top: 22px; flex: 1; display: grid; grid-template-columns: 330px 1fr; gap: 24px; min-height: 0; }
+    .case-selector { display: grid; gap: 11px; align-content: start; }
+    .case-button { padding: 16px; border: 1px solid var(--line); border-radius: 15px; background: rgba(39,29,19,.83); text-align: left; cursor: pointer; transition: .25s; }
+    .case-button.active { transform: translateX(8px); background: rgba(63,46,28,.95); border-color: rgba(240,200,117,.58); }
+    .case-button b { display: block; color: var(--gold-2); font-size: 16px; }
+    .case-button span { display: block; margin-top: 5px; color: var(--cream-2); font-size: 14px; line-height: 1.25; }
+    .formula-stage { padding: 27px; overflow: hidden; }
+    .formula-row { display: grid; grid-template-columns: repeat(7, auto); align-items: stretch; gap: 9px; }
+    .formula-piece { min-width: 0; padding: 14px 11px; border: 1px solid var(--line); border-radius: 13px; background: rgba(255,255,255,.035); text-align: center; color: var(--cream-2); font-size: 15px; font-weight: 750; line-height: 1.25; }
+    .formula-piece b { display: block; color: var(--gold-2); margin-bottom: 5px; font-size: 13px; letter-spacing: .06em; text-transform: uppercase; }
+    .plus { align-self: center; color: var(--gold); font-size: 27px; }
+    .problem-output { position: relative; min-height: 190px; margin-top: 26px; padding: 24px 26px; border-left: 5px solid var(--teal); border-radius: 0 18px 18px 0; background: rgba(118,170,152,.075); }
+    .problem-output .label { color: var(--teal); font-size: 14px; font-weight: 850; letter-spacing: .11em; text-transform: uppercase; }
+    .problem-output p { margin-top: 12px; color: var(--cream); font: 700 25px/1.36 Georgia, serif; }
+    .criteria-row { margin-top: 20px; display: flex; flex-wrap: wrap; gap: 8px; }
+    .criteria-row .tag { color: var(--cream-2); }
+
+    /* QUESTION MACHINE */
+    .question-layout { margin-top: 22px; flex: 1; display: grid; grid-template-columns: 380px 1fr; gap: 25px; min-height: 0; }
+    .need-list { display: grid; grid-template-columns: 1fr 1fr; gap: 9px; align-content: start; }
+    .need-button { min-height: 78px; padding: 12px 11px; border: 1px solid var(--line); border-radius: 13px; background: rgba(39,29,19,.83); text-align: left; cursor: pointer; transition: .24s; }
+    .need-button.active { background: var(--gold-2); border-color: var(--gold-2); color: var(--bg); transform: translateY(-3px); }
+    .need-button b { display: block; font-size: 16px; }
+    .need-button span { display: block; margin-top: 4px; color: var(--muted); font-size: 12px; line-height: 1.2; }
+    .need-button.active span { color: rgba(18,14,10,.72); }
+    .q-machine { position: relative; padding: 28px; overflow: hidden; }
+    .q-track { height: 145px; display: grid; grid-template-columns: 1fr 160px 1fr; align-items: center; gap: 28px; }
+    .q-input, .q-output { min-height: 105px; display: grid; place-items: center; padding: 17px; border: 1px solid var(--line); border-radius: 15px; background: rgba(255,255,255,.035); text-align: center; font-size: 17px; font-weight: 740; line-height: 1.3; }
+    .q-input { color: var(--cream-2); }
+    .q-output { border-color: rgba(118,170,152,.4); color: var(--cream); }
+    .q-gear { width: 115px; height: 115px; display: grid; place-items: center; justify-self: center; border: 2px dashed rgba(240,200,117,.48); border-radius: 50%; color: var(--gold-2); font-size: 38px; animation: gear-turn 9s linear infinite; }
+    .q-gear span { transform: rotate(0); animation: gear-counter 9s linear infinite; }
+    @keyframes gear-turn { to { transform: rotate(360deg); } }
+    @keyframes gear-counter { to { transform: rotate(-360deg); } }
+    .q-chip { position: absolute; z-index: 5; left: 75px; top: 87px; width: 22px; height: 22px; border-radius: 50%; background: var(--gold-2); box-shadow: 0 0 22px rgba(240,200,117,.7); opacity: 0; }
+    .q-chip.run { animation: question-travel 1.05s var(--ease); }
+    @keyframes question-travel {
+      0% { opacity: 0; transform: translateX(0) scale(.6); }
+      15% { opacity: 1; }
+      55% { opacity: 1; transform: translateX(435px) scale(1.2); }
+      100% { opacity: 0; transform: translateX(860px) scale(.7); }
+    }
+    .q-explain { margin-top: 18px; padding: 20px 22px; border: 1px solid var(--line); border-radius: 15px; background: rgba(0,0,0,.13); }
+    .q-explain h3 { margin: 0 0 8px; color: var(--gold-2); font: 700 25px Georgia, serif; }
+    .q-explain p { color: var(--cream-2); font-size: 18px; line-height: 1.4; }
+
+    /* FIVE-LENS FEASIBILITY TEST */
+    .viability-layout { margin-top: 20px; flex: 1; display: grid; grid-template-columns: 355px 1fr; gap: 23px; min-height: 0; }
+    .viability-question { padding: 23px; display: flex; flex-direction: column; overflow: hidden; }
+    .viability-question .overline { color: var(--gold-2); font-size: 14px; font-weight: 850; letter-spacing: .11em; text-transform: uppercase; }
+    .sample-switch { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 14px; }
+    .sample-switch button { min-height: 48px; padding: 8px 10px; border: 1px solid var(--line); border-radius: 11px; background: rgba(255,255,255,.025); color: var(--muted); font-size: 13px; font-weight: 780; line-height: 1.18; cursor: pointer; }
+    .sample-switch button.active { background: var(--gold-2); border-color: var(--gold-2); color: var(--bg); }
+    .viability-question h3 { min-height: 169px; margin: 20px 0 16px; padding: 19px 18px; display: grid; place-items: center; border: 1px solid rgba(240,200,117,.27); border-radius: 16px; background: rgba(213,168,77,.065); color: var(--cream); font: 700 23px/1.34 Georgia, serif; text-align: center; }
+    .check-progress { margin-top: auto; padding: 16px; border: 1px solid var(--line); border-radius: 14px; background: rgba(0,0,0,.15); }
+    .check-progress-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+    .check-progress-head strong { color: var(--cream-2); font-size: 15px; }
+    .check-progress-head span { color: var(--gold-2); font-size: 16px; font-weight: 850; }
+    .check-dots { display: grid; grid-template-columns: repeat(5, 1fr); gap: 7px; margin: 11px 0 13px; }
+    .check-dots i { height: 7px; border-radius: 99px; background: rgba(255,255,255,.08); transition: background .3s ease, transform .3s ease; }
+    .check-dots i.on { background: var(--gold-2); transform: scaleY(1.35); box-shadow: 0 0 12px rgba(240,200,117,.28); }
+    .eligibility-verdict { min-height: 63px; color: var(--muted); font-size: 15px; line-height: 1.36; }
+    .eligibility-verdict.ready { color: var(--teal); font-weight: 740; }
+    .eligibility-verdict.revise { color: var(--red); font-weight: 740; }
+    .viability-main { position: relative; padding: 23px 24px; overflow: hidden; }
+    .lens-track { position: relative; height: 130px; display: grid; grid-template-columns: repeat(5, 1fr); gap: 9px; }
+    .eligibility-lens { position: relative; z-index: 2; min-width: 0; padding: 62px 9px 11px; border: 1px solid var(--line); border-radius: 14px; background: rgba(255,255,255,.025); color: var(--cream-2); font-size: 14px; font-weight: 780; line-height: 1.16; text-align: center; cursor: pointer; transition: border-color .25s, background .25s, transform .25s; }
+    .eligibility-lens:hover,
+    .eligibility-lens.active { border-color: rgba(240,200,117,.58); background: rgba(213,168,77,.075); transform: translateY(-4px); }
+    .eligibility-lens.checked::after { content: "✓"; position: absolute; right: 8px; top: 8px; width: 20px; height: 20px; display: grid; place-items: center; border-radius: 50%; background: rgba(118,170,152,.16); color: var(--teal); font-size: 12px; }
+    .eligibility-lens .lens-index { position: absolute; left: 50%; top: 13px; transform: translateX(-50%); width: 42px; height: 42px; display: grid; place-items: center; border-radius: 50%; border: 1px solid var(--line); background: #241a11; color: var(--gold-2); font: 700 17px Georgia, serif; }
+    .lens-glider { position: absolute; z-index: 5; left: 0; top: 5px; width: 58px; height: 58px; border: 3px solid var(--gold-2); border-radius: 50%; box-shadow: inset 0 0 22px rgba(240,200,117,.12), 0 0 24px rgba(213,168,77,.22); pointer-events: none; transition: transform .78s var(--ease); }
+    .lens-glider::after { content: ""; position: absolute; right: -27px; bottom: -12px; width: 38px; height: 7px; border-radius: 9px; background: var(--gold-2); transform: rotate(46deg); transform-origin: left center; }
+    .eligibility-detail { min-height: 272px; margin-top: 15px; padding: 20px; border: 1px solid var(--line); border-radius: 16px; background: rgba(0,0,0,.14); }
+    .detail-title-row { display: flex; align-items: center; justify-content: space-between; gap: 15px; }
+    .detail-title-row h3 { margin: 0; color: var(--gold-2); font: 700 28px/1.1 Georgia, serif; }
+    .lens-status { flex: 0 0 auto; padding: 7px 11px; border: 1px solid var(--line); border-radius: 999px; font-size: 13px; font-weight: 850; }
+    .lens-status.strong { color: var(--teal); border-color: rgba(118,170,152,.35); background: rgba(118,170,152,.08); }
+    .lens-status.caution { color: var(--gold-2); border-color: rgba(240,200,117,.35); background: rgba(240,200,117,.07); }
+    .lens-status.weak { color: var(--red); border-color: rgba(198,113,97,.38); background: rgba(198,113,97,.08); }
+    .eligibility-columns { margin-top: 17px; display: grid; grid-template-columns: .9fr 1.15fr 1.15fr; gap: 12px; }
+    .eligibility-cell { min-height: 153px; padding: 14px; border: 1px solid rgba(240,200,117,.15); border-radius: 13px; background: rgba(255,255,255,.024); }
+    .eligibility-cell b { display: block; margin-bottom: 7px; color: var(--teal); font-size: 12px; letter-spacing: .09em; text-transform: uppercase; }
+    .eligibility-cell p { color: var(--cream-2); font-size: 16px; line-height: 1.36; }
+    .five-lens-formula { margin-top: 15px; min-height: 57px; display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 7px; padding: 10px 14px; border: 1px solid rgba(118,170,152,.25); border-radius: 14px; background: rgba(118,170,152,.055); color: var(--cream-2); font-size: 14px; }
+    .five-lens-formula b { color: var(--teal); }
+    .five-lens-formula i { color: var(--gold); font-style: normal; }
+
+    /* METHOD */
+    .method-layout { margin-top: 18px; flex: 1; display: grid; grid-template-columns: 390px 1fr; gap: 23px; min-height: 0; }
+    .method-inputs { display: grid; gap: 9px; align-content: start; }
+    .method-question { padding: 13px 14px; border: 1px solid var(--line); border-radius: 14px; background: rgba(39,29,19,.84); text-align: left; color: var(--cream-2); font-size: 15px; line-height: 1.26; cursor: pointer; transition: .24s; }
+    .method-question b { display: block; margin-bottom: 4px; color: var(--gold-2); font-size: 13px; letter-spacing: .05em; text-transform: uppercase; }
+    .method-question.active { border-color: rgba(240,200,117,.62); background: rgba(65,47,29,.96); transform: translateX(7px); }
+    .method-stage { position: relative; padding: 20px 23px; overflow: hidden; }
+    .method-rail { position: relative; height: 112px; display: grid; grid-template-columns: repeat(4,1fr); gap: 10px; }
+    .method-rail::before { content: ""; position: absolute; left: 8%; right: 8%; top: 39px; height: 3px; background: rgba(240,200,117,.25); }
+    .method-stop { position: relative; z-index: 2; text-align: center; color: var(--muted); font-size: 13px; font-weight: 750; }
+    .method-stop i { display: grid; place-items: center; width: 52px; height: 52px; margin: 13px auto 7px; border: 1px solid var(--line); border-radius: 50%; background: var(--panel); color: var(--gold-2); font-style: normal; font-size: 16px; }
+    .method-stop.active i { background: var(--gold-2); color: var(--bg); box-shadow: 0 0 28px rgba(213,168,77,.3); transform: scale(1.12); }
+    .method-token { position: absolute; z-index: 5; left: 88px; top: 47px; width: 22px; height: 22px; border: 4px solid var(--bg); border-radius: 50%; background: var(--teal); box-shadow: 0 0 20px rgba(118,170,152,.68); transition: transform .8s var(--ease); }
+    .method-detail { min-height: 175px; padding: 18px 20px; border: 1px solid var(--line); border-radius: 15px; background: rgba(0,0,0,.14); }
+    .method-detail h3 { margin: 0 0 8px; color: var(--gold-2); font: 700 27px Georgia, serif; }
+    .method-detail p { color: var(--cream-2); font-size: 17px; line-height: 1.38; }
+    .method-options { margin-top: 12px; display: flex; flex-wrap: wrap; gap: 7px; }
+    .reflection { margin-top: 14px; padding: 14px 17px; border: 1px solid rgba(118,170,152,.28); border-radius: 14px; background: rgba(118,170,152,.06); }
+    .reflection strong { color: var(--teal); font-size: 14px; letter-spacing: .08em; text-transform: uppercase; }
+    .reflection-flow { margin-top: 9px; display: flex; align-items: center; flex-wrap: wrap; gap: 6px; color: var(--cream-2); font-size: 14px; }
+    .reflection-flow i { color: var(--gold); font-style: normal; }
+
+    /* REFERENCES */
+    #s13 { padding-top: 49px; }
+    .refs-grid { margin-top: 19px; display: grid; grid-template-columns: 1fr 1fr; gap: 9px 14px; }
+    .ref-link {
+      position: relative;
+      min-height: 64px;
+      display: grid;
+      grid-template-columns: 41px 1fr 25px;
+      align-items: center;
+      gap: 11px;
+      padding: 10px 13px;
+      border: 1px solid var(--line);
+      border-radius: 13px;
+      background: rgba(39,29,19,.78);
+      color: var(--cream);
+      text-decoration: none;
+      transition: transform .22s, border-color .22s, background .22s;
+    }
+    .ref-link:hover { transform: translateY(-3px); border-color: rgba(240,200,117,.58); background: rgba(57,42,26,.95); }
+    .ref-num { width: 34px; height: 34px; display: grid; place-items: center; border-radius: 9px; background: rgba(213,168,77,.1); color: var(--gold-2); font: 700 15px Georgia, serif; }
+    .ref-copy b { display: block; color: var(--cream); font-size: 14px; line-height: 1.18; }
+    .ref-copy span { display: block; margin-top: 3px; color: var(--muted); font-size: 12px; line-height: 1.18; }
+    .ref-arrow { color: var(--gold-2); font-size: 19px; }
+    .closing-line { margin-top: 18px; display: flex; align-items: center; justify-content: space-between; gap: 20px; }
+    .closing-line .thanks { font: 700 24px Georgia, serif; color: var(--gold-2); }
+    .closing-line .signature { color: var(--cream-2); font-size: 15px; text-align: right; }
+
+    /* CONTROLS */
+    #controls {
+      position: absolute;
+      z-index: 30;
+      left: 50%;
+      bottom: 19px;
+      transform: translateX(-50%);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 9px;
+      border: 1px solid rgba(240,200,117,.2);
+      border-radius: 16px;
+      background: rgba(16,12,8,.86);
+      box-shadow: 0 12px 34px rgba(0,0,0,.38);
+      backdrop-filter: blur(14px);
+    }
+    .control-btn {
+      width: 39px;
+      height: 39px;
+      display: grid;
+      place-items: center;
+      padding: 0;
+      border: 1px solid transparent;
+      border-radius: 11px;
+      background: transparent;
+      color: var(--cream-2);
+      font-size: 17px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+    .control-btn:hover { background: rgba(213,168,77,.11); color: var(--gold-2); border-color: var(--line); }
+    .control-btn:disabled { opacity: .28; cursor: default; }
+    .control-btn.active { color: var(--bg); background: var(--gold-2); }
+    #counter { min-width: 72px; color: var(--cream-2); font-size: 14px; font-variant-numeric: tabular-nums; text-align: center; }
+    .divider { width: 1px; height: 23px; background: var(--line); margin: 0 2px; }
+    #progress { position: absolute; z-index: 31; left: 0; bottom: 0; width: 100%; height: 4px; background: rgba(255,255,255,.035); }
+    #progressBar { width: 7.692%; height: 100%; background: linear-gradient(90deg, var(--gold-3), var(--gold-2)); transition: width .42s var(--ease); box-shadow: 0 0 15px rgba(240,200,117,.36); }
+
+    #help {
+      position: absolute;
+      z-index: 50;
+      inset: 0;
+      display: none;
+      place-items: center;
+      background: rgba(7,5,3,.72);
+      backdrop-filter: blur(10px);
+    }
+    #help.open { display: grid; animation: item-in .25s ease both; }
+    .help-card { width: 720px; padding: 31px; border: 1px solid rgba(240,200,117,.38); border-radius: 22px; background: #21180f; box-shadow: var(--shadow); }
+    .help-card h3 { margin: 0 0 20px; color: var(--gold-2); font: 700 32px Georgia, serif; }
+    .shortcut-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px 22px; }
+    .shortcut { display: flex; align-items: center; gap: 12px; color: var(--cream-2); font-size: 18px; }
+    kbd { min-width: 60px; padding: 7px 10px; border: 1px solid var(--line); border-bottom-width: 3px; border-radius: 8px; background: rgba(255,255,255,.045); color: var(--gold-2); text-align: center; font: 750 15px Aptos, sans-serif; }
+    .help-tip { margin-top: 22px; padding-top: 17px; border-top: 1px solid var(--line); color: var(--muted); font-size: 16px; line-height: 1.4; }
+    #closeHelp { margin-top: 21px; width: 100%; padding: 11px; border: 1px solid var(--line); border-radius: 11px; background: rgba(213,168,77,.1); color: var(--gold-2); font-weight: 800; cursor: pointer; }
+
+    .paused *, .paused *::before, .paused *::after { animation-play-state: paused !important; }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; scroll-behavior: auto !important; transition-duration: .01ms !important; }
+    }
+  </style>
+</head>
+<body>
+  <div id="shell">
+    <main id="deck" aria-live="polite">
+      <div id="ambient" aria-hidden="true">
+        <div class="ambient-orbit one"></div>
+        <div class="ambient-orbit two"></div>
+      </div>
+
+      <section class="scene active" id="s1" data-title="Sampul" aria-label="Sampul">
+        <div class="cover-layout">
+          <div>
+            <div class="cover-chip" data-anim style="--d:80ms"><i></i> Materi Perkuliahan • Bagian 1</div>
+            <h1 class="cover-title" data-anim style="--d:180ms">Metodologi Penelitian Kuantitatif <span>Dari Topik hingga Pilihan Metode</span></h1>
+            <p class="cover-subtitle" data-anim style="--d:300ms">Menemukan masalah yang layak diteliti, membaca celah pengetahuan, lalu memilih jalan penelitian yang tepat.</p>
+            <div class="cover-author" data-anim style="--d:430ms">
+              <div class="author-mark"></div>
+              <div><strong>Najib Mubarok, M.Sc.</strong><span>INISNU Temanggung</span></div>
+            </div>
+          </div>
+          <div class="journey" data-anim style="--d:250ms" aria-label="Alur dari topik menuju metode">
+            <div class="journey-ring"></div>
+            <div class="journey-tracer"></div>
+            <div class="journey-core">Masalah<br>Penelitian</div>
+            <div class="journey-node n1"><b>01</b>Topik</div>
+            <div class="journey-node n2"><b>02</b>Fenomena</div>
+            <div class="journey-node n3"><b>03</b>Literatur</div>
+            <div class="journey-node n4"><b>04</b>Research Gap</div>
+            <div class="journey-node n5"><b>05</b>Pertanyaan</div>
+            <div class="journey-node n6"><b>06</b>Metode</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="scene" id="s2" data-title="Topik & CCTE" aria-label="Topik penelitian dan CCTE">
+        <div class="scene-no">02</div>
+        <div class="kicker" data-anim>Mulai dari dunia nyata</div>
+        <h2 data-anim style="--d:120ms">Apa yang Sedang Terjadi di Sekitar Kita?</h2>
+        <p class="lead" data-anim style="--d:180ms">Topik yang kuat sering terasa melalui empat sinyal: <span class="accent">Controversy, Change, Trend, Emergency</span>. Klik kartu untuk memindahkannya—satu topik bisa dibaca dengan lebih dari satu lensa.</p>
+        <div class="ccte-board" data-anim style="--d:260ms">
+          <div class="topic-bank panel">
+            <div class="bank-label"><strong>Bank topik lintas bidang</strong><span class="note">klik berulang: kontroversi → perubahan → tren → darurat → kembali</span></div>
+            <div class="topic-list" id="topicList">
+              <button class="topic-card" data-short="Minat baca anak" data-pos="0">Minat membaca buku pada anak usia sekolah<small>Pendidikan</small></button>
+              <button class="topic-card" data-short="Mental remaja" data-pos="0">Kesehatan mental remaja dan dukungan sekolah<small>Pendidikan • Kesehatan</small></button>
+              <button class="topic-card" data-short="Program literasi" data-pos="0">Perbedaan keberhasilan program literasi sekolah<small>Manajemen pendidikan</small></button>
+              <button class="topic-card" data-short="Data madrasah" data-pos="0">Pemanfaatan data akademik dalam pengelolaan madrasah<small>MPI</small></button>
+              <button class="topic-card" data-short="PAI & sosial" data-pos="0">Pembelajaran PAI dan perilaku sosial siswa<small>PAI</small></button>
+              <button class="topic-card" data-short="UMKM & harga" data-pos="0">Ketahanan UMKM menghadapi perubahan harga input<small>Ekonomi</small></button>
+              <button class="topic-card" data-short="Pembayaran digital" data-pos="0">Adopsi pembayaran digital oleh UMKM<small>Ekonomi</small></button>
+              <button class="topic-card" data-short="Risiko kripto" data-pos="0">Literasi risiko aset kripto pada generasi muda<small>Ekonomi digital</small></button>
+              <button class="topic-card" data-short="Pilihan sekolah" data-pos="0">Perubahan pilihan orang tua atas sekolah atau madrasah<small>Pendidikan</small></button>
+              <button class="topic-card" data-short="Potensi lokal" data-pos="0">Potensi ekonomi lokal yang belum dimanfaatkan optimal<small>Ekonomi masyarakat</small></button>
+            </div>
+          </div>
+          <div class="ccte-bins">
+            <div class="ccte-bin" style="--bin-color:var(--red)" data-bin="1"><span class="bin-count">0</span><h3>Controversy</h3><p>Ada perdebatan nilai, kebijakan, atau kepentingan.</p><div class="bin-items"></div></div>
+            <div class="ccte-bin" style="--bin-color:var(--blue)" data-bin="2"><span class="bin-count">0</span><h3>Change</h3><p>Ada perubahan perilaku, sistem, atau keadaan.</p><div class="bin-items"></div></div>
+            <div class="ccte-bin" style="--bin-color:var(--green)" data-bin="3"><span class="bin-count">0</span><h3>Trend</h3><p>Ada pola yang menguat, melemah, atau bergeser.</p><div class="bin-items"></div></div>
+            <div class="ccte-bin" style="--bin-color:var(--gold-2)" data-bin="4"><span class="bin-count">0</span><h3>Emergency</h3><p>Ada dampak mendesak yang perlu dipahami.</p><div class="bin-items"></div></div>
+          </div>
+        </div>
+        <div class="ccte-instruction">Pertanyaan kunci: “Mengapa topik ini layak diperiksa sekarang?”</div>
+      </section>
+
+      <section class="scene" id="s3" data-title="Tujuh Lensa I" aria-label="Tujuh lensa masalah bagian pertama">
+        <div class="scene-no">03</div>
+        <div class="kicker" data-anim>Fenomena nyata • 1/2</div>
+        <h2 data-anim style="--d:120ms">Masalah Tidak Selalu Berupa Kegagalan</h2>
+        <p class="lead" data-anim style="--d:180ms">Empat lensa pertama membantu kita melihat jarak antara <span class="accent">apa yang terjadi</span> dan <span class="teal">apa yang semestinya terjadi</span>.</p>
+        <div class="lens-workspace" data-anim style="--d:250ms">
+          <div class="lens-menu" id="lensMenuA">
+            <button class="lens-button active" data-lens="0"><span class="num">1</span><strong>Tidak berjalan semestinya</strong><span>Program ada, fungsi utamanya tidak hidup.</span></button>
+            <button class="lens-button" data-lens="1"><span class="num">2</span><strong>Ideal ≠ aktual</strong><span>Standar atau harapan berbeda dari praktik.</span></button>
+            <button class="lens-button" data-lens="2"><span class="num">3</span><strong>Hasil berbeda antartempat</strong><span>Intervensi serupa, hasilnya tidak sama.</span></button>
+            <button class="lens-button" data-lens="3"><span class="num">4</span><strong>Efektivitas belum diketahui</strong><span>Kebijakan berjalan, dampaknya belum terukur.</span></button>
+          </div>
+          <div class="lens-display panel" id="lensDisplayA">
+            <div class="lens-orb" id="lensOrbA"></div>
+            <div class="lens-content">
+              <div class="mini" id="lensMiniA">Lensa 01 • Fungsi</div>
+              <h3 id="lensTitleA">Ada kegiatan, tetapi tidak menghasilkan perilaku yang diharapkan</h3>
+              <div class="case" id="lensCaseA">Sekolah memiliki jadwal literasi dan perpustakaan, tetapi siswa hanya membaca ketika diminta; kunjungan mandiri tetap rendah.</div>
+              <div class="question" id="lensQuestionA"><b>Pertanyaan awal:</b> bagian mana dari program yang belum bekerja sebagaimana tujuan awalnya?</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="scene" id="s4" data-title="Tujuh Lensa II" aria-label="Tujuh lensa masalah bagian kedua">
+        <div class="scene-no">04</div>
+        <div class="kicker" data-anim>Fenomena nyata • 2/2</div>
+        <h2 data-anim style="--d:120ms">Masalah Juga Bisa Berupa Solusi, Perubahan, atau Potensi</h2>
+        <p class="lead" data-anim style="--d:180ms">Tiga lensa berikut memperluas pandangan: jangan hanya mencari yang buruk—cari pula <span class="accent">yang belum optimal, belum dipahami, atau belum dimanfaatkan</span>.</p>
+        <div class="lens-workspace" data-anim style="--d:250ms">
+          <div>
+            <div class="lens-menu" id="lensMenuB">
+              <button class="lens-button active" data-lens="0"><span class="num">5</span><strong>Solusi belum optimal</strong><span>Sudah ada upaya, tetapi manfaatnya terbatas.</span></button>
+              <button class="lens-button" data-lens="1"><span class="num">6</span><strong>Dampak perubahan belum diketahui</strong><span>Ada praktik baru, konsekuensinya kabur.</span></button>
+              <button class="lens-button" data-lens="2"><span class="num">7</span><strong>Potensi baik belum dimanfaatkan</strong><span>Sumber daya ada, nilainya belum diwujudkan.</span></button>
+            </div>
+            <div class="domain-switch" id="domainSwitch">
+              <button class="active" data-domain="edu">Pendidikan</button>
+              <button data-domain="pai">PAI/MPI</button>
+              <button data-domain="eco">Ekonomi</button>
+            </div>
+          </div>
+          <div class="lens-display panel" id="lensDisplayB">
+            <div class="lens-orb" id="lensOrbB"></div>
+            <div class="lens-content">
+              <div class="mini" id="lensMiniB">Lensa 05 • Pendidikan</div>
+              <h3 id="lensTitleB">Solusinya telah ada, tetapi baru menjadi rutinitas administratif</h3>
+              <div class="case" id="lensCaseB">Program literasi sekolah berjalan setiap pekan, tetapi kegiatan belum terhubung dengan pilihan bacaan, refleksi, dan kebiasaan membaca mandiri.</div>
+              <div class="question" id="lensQuestionB"><b>Uji perhatian:</b> apakah masalahnya terletak pada desain, pelaksanaan, atau evaluasi solusi?</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="scene" id="s5" data-title="Tinjauan Literatur" aria-label="Tinjauan literatur">
+        <div class="scene-no">05</div>
+        <div class="kicker" data-anim>Dari masalah praktis menuju masalah akademik</div>
+        <h2 data-anim style="--d:120ms">Jangan Langsung Meneliti: Periksa Apa yang Sudah Diketahui</h2>
+        <p class="lead" data-anim style="--d:180ms">Fenomena adalah pintu masuk, bukan kesimpulan. Klik tiap stasiun untuk menguji fenomena melalui literatur secara sistematis.</p>
+        <div class="lit-layout" data-anim style="--d:250ms">
+          <div class="phenomenon-card panel">
+            <div class="overline">Fenomena awal</div>
+            <h3>“Pengguna pembayaran digital bertambah, tetapi sebagian UMKM belum merasakan perbaikan pencatatan usaha.”</h3>
+            <p>Kalimat ini menunjukkan gejala. Kita belum tahu apakah masalahnya terjadi secara luas, apa penjelasannya, dan apa yang belum dijawab penelitian.</p>
+            <div class="raw-stamp">BELUM MENJADI RESEARCH GAP</div>
+          </div>
+          <div class="lit-machine panel">
+            <div class="machine-track" id="machineTrack">
+              <div class="lit-token" id="litToken"></div>
+              <div class="machine-stations">
+                <button class="station active" data-step="0"><span class="station-dot">01</span><span>Teori</span></button>
+                <button class="station" data-step="1"><span class="station-dot">02</span><span>Temuan</span></button>
+                <button class="station" data-step="2"><span class="station-dot">03</span><span>Metode</span></button>
+                <button class="station" data-step="3"><span class="station-dot">04</span><span>Konteks</span></button>
+                <button class="station" data-step="4"><span class="station-dot">05</span><span>Solusi</span></button>
+                <button class="station" data-step="5"><span class="station-dot">06</span><span>Batasan</span></button>
+              </div>
+            </div>
+            <div class="lit-output" id="litOutput">
+              <div class="step">Pemeriksaan 01</div>
+              <h3>Teori: konsep apa yang menerangkan fenomena?</h3>
+              <p>Identifikasi konstruk utama, hubungan yang diperkirakan, serta alasan teoritis mengapa perilaku atau hasil tertentu seharusnya muncul.</p>
+            </div>
+            <div class="source-strip"><span class="tag">Jurnal ilmiah</span><span class="tag">Buku akademik</span><span class="tag">Laporan resmi</span><span class="tag">Statistik</span><span class="tag">Regulasi</span></div>
+          </div>
+        </div>
+        <div class="scene-footnote">Tinjauan literatur adalah metode untuk memetakan pengetahuan, bukan sekadar daftar ringkasan (Snyder, 2019).</div>
+      </section>
+
+      <section class="scene" id="s6" data-title="Dua Jenis Celah" aria-label="Masalah praktis dan research gap">
+        <div class="scene-no">06</div>
+        <div class="kicker" data-anim>Bedakan sebelum merumuskan</div>
+        <h2 data-anim style="--d:120ms">Dua Celah yang Berbeda</h2>
+        <p class="lead" data-anim style="--d:180ms">Masalah nyata menunjukkan sesuatu perlu diperhatikan. <span class="accent">Research gap</span> menunjukkan pengetahuan ilmiah kita belum lengkap.</p>
+        <div class="gap-comparison" data-anim style="--d:260ms">
+          <article class="gap-card panel">
+            <div class="label">Celah praktis</div>
+            <h3>Realitas ≠ Harapan</h3>
+            <div class="gap-equation"><div class="gap-state">Kondisi ideal</div><div class="gap-symbol">≠</div><div class="gap-state">Kondisi aktual</div></div>
+            <ul><li>Terlihat di lapangan.</li><li>Menunjukkan kebutuhan atau persoalan.</li><li>Belum otomatis menjadi masalah penelitian.</li></ul>
+          </article>
+          <div class="gap-bridge" aria-hidden="true"><div class="bridge-line"></div><div class="bridge-lens">⌕</div></div>
+          <article class="gap-card panel">
+            <div class="label">Celah akademik</div>
+            <h3>Diketahui ≠ Perlu Diketahui</h3>
+            <div class="gap-equation"><div class="gap-state">Pengetahuan tersedia</div><div class="gap-symbol">≠</div><div class="gap-state">Jawaban dibutuhkan</div></div>
+            <ul><li>Ditemukan setelah membandingkan literatur.</li><li>Spesifik pada teori, bukti, konteks, atau solusi.</li><li>Memberi alasan akademik untuk penelitian.</li></ul>
+          </article>
+        </div>
+        <div class="gap-verdict">Research gap ditemukan melalui perbandingan—bukan dibuat-buat.</div>
+        <div class="scene-footnote">Perbedaan lokasi saja belum cukup; konteks baru harus memberi alasan teoretis atau empiris yang bermakna (Robinson et al., 2011).</div>
+      </section>
+
+      <section class="scene" id="s7" data-title="Lima Research Gap" aria-label="Lima bentuk research gap">
+        <div class="scene-no">07</div>
+        <div class="kicker" data-anim>Membaca friksi fenomena dan literatur</div>
+        <h2 data-anim style="--d:120ms">Di Bagian Mana Pengetahuan Kita Belum Lengkap?</h2>
+        <p class="lead" data-anim style="--d:180ms">Klik jenis friksi. Perhatikan bagaimana hubungan antara fenomena dan pengetahuan sebelumnya berubah.</p>
+        <div class="friction-layout" data-anim style="--d:250ms">
+          <div class="friction-tabs" id="frictionTabs">
+            <button class="friction-tab active" data-friction="0"><b>01 • Empirical evidence gap</b><span>Teori ada, bukti statistik belum memadai.</span></button>
+            <button class="friction-tab" data-friction="1"><b>02 • Contradictory evidence</b><span>Temuan penelitian tidak konsisten.</span></button>
+            <button class="friction-tab" data-friction="2"><b>03 • Theoretical gap</b><span>Teori belum menjelaskan fenomena.</span></button>
+            <button class="friction-tab" data-friction="3"><b>04 • Solution/design gap</b><span>Produk solusi belum tersedia.</span></button>
+            <button class="friction-tab" data-friction="4"><b>05 • Implementation gap</b><span>Solusi ada, proses atau dampaknya belum jelas.</span></button>
+          </div>
+          <div class="friction-stage panel">
+            <div class="friction-visual" id="frictionVisual">
+              <div class="f-block real" id="fReal">Fenomena nyata<small>Literasi risiko kripto beragam</small></div>
+              <div class="friction-link" id="fLink"></div>
+              <div class="friction-mark" id="fMark">?</div>
+              <div class="f-block lit" id="fLit">Teori tersedia<small>Keputusan dan persepsi risiko</small></div>
+            </div>
+            <div class="friction-copy" id="frictionCopy">
+              <h3>Bukti empiris belum cukup</h3>
+              <p>Hubungan teoretis telah dirumuskan, tetapi belum ada atau belum kuat bukti statistiknya pada populasi dan konteks yang relevan.</p>
+              <div class="route-chip">Arah awal → Kuantitatif</div>
+            </div>
+          </div>
+        </div>
+        <div class="scene-footnote">Kategori gap membantu membuat alasan penelitian lebih transparan dan dapat diperiksa (Robinson et al., 2011).</div>
+      </section>
+
+      <section class="scene" id="s8" data-title="Gap ke Pendekatan" aria-label="Research gap menuju pendekatan penelitian">
+        <div class="scene-no">08</div>
+        <div class="kicker" data-anim>Menentukan arah awal</div>
+        <h2 data-anim style="--d:120ms">Di Mana Celahnya, ke Sana Penelitian Bergerak</h2>
+        <p class="lead" data-anim style="--d:180ms">Pilih salah satu arah. Titik emas akan bergerak dari research gap menuju pendekatan yang paling masuk akal.</p>
+        <div class="router" id="router" data-anim style="--d:250ms">
+          <svg class="route-line" viewBox="0 0 620 440" aria-hidden="true"><line x1="310" y1="220" x2="55" y2="50"/><line x1="310" y1="220" x2="565" y2="50"/><line x1="310" y1="220" x2="55" y2="390"/><line x1="310" y1="220" x2="565" y2="390"/></svg>
+          <button class="route-card r1" data-route="0"><div class="type">Kualitatif</div><div class="where">Gap pada makna, proses, pengalaman, konsep, atau penjelasan teori.</div><div class="example">“Bagaimana nilai kepedulian sosial diterjemahkan guru ke kebiasaan siswa?”</div></button>
+          <button class="route-card r2" data-route="1"><div class="type">Kuantitatif</div><div class="where">Gap pada hubungan, perbedaan, pengaruh, atau bukti empirik.</div><div class="example">“Apakah literasi risiko memprediksi keputusan investasi aset kripto?”</div></button>
+          <button class="route-card r3" data-route="2"><div class="type">Pengembangan</div><div class="where">Gap pada solusi, model, media, prosedur, atau prototipe.</div><div class="example">“Belum tersedia program literasi keluarga yang valid dan praktis.”</div></button>
+          <button class="route-card r4" data-route="3"><div class="type">Mixed Methods</div><div class="where">Teori dan bukti perlu dibangun serta diintegrasikan bersama.</div><div class="example">“Mengapa program berbeda hasil, dan faktor apa yang memprediksi keberhasilan?”</div></button>
+          <div class="route-center">Research Gap<small>bukan metode—melainkan alasan akademik</small></div>
+          <div class="route-token" id="routeToken"></div>
+          <div class="router-warning">Arah ini bukan aturan otomatis. Mixed methods menuntut integrasi data dan inferensi—bukan sekadar “wawancara + angka”.</div>
+        </div>
+        <div class="scene-footnote">Pemilihan desain mengikuti pertanyaan, bukti yang diperlukan, dan tujuan penelitian (Creswell & Creswell, 2023; APA, n.d.).</div>
+      </section>
+
+      <section class="scene" id="s9" data-title="Masalah Penelitian" aria-label="Merumuskan masalah penelitian">
+        <div class="scene-no">09</div>
+        <div class="kicker" data-anim>Merumuskan fokus</div>
+        <h2 data-anim style="--d:120ms">Research Gap Diubah Menjadi Fokus yang Dapat Diteliti</h2>
+        <p class="lead" data-anim style="--d:180ms">Pilih contoh bidang. Empat komponen akan menyusun masalah penelitian yang spesifik dan dapat dipertanggungjawabkan.</p>
+        <div class="problem-layout" data-anim style="--d:250ms">
+          <div class="case-selector" id="caseSelector">
+            <button class="case-button active" data-case="0"><b>Kuantitatif • Ekonomi</b><span>Literasi risiko dan keputusan aset kripto.</span></button>
+            <button class="case-button" data-case="1"><b>Kualitatif • PAI</b><span>Nilai kepedulian sosial dalam kebiasaan siswa.</span></button>
+            <button class="case-button" data-case="2"><b>Pengembangan • Pendidikan</b><span>Program literasi keluarga.</span></button>
+            <button class="case-button" data-case="3"><b>Mixed • MPI</b><span>Perbedaan hasil program manajemen madrasah.</span></button>
+          </div>
+          <div class="formula-stage panel">
+            <div class="formula-row" id="formulaRow">
+              <div class="formula-piece"><b>Fenomena</b><span id="fp1">Minat investasi aset kripto meningkat</span></div><div class="plus">+</div>
+              <div class="formula-piece"><b>Research gap</b><span id="fp2">Bukti tentang peran literasi risiko belum konsisten</span></div><div class="plus">+</div>
+              <div class="formula-piece"><b>Konteks</b><span id="fp3">Generasi muda di wilayah penelitian</span></div><div class="plus">+</div>
+              <div class="formula-piece"><b>Konsekuensi</b><span id="fp4">Keputusan finansial berisiko</span></div>
+            </div>
+            <div class="problem-output">
+              <div class="label">Masalah penelitian</div>
+              <p id="problemText">Belum terdapat bukti yang konsisten mengenai hubungan literasi risiko dengan keputusan investasi aset kripto pada generasi muda di wilayah penelitian.</p>
+            </div>
+            <div class="criteria-row"><span class="tag">Spesifik</span><span class="tag">Dapat diteliti</span><span class="tag">Berbasis literatur</span><span class="tag">Yang belum diketahui jelas</span><span class="tag">Konteks jelas</span><span class="tag">Ada kontribusi</span></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="scene" id="s10" data-title="Pertanyaan Penelitian" aria-label="Masalah menjadi pertanyaan penelitian">
+        <div class="scene-no">10</div>
+        <div class="kicker" data-anim>Dari fokus menuju jawaban</div>
+        <h2 data-anim style="--d:120ms">Jenis Jawaban yang Dicari Menentukan Pertanyaannya</h2>
+        <p class="lead" data-anim style="--d:180ms">Klik kebutuhan jawaban. “Mesin pertanyaan” akan mengubah masalah menjadi bentuk pertanyaan yang lebih operasional.</p>
+        <div class="question-layout" data-anim style="--d:250ms">
+          <div class="need-list" id="needList">
+            <button class="need-button active" data-need="0"><b>Mendeskripsikan</b><span>berapa, bagaimana profil</span></button>
+            <button class="need-button" data-need="1"><b>Menghubungkan</b><span>apakah X terkait Y</span></button>
+            <button class="need-button" data-need="2"><b>Membandingkan</b><span>apakah kelompok berbeda</span></button>
+            <button class="need-button" data-need="3"><b>Menguji pengaruh</b><span>apakah X memengaruhi Y</span></button>
+            <button class="need-button" data-need="4"><b>Memahami pengalaman</b><span>makna dari sudut pelaku</span></button>
+            <button class="need-button" data-need="5"><b>Menjelaskan proses</b><span>bagaimana sesuatu terbentuk</span></button>
+            <button class="need-button" data-need="6"><b>Mengembangkan solusi</b><span>produk/model yang layak</span></button>
+            <button class="need-button" data-need="7"><b>Menjelajah + menguji</b><span>integrasi dua jenis bukti</span></button>
+          </div>
+          <div class="q-machine panel">
+            <div class="q-chip" id="qChip"></div>
+            <div class="q-track">
+              <div class="q-input" id="qInput">Perlu diketahui tingkat literasi risiko aset kripto pada generasi muda.</div>
+              <div class="q-gear"><span>✦</span></div>
+              <div class="q-output" id="qOutput">Bagaimana tingkat literasi risiko aset kripto pada generasi muda di wilayah penelitian?</div>
+            </div>
+            <div class="q-explain" id="qExplain"><h3>Jawaban yang dicari: gambaran terukur</h3><p>Kata tanya “bagaimana tingkat…” mengarahkan penelitian untuk memotret distribusi, kategori, atau karakteristik variabel.</p></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="scene" id="s11" data-title="Lima Lensa Kelayakan" aria-label="Lima lensa kelayakan pertanyaan penelitian">
+        <div class="scene-no">11</div>
+        <div class="kicker" data-anim>Uji kelayakan sebelum memilih metode</div>
+        <h2 data-anim style="--d:120ms">Apakah Pertanyaan Ini Layak Dilanjutkan?</h2>
+        <p class="lead" data-anim style="--d:180ms">Kalimat yang terdengar ilmiah belum tentu menjadi penelitian yang layak. Periksa pertanyaan melalui <span class="accent">lima lensa</span>—klik satu per satu sebelum memberi keputusan.</p>
+        <div class="viability-layout" data-anim style="--d:245ms">
+          <aside class="viability-question panel">
+            <div class="overline">Pertanyaan yang sedang diuji</div>
+            <div class="sample-switch" id="sampleSwitch">
+              <button class="active" data-sample="0">Contoh A<br>potensial</button>
+              <button data-sample="1">Contoh B<br>perlu revisi</button>
+            </div>
+            <h3 id="eligibilityQuestion">Apakah pemanfaatan data akademik berpengaruh terhadap kualitas keputusan pengelolaan madrasah?</h3>
+            <div class="check-progress">
+              <div class="check-progress-head"><strong>Lensa diperiksa</strong><span id="eligibilityCount">1 / 5</span></div>
+              <div class="check-dots" id="checkDots"><i class="on"></i><i></i><i></i><i></i><i></i></div>
+              <div class="eligibility-verdict" id="eligibilityVerdict">Periksa seluruh lensa sebelum memutuskan apakah pertanyaan layak dilanjutkan.</div>
+            </div>
+          </aside>
+          <div class="viability-main panel">
+            <div class="lens-track" id="eligibilityTrack">
+              <div class="lens-glider" id="lensGlider"></div>
+              <button class="eligibility-lens active checked" data-eligibility="0"><span class="lens-index">01</span>Ada fenomena</button>
+              <button class="eligibility-lens" data-eligibility="1"><span class="lens-index">02</span>Ada kepentingan</button>
+              <button class="eligibility-lens" data-eligibility="2"><span class="lens-index">03</span>Ada ketidakjelasan</button>
+              <button class="eligibility-lens" data-eligibility="3"><span class="lens-index">04</span>Dapat diteliti</button>
+              <button class="eligibility-lens" data-eligibility="4"><span class="lens-index">05</span>Ada kontribusi</button>
+            </div>
+            <div class="eligibility-detail" id="eligibilityDetail">
+              <div class="detail-title-row"><h3>Ada fenomenanya</h3><span class="lens-status strong">CUKUP KUAT</span></div>
+              <div class="eligibility-columns">
+                <div class="eligibility-cell"><b>Yang diuji</b><p>Apakah kondisi yang mendasari pertanyaan benar-benar terjadi?</p></div>
+                <div class="eligibility-cell"><b>Bukti yang dicari</b><p>Observasi awal, data, laporan, dokumen, atau sumber tepercaya—bukan sekadar dugaan peneliti.</p></div>
+                <div class="eligibility-cell"><b>Diagnosis contoh</b><p>Data akademik telah dikumpulkan, tetapi pemakaiannya dalam rapat dan keputusan madrasah belum konsisten.</p></div>
+              </div>
+            </div>
+            <div class="five-lens-formula"><b>Pertanyaan layak</b><i>=</i><span>fenomena</span><i>+</i><span>kepentingan</span><i>+</i><span>ketidakjelasan</span><i>+</i><span>dapat diteliti</span><i>+</i><span>kontribusi</span></div>
+          </div>
+        </div>
+        <div class="scene-footnote">Lima lensa ini merupakan pemeriksaan praktis atas dasar masalah, relevansi, ketidakpastian, kelayakan bukti, dan manfaat penelitian (Creswell &amp; Creswell, 2023).</div>
+      </section>
+
+      <section class="scene" id="s12" data-title="Pertanyaan ke Metode" aria-label="Memilih metode penelitian">
+        <div class="scene-no">12</div>
+        <div class="kicker" data-anim>Titik akhir bagian 1</div>
+        <h2 data-anim style="--d:120ms">Metode Bukan Pilihan Awal</h2>
+        <p class="lead" data-anim style="--d:180ms">Metode dipilih setelah jelas <span class="accent">pertanyaan apa</span> yang hendak dijawab dan <span class="teal">bukti apa</span> yang diperlukan.</p>
+        <div class="method-layout" data-anim style="--d:240ms">
+          <div class="method-inputs" id="methodInputs">
+            <button class="method-question active" data-method="0"><b>Makna / proses</b>Bagaimana guru menerjemahkan nilai kepedulian sosial ke kebiasaan siswa?</button>
+            <button class="method-question" data-method="1"><b>Hubungan / pengaruh</b>Apakah literasi risiko memprediksi keputusan investasi aset kripto?</button>
+            <button class="method-question" data-method="2"><b>Penjelasan + pengujian</b>Mengapa hasil program berbeda, dan faktor apa yang memprediksi keberhasilannya?</button>
+            <button class="method-question" data-method="3"><b>Produk / solusi</b>Bagaimana mengembangkan program literasi keluarga yang valid, praktis, dan efektif?</button>
+          </div>
+          <div class="method-stage panel">
+            <div class="method-rail" id="methodRail">
+              <div class="method-token" id="methodToken"></div>
+              <div class="method-stop active"><i>KUAL</i>Kualitatif</div>
+              <div class="method-stop"><i>KUAN</i>Kuantitatif</div>
+              <div class="method-stop"><i>MIX</i>Mixed</div>
+              <div class="method-stop"><i>R&amp;D</i>Pengembangan</div>
+            </div>
+            <div class="method-detail" id="methodDetail">
+              <h3>Kualitatif: memahami makna, pengalaman, dan proses</h3>
+              <p>Pilih desain sesuai objek dan logika pertanyaan—bukan karena dianggap lebih mudah.</p>
+              <div class="method-options"><span class="tag">Fenomenologi</span><span class="tag">Grounded theory</span><span class="tag">Studi kasus</span><span class="tag">Etnografi</span><span class="tag">Naratif</span></div>
+            </div>
+            <div class="reflection">
+              <strong>Refleksi keluar • 9 titik keputusan</strong>
+              <div class="reflection-flow"><span>Topik</span><i>→</i><span>CCTE</span><i>→</i><span>Masalah nyata</span><i>→</i><span>Literatur</span><i>→</i><span>Gap</span><i>→</i><span>Masalah penelitian</span><i>→</i><span>Pertanyaan</span><i>→</i><span>Kelayakan</span><i>→</i><span>Metode</span></div>
+            </div>
+          </div>
+        </div>
+        <div class="scene-footnote">Desain kualitatif, kuantitatif, mixed methods, dan pengembangan memiliki logika bukti berbeda (Creswell & Poth, 2018; Creswell & Creswell, 2023; Plomp & Nieveen, 2013).</div>
+      </section>
+
+      <section class="scene" id="s13" data-title="Bibliografi" aria-label="Bibliografi dan penutup">
+        <div class="scene-no">13</div>
+        <div class="kicker" data-anim>Daftar rujukan • dapat diklik</div>
+        <h2 data-anim style="--d:110ms">Lanjutkan Membaca, Periksa Sumbernya</h2>
+        <p class="lead" data-anim style="--d:170ms">Rujukan metodologis dan sumber konteks yang menopang materi ini. Klik judul untuk membuka sumber asli.</p>
+        <div class="refs-grid" data-anim style="--d:240ms">
+          <a class="ref-link" href="https://books.google.com/books/about/Research_Design.html?id=Pr2VEAAAQBAJ" target="_blank" rel="noopener"><span class="ref-num">01</span><span class="ref-copy"><b>Creswell &amp; Creswell — Research Design</b><span>Qualitative, Quantitative, and Mixed Methods Approaches • SAGE</span></span><span class="ref-arrow">↗</span></a>
+          <a class="ref-link" href="https://books.google.com/books?id=DLbBDQAAQBAJ" target="_blank" rel="noopener"><span class="ref-num">02</span><span class="ref-copy"><b>Creswell &amp; Poth — Qualitative Inquiry &amp; Research Design</b><span>Choosing Among Five Approaches • SAGE</span></span><span class="ref-arrow">↗</span></a>
+          <a class="ref-link" href="https://doi.org/10.1016/j.jbusres.2019.07.039" target="_blank" rel="noopener"><span class="ref-num">03</span><span class="ref-copy"><b>Snyder (2019) — Literature Review as a Research Methodology</b><span>Journal of Business Research • DOI</span></span><span class="ref-arrow">↗</span></a>
+          <a class="ref-link" href="https://doi.org/10.1016/j.jclinepi.2011.06.009" target="_blank" rel="noopener"><span class="ref-num">04</span><span class="ref-copy"><b>Robinson et al. (2011) — Framework to Identify Research Gaps</b><span>Journal of Clinical Epidemiology • DOI</span></span><span class="ref-arrow">↗</span></a>
+          <a class="ref-link" href="https://www.slo.nl/publish/pages/2904/educational-design-research-part-a.pdf" target="_blank" rel="noopener"><span class="ref-num">05</span><span class="ref-copy"><b>Plomp &amp; Nieveen (2013) — Educational Design Research</b><span>Part A: An Introduction • Open PDF</span></span><span class="ref-arrow">↗</span></a>
+          <a class="ref-link" href="https://apastyle.apa.org/jars" target="_blank" rel="noopener"><span class="ref-num">06</span><span class="ref-copy"><b>APA — Journal Article Reporting Standards</b><span>Quantitative, qualitative, and mixed methods standards</span></span><span class="ref-arrow">↗</span></a>
+          <a class="ref-link" href="https://www.who.int/news-room/fact-sheets/detail/adolescent-mental-health" target="_blank" rel="noopener"><span class="ref-num">07</span><span class="ref-copy"><b>WHO — Adolescent Mental Health</b><span>Fact sheet untuk konteks kesehatan remaja</span></span><span class="ref-arrow">↗</span></a>
+          <a class="ref-link" href="https://www.oecd.org/en/publications/pisa-2022-results-volume-i_53f23881-en.html" target="_blank" rel="noopener"><span class="ref-num">08</span><span class="ref-copy"><b>OECD — PISA 2022 Results, Volume I</b><span>Learning outcomes and equity in education</span></span><span class="ref-arrow">↗</span></a>
+          <a class="ref-link" href="https://ojk.go.id/id/fungsi-utama/itsk/perizinan-itsk-aset-keuangan-digital-aset-kripto/default.aspx" target="_blank" rel="noopener"><span class="ref-num">09</span><span class="ref-copy"><b>OJK — Aset Keuangan Digital dan Aset Kripto</b><span>Sumber resmi konteks regulasi Indonesia</span></span><span class="ref-arrow">↗</span></a>
+          <a class="ref-link" href="https://www.worldbank.org/en/programs/sief-trust-fund/publication/impact-evaluation-in-practice" target="_blank" rel="noopener"><span class="ref-num">10</span><span class="ref-copy"><b>World Bank — Impact Evaluation in Practice</b><span>Panduan evaluasi dampak berbasis bukti</span></span><span class="ref-arrow">↗</span></a>
+          <a class="ref-link" href="https://www.itl.nist.gov/div898/handbook/pri/pri.htm" target="_blank" rel="noopener"><span class="ref-num">11</span><span class="ref-copy"><b>NIST — Process Improvement &amp; Experimental Design</b><span>Engineering Statistics Handbook</span></span><span class="ref-arrow">↗</span></a>
+          <a class="ref-link" href="https://www.amstat.org/your-career/ethical-guidelines-for-statistical-practice" target="_blank" rel="noopener"><span class="ref-num">12</span><span class="ref-copy"><b>ASA — Ethical Guidelines for Statistical Practice</b><span>Pedoman etis praktik statistika</span></span><span class="ref-arrow">↗</span></a>
+        </div>
+        <div class="closing-line" data-anim style="--d:520ms"><div class="thanks">Terima kasih — mari mulai dari masalah yang benar.</div><div class="signature"><strong>Najib Mubarok, M.Sc.</strong><br>INISNU Temanggung</div></div>
+      </section>
+
+      <nav id="controls" aria-label="Kontrol presentasi">
+        <button class="control-btn" id="prevBtn" title="Sebelumnya (←)" aria-label="Scene sebelumnya">←</button>
+        <span id="counter">01 / 13</span>
+        <button class="control-btn" id="nextBtn" title="Berikutnya (→)" aria-label="Scene berikutnya">→</button>
+        <span class="divider"></span>
+        <button class="control-btn" id="pauseBtn" title="Jeda animasi (Spasi)" aria-label="Jeda animasi">Ⅱ</button>
+        <button class="control-btn" id="resetBtn" title="Reset scene (R)" aria-label="Reset scene">R</button>
+        <button class="control-btn" id="soundBtn" title="Suara (M)" aria-label="Aktifkan atau matikan suara">M</button>
+        <button class="control-btn" id="fullBtn" title="Layar penuh (F)" aria-label="Layar penuh">F</button>
+        <button class="control-btn" id="helpBtn" title="Bantuan (?)" aria-label="Bantuan">?</button>
+      </nav>
+      <div id="progress" aria-hidden="true"><div id="progressBar"></div></div>
+
+      <div id="help" role="dialog" aria-modal="true" aria-label="Bantuan kontrol">
+        <div class="help-card">
+          <h3>Kontrol Media Pembelajaran</h3>
+          <div class="shortcut-grid">
+            <div class="shortcut"><kbd>← / →</kbd><span>Pindah scene</span></div>
+            <div class="shortcut"><kbd>Spasi</kbd><span>Jeda / lanjut animasi</span></div>
+            <div class="shortcut"><kbd>R</kbd><span>Reset interaksi scene</span></div>
+            <div class="shortcut"><kbd>F</kbd><span>Masuk / keluar fullscreen</span></div>
+            <div class="shortcut"><kbd>M</kbd><span>Aktif / nonaktif suara</span></div>
+            <div class="shortcut"><kbd>?</kbd><span>Buka bantuan</span></div>
+          </div>
+          <div class="help-tip">Gunakan tombol-tombol di dalam scene untuk mengeksplorasi contoh. Media otomatis menyesuaikan ukuran layar tanpa memotong konten.</div>
+          <button id="closeHelp">Tutup bantuan</button>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    (function () {
+      'use strict';
+
+      var shell = document.getElementById('shell');
+      var deck = document.getElementById('deck');
+      var scenes = Array.from(document.querySelectorAll('.scene'));
+      var current = 0;
+      var switching = false;
+      var paused = false;
+      var soundOn = false;
+      var audioCtx = null;
+
+      function fit() {
+        var root = document.documentElement;
+        var vv = window.visualViewport;
+        var viewportW = root.clientWidth || window.innerWidth || 1600;
+        var viewportH = root.clientHeight || window.innerHeight || 900;
+        if (vv && vv.width && vv.height) {
+          viewportW = Math.min(viewportW, vv.width);
+          viewportH = Math.min(viewportH, vv.height);
+        }
+        var safeGap = document.fullscreenElement ? 8 : 12;
+        var scale = Math.min((viewportW - safeGap * 2) / 1600, (viewportH - safeGap * 2) / 900);
+        if (!isFinite(scale) || scale <= 0) scale = 1;
+        deck.style.transform = 'translate(-50%, -50%) scale(' + scale + ')';
+      }
+
+      function scheduleFit() {
+        fit();
+        requestAnimationFrame(function () { fit(); requestAnimationFrame(fit); });
+        setTimeout(fit, 120);
+        setTimeout(fit, 360);
+      }
+
+      window.addEventListener('resize', scheduleFit);
+      window.addEventListener('orientationchange', scheduleFit);
+      document.addEventListener('fullscreenchange', scheduleFit);
+      if (window.visualViewport) window.visualViewport.addEventListener('resize', scheduleFit);
+      scheduleFit();
+
+      function tone(freq, duration) {
+        if (!soundOn) return;
+        try {
+          audioCtx = audioCtx || new (window.AudioContext || window.webkitAudioContext)();
+          var osc = audioCtx.createOscillator();
+          var gain = audioCtx.createGain();
+          osc.type = 'sine';
+          osc.frequency.value = freq || 430;
+          gain.gain.setValueAtTime(.0001, audioCtx.currentTime);
+          gain.gain.exponentialRampToValueAtTime(.035, audioCtx.currentTime + .012);
+          gain.gain.exponentialRampToValueAtTime(.0001, audioCtx.currentTime + (duration || .1));
+          osc.connect(gain).connect(audioCtx.destination);
+          osc.start();
+          osc.stop(audioCtx.currentTime + (duration || .1) + .02);
+        } catch (e) {}
+      }
+
+      function updateUI() {
+        document.getElementById('counter').textContent = String(current + 1).padStart(2, '0') + ' / ' + String(scenes.length).padStart(2, '0');
+        document.getElementById('progressBar').style.width = ((current + 1) / scenes.length * 100) + '%';
+        document.getElementById('prevBtn').disabled = current === 0;
+        document.getElementById('nextBtn').disabled = current === scenes.length - 1;
+        document.title = scenes[current].dataset.title + ' — Metodologi Penelitian Kuantitatif';
+      }
+
+      function replayEntrance(scene) {
+        var items = scene.querySelectorAll('[data-anim]');
+        items.forEach(function (el) {
+          el.style.animation = 'none';
+          void el.offsetWidth;
+          el.style.animation = '';
+        });
+      }
+
+      function goTo(index) {
+        index = Math.max(0, Math.min(scenes.length - 1, index));
+        if (index === current || switching) return;
+        switching = true;
+        var oldScene = scenes[current];
+        var nextScene = scenes[index];
+        var forward = index > current;
+        oldScene.classList.add(forward ? 'leaving-next' : 'leaving-prev');
+        oldScene.classList.remove('active', 'from-left');
+        current = index;
+        nextScene.classList.toggle('from-left', !forward);
+        nextScene.classList.add('active');
+        replayEntrance(nextScene);
+        updateUI();
+        tone(forward ? 510 : 390, .09);
+        setTimeout(function () {
+          oldScene.classList.remove('leaving-next', 'leaving-prev');
+          switching = false;
+        }, 460);
+      }
+
+      document.getElementById('prevBtn').addEventListener('click', function () { goTo(current - 1); });
+      document.getElementById('nextBtn').addEventListener('click', function () { goTo(current + 1); });
+
+      function togglePause() {
+        paused = !paused;
+        deck.classList.toggle('paused', paused);
+        document.getAnimations().forEach(function (animation) {
+          try { paused ? animation.pause() : animation.play(); } catch (e) {}
+        });
+        var btn = document.getElementById('pauseBtn');
+        btn.textContent = paused ? '▶' : 'Ⅱ';
+        btn.classList.toggle('active', paused);
+      }
+
+      document.getElementById('pauseBtn').addEventListener('click', togglePause);
+      document.getElementById('soundBtn').addEventListener('click', function () {
+        soundOn = !soundOn;
+        this.classList.toggle('active', soundOn);
+        if (soundOn) tone(620, .13);
+      });
+
+      document.getElementById('fullBtn').addEventListener('click', function () {
+        if (!document.fullscreenElement) {
+          var p = shell.requestFullscreen ? shell.requestFullscreen() : Promise.resolve();
+          if (p && p.then) p.then(scheduleFit).catch(function () {});
+        } else if (document.exitFullscreen) {
+          document.exitFullscreen().then(scheduleFit).catch(function () {});
+        }
+      });
+
+      var help = document.getElementById('help');
+      function toggleHelp(force) {
+        var open = typeof force === 'boolean' ? force : !help.classList.contains('open');
+        help.classList.toggle('open', open);
+      }
+      document.getElementById('helpBtn').addEventListener('click', function () { toggleHelp(); });
+      document.getElementById('closeHelp').addEventListener('click', function () { toggleHelp(false); });
+      help.addEventListener('click', function (e) { if (e.target === help) toggleHelp(false); });
+
+      function resetScene() {
+        replayEntrance(scenes[current]);
+        var fn = resetters[current];
+        if (fn) fn();
+        tone(460, .1);
+      }
+      document.getElementById('resetBtn').addEventListener('click', resetScene);
+
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape' && help.classList.contains('open')) { toggleHelp(false); return; }
+        if (help.classList.contains('open')) return;
+        if (e.key === 'ArrowRight' || e.key === 'PageDown') { e.preventDefault(); goTo(current + 1); }
+        else if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); goTo(current - 1); }
+        else if (e.key === ' ') { e.preventDefault(); togglePause(); }
+        else if (e.key.toLowerCase() === 'r') resetScene();
+        else if (e.key.toLowerCase() === 'f') document.getElementById('fullBtn').click();
+        else if (e.key.toLowerCase() === 'm') document.getElementById('soundBtn').click();
+        else if (e.key === '?' || (e.shiftKey && e.key === '/')) toggleHelp();
+      });
+
+      var touchStartX = null;
+      deck.addEventListener('touchstart', function (e) { touchStartX = e.touches[0].clientX; }, {passive:true});
+      deck.addEventListener('touchend', function (e) {
+        if (touchStartX === null) return;
+        var delta = e.changedTouches[0].clientX - touchStartX;
+        touchStartX = null;
+        if (Math.abs(delta) > 90) goTo(current + (delta < 0 ? 1 : -1));
+      }, {passive:true});
+
+      /* Scene 2: FLIP classification */
+      var topicCards = Array.from(document.querySelectorAll('.topic-card'));
+      function renderBins() {
+        var palette = ['', 'var(--red)', 'var(--blue)', 'var(--green)', 'var(--gold-2)'];
+        topicCards.forEach(function (card) {
+          var pos = Number(card.dataset.pos);
+          card.style.opacity = pos ? '.58' : '1';
+          card.style.borderColor = pos ? palette[pos] : '';
+        });
+        document.querySelectorAll('.ccte-bin').forEach(function (bin) {
+          var n = Number(bin.dataset.bin);
+          var assigned = topicCards.filter(function (card) { return Number(card.dataset.pos) === n; });
+          bin.querySelector('.bin-count').textContent = assigned.length;
+          bin.querySelector('.bin-items').innerHTML = assigned.map(function (card) { return '<span class="bin-pill">' + card.dataset.short + '</span>'; }).join('');
+        });
+      }
+      topicCards.forEach(function (card) {
+        card.addEventListener('click', function () {
+          var start = card.getBoundingClientRect();
+          var pos = (Number(card.dataset.pos) + 1) % 5;
+          card.dataset.pos = pos;
+          var bin = pos ? document.querySelector('.ccte-bin[data-bin="' + pos + '"]') : document.querySelector('.topic-bank');
+          var target = bin.getBoundingClientRect();
+          var scale = deck.getBoundingClientRect().width / 1600 || 1;
+          var dx = (target.left + target.width / 2 - (start.left + start.width / 2)) / scale;
+          var dy = (target.top + target.height / 2 - (start.top + start.height / 2)) / scale;
+          card.animate([
+            { transform: 'translate(0,0) scale(1)', opacity: 1, zIndex: 20 },
+            { transform: 'translate(' + dx * .55 + 'px,' + dy * .55 + 'px) scale(.86)', opacity: .92, zIndex: 20, offset: .62 },
+            { transform: 'translate(' + dx + 'px,' + dy + 'px) scale(.25)', opacity: 0, zIndex: 20 }
+          ], { duration: 680, easing: 'cubic-bezier(.2,.8,.2,1)' });
+          setTimeout(renderBins, 480);
+          tone(520 + pos * 45, .08);
+        });
+      });
+      function resetTopics() { topicCards.forEach(function (c) { c.dataset.pos = 0; }); renderBins(); }
+
+      /* Scenes 3 and 4: lenses */
+      var lensA = [
+        { mini:'Lensa 01 • Fungsi', title:'Ada kegiatan, tetapi tidak menghasilkan perilaku yang diharapkan', text:'Sekolah memiliki jadwal literasi dan perpustakaan, tetapi siswa hanya membaca ketika diminta; kunjungan mandiri tetap rendah.', q:'bagian mana dari program yang belum bekerja sebagaimana tujuan awalnya?' },
+        { mini:'Lensa 02 • Kesenjangan', title:'Harapan normatif belum menjadi perilaku aktual', text:'Pembelajaran PAI menargetkan kepedulian sosial, tetapi praktik saling membantu dan kepedulian terhadap lingkungan belum konsisten di luar kelas.', q:'seberapa jauh kondisi aktual berbeda dari indikator ideal yang dapat diamati?' },
+        { mini:'Lensa 03 • Variasi', title:'Program sama, hasilnya berbeda', text:'Dua sekolah menjalankan program literasi dengan durasi dan panduan serupa, tetapi perubahan kebiasaan membaca siswanya sangat berbeda.', q:'faktor apa yang membedakan proses atau hasil pada kedua konteks?' },
+        { mini:'Lensa 04 • Efektivitas', title:'Kegiatan berjalan, tetapi dampaknya belum terukur', text:'Layanan konseling kesehatan mental remaja telah dilaksanakan, tetapi belum diketahui apakah akses, rasa aman, dan kesejahteraan siswa membaik.', q:'indikator apa yang membuktikan program efektif, bagi siapa, dan dalam kondisi apa?' }
+      ];
+      function setLensA(i, immediate) {
+        document.querySelectorAll('#lensMenuA .lens-button').forEach(function (b,n) { b.classList.toggle('active', n===i); });
+        var d = lensA[i];
+        var content = document.querySelector('#lensDisplayA .lens-content');
+        if (!immediate) content.animate([{opacity:.25,transform:'translateX(22px)'},{opacity:1,transform:'none'}],{duration:420,easing:'ease-out'});
+        document.getElementById('lensMiniA').textContent=d.mini;
+        document.getElementById('lensTitleA').textContent=d.title;
+        document.getElementById('lensCaseA').textContent=d.text;
+        document.getElementById('lensQuestionA').innerHTML='<b>Pertanyaan awal:</b> '+d.q;
+        document.getElementById('lensOrbA').style.transform='translate('+(i%2?34:0)+'px,'+(i*72)+'px) scale('+(1-i*.06)+')';
+        document.getElementById('lensDisplayA').style.setProperty('--lens-x',(24+i*17)+'%');
+        document.getElementById('lensDisplayA').style.setProperty('--lens-y',(22+i*17)+'%');
+        tone(480+i*55,.08);
+      }
+      document.querySelectorAll('#lensMenuA .lens-button').forEach(function(b,i){ b.addEventListener('click',function(){setLensA(i);}); });
+
+      var domain = 'edu';
+      var lensBIndex = 0;
+      var lensB = {
+        edu:[
+          ['Lensa 05 • Pendidikan','Solusinya telah ada, tetapi baru menjadi rutinitas administratif','Program literasi sekolah berjalan setiap pekan, tetapi kegiatan belum terhubung dengan pilihan bacaan, refleksi, dan kebiasaan membaca mandiri.','apakah masalahnya terletak pada desain, pelaksanaan, atau evaluasi solusi?'],
+          ['Lensa 06 • Pendidikan','Perubahan terjadi lebih cepat daripada pemahaman dampaknya','Digitalisasi administrasi sekolah meluas, tetapi pengaruhnya terhadap kualitas keputusan, beban kerja, dan layanan pendidikan belum jelas.','dampak apa yang harus diukur—dan siapa yang mungkin memperoleh atau kehilangan manfaat?'],
+          ['Lensa 07 • Pendidikan','Sumber daya baik belum menghasilkan nilai maksimal','Perpustakaan, data hasil belajar, dan komunitas orang tua tersedia, tetapi belum diorkestrasi menjadi dukungan belajar yang terarah.','potensi mana yang paling layak diaktifkan dan bagaimana indikator keberhasilannya?']
+        ],
+        pai:[
+          ['Lensa 05 • PAI/MPI','Kegiatan keagamaan ada, internalisasi nilainya belum terhubung','Program pembiasaan religius berlangsung rutin, tetapi refleksi nilai dan kaitannya dengan perilaku sosial belum menjadi bagian desain program.','bagian mana yang perlu diperbaiki agar ritual, pemahaman, dan perilaku saling terhubung?'],
+          ['Lensa 06 • PAI/MPI','Pola pengelolaan madrasah berubah, dampaknya belum dipahami','Pengambilan keputusan makin berbasis aplikasi dan data, tetapi belum diketahui bagaimana perubahan itu memengaruhi partisipasi guru dan mutu layanan.','bagaimana perubahan proses keputusan dirasakan dan apa hasil yang dapat diukur?'],
+          ['Lensa 07 • PAI/MPI','Modal sosial-keagamaan belum diolah menjadi solusi','Dana sosial keagamaan dan jejaring alumni tersedia, tetapi belum dikelola sebagai ekosistem dukungan pendidikan yang berkelanjutan.','model pengelolaan apa yang dapat mengubah potensi menjadi manfaat terukur?']
+        ],
+        eco:[
+          ['Lensa 05 • Ekonomi','Adopsi alat belum otomatis menjadi peningkatan kapasitas','UMKM menerima pembayaran digital, tetapi catatan transaksinya belum dipakai untuk arus kas, keputusan stok, atau akses pembiayaan.','apakah hambatannya berasal dari literasi, desain alat, atau kebutuhan usaha?'],
+          ['Lensa 06 • Ekonomi','Minat baru tumbuh, pemahaman risikonya belum diketahui','Ketertarikan generasi muda pada aset kripto meningkat, tetapi hubungan literasi risiko, pengaruh sosial, dan keputusan investasinya belum jelas.','variabel apa yang perlu diuji agar keputusan finansial dapat dipahami secara empirik?'],
+          ['Lensa 07 • Ekonomi','Keunggulan lokal belum terkonversi menjadi nilai ekonomi','Produk halal, kerajinan, dan potensi wisata lokal tersedia, tetapi jejaring pasar dan model usaha bersama belum bekerja optimal.','potensi apa yang paling siap dikembangkan dan solusi apa yang masih belum tersedia?']
+        ]
+      };
+      function setLensB(i, immediate) {
+        lensBIndex=i;
+        document.querySelectorAll('#lensMenuB .lens-button').forEach(function(b,n){b.classList.toggle('active',n===i);});
+        var d=lensB[domain][i];
+        var content=document.querySelector('#lensDisplayB .lens-content');
+        if(!immediate) content.animate([{opacity:.2,transform:'translateY(18px)'},{opacity:1,transform:'none'}],{duration:430,easing:'ease-out'});
+        document.getElementById('lensMiniB').textContent=d[0];
+        document.getElementById('lensTitleB').textContent=d[1];
+        document.getElementById('lensCaseB').textContent=d[2];
+        document.getElementById('lensQuestionB').innerHTML='<b>Uji perhatian:</b> '+d[3];
+        document.getElementById('lensOrbB').style.transform='translate('+(i*34)+'px,'+(i*105)+'px) scale('+(1-i*.09)+')';
+        document.getElementById('lensDisplayB').style.setProperty('--lens-x',(25+i*22)+'%');
+        document.getElementById('lensDisplayB').style.setProperty('--lens-y',(24+i*24)+'%');
+        tone(500+i*60,.08);
+      }
+      document.querySelectorAll('#lensMenuB .lens-button').forEach(function(b,i){b.addEventListener('click',function(){setLensB(i);});});
+      document.querySelectorAll('#domainSwitch button').forEach(function(b){b.addEventListener('click',function(){domain=b.dataset.domain;document.querySelectorAll('#domainSwitch button').forEach(function(x){x.classList.toggle('active',x===b);});setLensB(lensBIndex);});});
+
+      /* Scene 5: literature machine */
+      var litData = [
+        ['Pemeriksaan 01','Teori: konsep apa yang menerangkan fenomena?','Identifikasi konstruk utama, hubungan yang diperkirakan, serta alasan teoritis mengapa perilaku atau hasil tertentu seharusnya muncul.'],
+        ['Pemeriksaan 02','Temuan: apa yang telah dibuktikan?','Bandingkan hasil penelitian—mana yang konsisten, mana yang bertentangan, seberapa kuat buktinya, dan populasi mana yang telah dikaji.'],
+        ['Pemeriksaan 03','Metode: bagaimana pengetahuan itu dihasilkan?','Periksa desain, sampel, instrumen, teknik analisis, serta batas kemampuan metode lama dalam menjawab pertanyaan.'],
+        ['Pemeriksaan 04','Konteks: di mana penjelasan berlaku?','Nilai apakah karakter lokasi, lembaga, budaya, waktu, atau kelompok membuat teori perlu diuji atau dipahami kembali.'],
+        ['Pemeriksaan 05','Solusi: apa yang pernah dicoba?','Cari program, model, media, kebijakan, atau prototipe yang telah dikembangkan—beserta bukti validitas, kepraktisan, dan efektivitasnya.'],
+        ['Pemeriksaan 06','Keterbatasan: apa yang masih belum terjawab?','Satukan batas teori, data, konteks, metode, dan solusi. Di sinilah calon research gap mulai terlihat secara jujur.']
+      ];
+      function setLit(i, immediate) {
+        var stations=Array.from(document.querySelectorAll('.station'));
+        stations.forEach(function(s,n){s.classList.toggle('active',n===i);});
+        var track=document.getElementById('machineTrack').getBoundingClientRect();
+        var dot=stations[i].querySelector('.station-dot').getBoundingClientRect();
+        var scale=deck.getBoundingClientRect().width/1600||1;
+        document.getElementById('litToken').style.transform='translateX('+((dot.left+dot.width/2-track.left)/scale-12.5)+'px)';
+        var out=document.getElementById('litOutput');
+        if(!immediate) out.animate([{opacity:.25,transform:'translateY(16px)'},{opacity:1,transform:'none'}],{duration:430,easing:'ease-out'});
+        out.innerHTML='<div class="step">'+litData[i][0]+'</div><h3>'+litData[i][1]+'</h3><p>'+litData[i][2]+'</p>';
+        tone(470+i*42,.08);
+      }
+      document.querySelectorAll('.station').forEach(function(s,i){s.addEventListener('click',function(){setLit(i);});});
+
+      /* Scene 7: friction */
+      var frictionData = [
+        {title:'Bukti empiris belum cukup',body:'Hubungan teoretis telah dirumuskan, tetapi belum ada atau belum kuat bukti statistiknya pada populasi dan konteks yang relevan.',route:'Kuantitatif',real:'Literasi risiko kripto beragam',lit:'Teori keputusan dan persepsi risiko',mark:'?',mode:0},
+        {title:'Temuan penelitian saling bertentangan',body:'Penelitian sebelumnya menghasilkan arah atau besar hubungan yang berbeda. Peneliti dapat menguji ulang secara kuantitatif atau menjelaskan konteksnya secara kualitatif.',route:'Kuantitatif / Kualitatif',real:'Program literasi menunjukkan hasil berbeda',lit:'Studi A positif • Studi B lemah',mark:'↯',mode:1},
+        {title:'Teori terlalu sempit untuk fenomena',body:'Konsep yang tersedia belum mampu menangkap makna, proses, atau variasi penting pada fenomena. Fokusnya membangun pemahaman atau mengembangkan teori.',route:'Kualitatif',real:'Nilai agama menjadi kebiasaan sosial',lit:'Teori hanya menjelaskan pembelajaran kelas',mark:'⋯',mode:2},
+        {title:'Solusi atau desain belum tersedia',body:'Masalah dan kebutuhan telah dipahami, tetapi belum ada model, media, prosedur, atau prototipe yang layak digunakan.',route:'Penelitian pengembangan',real:'Keluarga membutuhkan dukungan literasi',lit:'Belum ada program yang sesuai konteks',mark:'＋',mode:3},
+        {title:'Implementasi atau dampak belum jelas',body:'Solusi sudah ada, tetapi cara kerja, penerimaan, kepraktisan, atau efektivitasnya belum diketahui secara memadai.',route:'Pengembangan + Kual/Kuanti',real:'Pembayaran digital telah dipakai UMKM',lit:'Dampak pada pencatatan usaha belum jelas',mark:'⌁',mode:4}
+      ];
+      function setFriction(i, immediate){
+        document.querySelectorAll('.friction-tab').forEach(function(b,n){b.classList.toggle('active',n===i);});
+        var d=frictionData[i], real=document.getElementById('fReal'), lit=document.getElementById('fLit'), link=document.getElementById('fLink'), mark=document.getElementById('fMark');
+        real.innerHTML='Fenomena nyata<small>'+d.real+'</small>';
+        lit.innerHTML='Literatur<small>'+d.lit+'</small>';
+        mark.textContent=d.mark;
+        real.style.transform=''; lit.style.transform=''; link.style.transform=''; link.style.background='var(--red)'; mark.style.transform='translateX(-50%)';
+        if(d.mode===1){ real.style.transform='translateY(-18px) rotate(-2deg)';lit.style.transform='translateY(20px) rotate(2deg)';link.style.transform='rotate(8deg)'; }
+        if(d.mode===2){ lit.style.transform='scale(.58)'; mark.style.transform='translateX(-50%) scale(1.25)'; }
+        if(d.mode===3){ lit.style.transform='translateX(105px)';lit.style.opacity='.25';link.style.transform='scaleX(.35)'; }
+        if(d.mode===4){ real.style.transform='translateX(45px)';lit.style.transform='translateX(-25px)';link.style.background='var(--gold)'; }
+        var copy=document.getElementById('frictionCopy');
+        if(!immediate) document.getElementById('frictionVisual').animate([{opacity:.3,transform:'scale(.98)'},{opacity:1,transform:'none'}],{duration:520,easing:'ease-out'});
+        copy.innerHTML='<h3>'+d.title+'</h3><p>'+d.body+'</p><div class="route-chip">Arah awal → '+d.route+'</div>';
+        tone(480+i*52,.09);
+      }
+      document.querySelectorAll('.friction-tab').forEach(function(b,i){b.addEventListener('click',function(){setFriction(i);});});
+
+      /* Scene 8: route */
+      var routeOffsets=[[-440,-175],[440,-175],[-440,175],[440,175]];
+      function setRoute(i, immediate){
+        document.querySelectorAll('.route-card').forEach(function(b,n){b.classList.toggle('active',n===i);});
+        document.getElementById('routeToken').style.transform='translate('+routeOffsets[i][0]+'px,'+routeOffsets[i][1]+'px)';
+        if(!immediate){var card=document.querySelector('.route-card[data-route="'+i+'"]');setTimeout(function(){card.animate([{boxShadow:'0 0 0 rgba(240,200,117,0)'},{boxShadow:'0 0 38px rgba(240,200,117,.26)'},{boxShadow:'0 0 0 rgba(240,200,117,0)'}],{duration:700});},470);}
+        tone(520+i*60,.1);
+      }
+      document.querySelectorAll('.route-card').forEach(function(b,i){b.addEventListener('click',function(){setRoute(i);});});
+
+      /* Scene 9: formula */
+      var cases=[
+        {p:['Minat investasi aset kripto meningkat','Bukti tentang peran literasi risiko belum konsisten','Generasi muda di wilayah penelitian','Keputusan finansial berisiko'],text:'Belum terdapat bukti yang konsisten mengenai hubungan literasi risiko dengan keputusan investasi aset kripto pada generasi muda di wilayah penelitian.'},
+        {p:['Nilai kepedulian sosial diajarkan dalam PAI','Proses penerjemahan nilai menjadi kebiasaan belum terjelaskan','Guru dan siswa pada sekolah tertentu','Internalisasi nilai sulit diperkuat'],text:'Belum dipahami bagaimana guru menerjemahkan nilai kepedulian sosial dalam pembelajaran PAI menjadi kebiasaan sehari-hari siswa.'},
+        {p:['Kebiasaan membaca anak melemah','Belum tersedia solusi yang sesuai ekologi keluarga','Keluarga dan anak usia sekolah','Dukungan membaca tidak berkelanjutan'],text:'Belum tersedia program literasi keluarga yang sesuai konteks, valid, praktis, dan berpotensi meningkatkan kebiasaan membaca anak usia sekolah.'},
+        {p:['Program manajemen menghasilkan capaian berbeda','Penjelasan proses dan prediktor keberhasilan belum terintegrasi','Madrasah dengan karakter beragam','Replikasi kebijakan sulit dilakukan'],text:'Belum diketahui mengapa hasil program manajemen berbeda antarmadrasah serta faktor apa yang secara empiris memprediksi keberhasilannya.'}
+      ];
+      function setCase(i, immediate){
+        document.querySelectorAll('.case-button').forEach(function(b,n){b.classList.toggle('active',n===i);});
+        var d=cases[i];
+        ['fp1','fp2','fp3','fp4'].forEach(function(id,n){document.getElementById(id).textContent=d.p[n];});
+        document.getElementById('problemText').textContent=d.text;
+        if(!immediate){document.querySelectorAll('.formula-piece').forEach(function(piece,n){piece.animate([{opacity:0,transform:'translateY('+(n%2?'-35':'35')+'px) scale(.9)'},{opacity:1,transform:'none'}],{duration:520,delay:n*75,easing:'cubic-bezier(.2,.8,.2,1)',fill:'both'});});document.querySelector('.problem-output').animate([{opacity:.15,transform:'translateX(50px)'},{opacity:1,transform:'none'}],{duration:700,delay:320,easing:'ease-out',fill:'both'});}
+        tone(500+i*65,.09);
+      }
+      document.querySelectorAll('.case-button').forEach(function(b,i){b.addEventListener('click',function(){setCase(i);});});
+
+      /* Scene 10: question machine */
+      var needs=[
+        ['Perlu diketahui tingkat literasi risiko aset kripto pada generasi muda.','Bagaimana tingkat literasi risiko aset kripto pada generasi muda di wilayah penelitian?','Jawaban yang dicari: gambaran terukur','Kata tanya “bagaimana tingkat…” mengarahkan penelitian untuk memotret distribusi, kategori, atau karakteristik variabel.'],
+        ['Belum konsisten bukti hubungan literasi risiko dengan keputusan investasi.','Apakah terdapat hubungan antara literasi risiko dan keputusan investasi aset kripto pada generasi muda?','Jawaban yang dicari: pola hubungan','Pertanyaan mengarahkan pengukuran dua variabel atau lebih dan penilaian kekuatan serta arah keterkaitannya.'],
+        ['Hasil program literasi berbeda antarsekolah.','Apakah terdapat perbedaan kebiasaan membaca antara siswa pada program literasi A dan program literasi B?','Jawaban yang dicari: perbedaan kelompok','Kelompok dan indikator hasil harus dirumuskan sebelum memilih teknik komparasi.'],
+        ['Pemanfaatan data diperkirakan meningkatkan kualitas keputusan.','Apakah pemanfaatan data akademik berpengaruh terhadap kualitas keputusan pengelolaan madrasah?','Jawaban yang dicari: dugaan pengaruh','Bahasa “pengaruh” memerlukan desain dan asumsi yang lebih kuat daripada sekadar korelasi.'],
+        ['Nilai kepedulian sosial diajarkan, tetapi pengalaman siswa belum dipahami.','Bagaimana siswa memaknai pengalaman pembelajaran nilai kepedulian sosial dalam PAI?','Jawaban yang dicari: pengalaman dan makna','Pertanyaan terbuka menjaga ruang bagi perspektif partisipan dan konteksnya.'],
+        ['Belum jelas bagaimana program menjadi kebiasaan yang bertahan.','Bagaimana proses program literasi sekolah membentuk kebiasaan membaca mandiri siswa?','Jawaban yang dicari: proses','Fokusnya urutan, mekanisme, aktor, konteks, dan perubahan yang terjadi.'],
+        ['Belum ada program literasi keluarga yang sesuai konteks.','Bagaimana mengembangkan program literasi keluarga yang valid, praktis, dan efektif?','Jawaban yang dicari: produk solusi','Pertanyaan pengembangan mengandung produk serta kriteria mutu yang akan divalidasi dan diuji.'],
+        ['Hasil program berbeda dan faktor penjelasnya belum diketahui.','Mengapa hasil program manajemen berbeda antarmadrasah, dan faktor apa yang memprediksi keberhasilannya?','Jawaban yang dicari: penjelasan terintegrasi','Dua jenis pertanyaan disatukan melalui desain mixed methods yang menjelaskan bagaimana data saling melengkapi.']
+      ];
+      function setNeed(i, immediate){
+        document.querySelectorAll('.need-button').forEach(function(b,n){b.classList.toggle('active',n===i);});
+        var d=needs[i], chip=document.getElementById('qChip');
+        document.getElementById('qInput').textContent=d[0];
+        document.getElementById('qOutput').textContent=d[1];
+        document.getElementById('qExplain').innerHTML='<h3>'+d[2]+'</h3><p>'+d[3]+'</p>';
+        if(!immediate){chip.classList.remove('run');void chip.offsetWidth;chip.classList.add('run');document.getElementById('qOutput').animate([{opacity:.15,transform:'translateX(24px)'},{opacity:1,transform:'none'}],{duration:520,delay:600,easing:'ease-out',fill:'both'});}
+        tone(470+i*38,.08);
+      }
+      document.querySelectorAll('.need-button').forEach(function(b,i){b.addEventListener('click',function(){setNeed(i);});});
+
+      /* Scene 11: five-lens feasibility test */
+      var eligibilitySample = 0;
+      var eligibilityVisited = new Set([0]);
+      var eligibilityData = [
+        {
+          question:'Apakah pemanfaatan data akademik berpengaruh terhadap kualitas keputusan pengelolaan madrasah?',
+          verdict:'Layak dilanjutkan. Pertanyaan memiliki dasar fenomena, kebutuhan keputusan, ketidakjelasan ilmiah, sumber data yang memungkinkan, dan manfaat yang terarah.',
+          verdictClass:'ready',
+          lenses:[
+            ['Ada fenomenanya','strong','CUKUP KUAT','Apakah kondisi yang mendasari pertanyaan benar-benar terjadi?','Observasi awal, data, laporan, dokumen, atau sumber tepercaya—bukan sekadar dugaan peneliti.','Data akademik telah dikumpulkan, tetapi pemakaiannya dalam rapat dan keputusan madrasah belum konsisten.'],
+            ['Ada kepentingannya','strong','PENTING','Apa yang tetap tidak dapat dipahami atau diputuskan bila pertanyaan tidak dijawab?','Tunjukkan kebutuhan pengetahuan, keputusan, kebijakan, atau tindakan praktis yang masih tertahan.','Madrasah perlu mengetahui apakah investasi sistem dan pelatihan pengelolaan data benar-benar mendukung keputusan yang lebih baik.'],
+            ['Ada ketidakjelasannya','strong','BELUM TERJAWAB','Apakah jawabannya belum diketahui, masih diperdebatkan, atau buktinya belum memadai?','Bandingkan teori dan temuan terdahulu untuk memastikan ada ketidakpastian ilmiah—bukan fakta yang sudah jelas.','Manfaat data sering diasumsikan, tetapi bukti hubungan pemanfaatan data dengan kualitas keputusan pada konteks madrasah belum memadai.'],
+            ['Dapat diteliti','strong','MEMUNGKINKAN','Apakah tersedia jalan yang realistis untuk memperoleh jawaban?','Pastikan ada data, sumber informasi, objek atau partisipan, indikator, waktu, akses, dan prosedur etis yang memungkinkan.','Pengelola madrasah dapat dijangkau; pemanfaatan data dan kualitas keputusan dapat dioperasionalkan serta diukur dengan sumber yang tersedia.'],
+            ['Ada kontribusinya','strong','BERMANFAAT','Apa yang menjadi lebih dapat dipahami, diputuskan, atau dilakukan setelah penelitian selesai?','Tentukan pengguna hasil dan perubahan pengetahuan, keputusan, atau tindakan yang mungkin dihasilkan.','Hasil dapat memperjelas peran data sekaligus membantu madrasah memutuskan strategi pengelolaan dan pelatihan yang lebih tepat.']
+          ]
+        },
+        {
+          question:'Bagaimana budaya sekolah membentuk masa depan karakter seluruh siswa Indonesia?',
+          verdict:'Belum layak dalam bentuk sekarang. Persempit fenomena dan konteks, operasionalkan “karakter”, tentukan data yang dapat diakses, lalu jelaskan keputusan yang akan ditopang hasilnya.',
+          verdictClass:'revise',
+          lenses:[
+            ['Ada fenomenanya','weak','BELUM SPESIFIK','Apakah kondisi yang mendasari pertanyaan benar-benar terjadi?','Fenomena perlu ditunjukkan melalui kejadian, pola, data awal, laporan, atau pengamatan yang dapat diperiksa.','“Budaya sekolah” disebut sangat umum; belum ada gejala tertentu, kesenjangan, kelompok, atau kondisi aktual yang menjadi titik berangkat.'],
+            ['Ada kepentingannya','caution','MASIH UMUM','Apa yang tetap tidak dapat dipahami atau diputuskan bila pertanyaan tidak dijawab?','Kepentingan harus menunjuk kebutuhan pengetahuan, keputusan, kebijakan, atau praktik yang konkret.','Topiknya terdengar penting, tetapi belum jelas siapa yang membutuhkan jawaban dan keputusan apa yang tidak dapat dibuat tanpa penelitian.'],
+            ['Ada ketidakjelasannya','weak','KABUR ≠ GAP','Apakah jawabannya belum diketahui karena bukti terbatas—atau hanya karena istilahnya kabur?','Ketidakjelasan ilmiah harus ditemukan dari teori dan temuan; pertanyaan yang samar tidak otomatis mengandung research gap.','“Membentuk masa depan karakter” membuka terlalu banyak tafsir. Kekaburan istilah belum membuktikan adanya celah pengetahuan.'],
+            ['Dapat diteliti','weak','TIDAK REALISTIS','Apakah tersedia jalan yang realistis untuk memperoleh jawaban?','Periksa ketersediaan data, jangkauan objek, indikator, akses, waktu, biaya, dan etika penelitian.','Seluruh siswa Indonesia terlalu luas, “masa depan” belum dapat diamati sekarang, dan indikator karakter maupun sumber datanya belum ditentukan.'],
+            ['Ada kontribusinya','caution','BELUM TERARAH','Apa yang menjadi lebih dapat dipahami, diputuskan, atau dilakukan setelah penelitian selesai?','Kontribusi perlu menyebut pengguna hasil serta manfaat teoretis atau praktis yang mungkin diwujudkan.','Janji manfaatnya sangat besar, tetapi pengetahuan baru, pengguna hasil, dan tindakan yang akan didukung belum dapat diidentifikasi.']
+          ]
+        }
+      ];
+
+      function updateEligibilityProgress() {
+        document.querySelectorAll('#checkDots i').forEach(function(dot, i) { dot.classList.toggle('on', eligibilityVisited.has(i)); });
+        document.querySelectorAll('.eligibility-lens').forEach(function(button, i) { button.classList.toggle('checked', eligibilityVisited.has(i)); });
+        document.getElementById('eligibilityCount').textContent = eligibilityVisited.size + ' / 5';
+        var verdict = document.getElementById('eligibilityVerdict');
+        verdict.className = 'eligibility-verdict';
+        if (eligibilityVisited.size === 5) {
+          verdict.textContent = eligibilityData[eligibilitySample].verdict;
+          verdict.classList.add(eligibilityData[eligibilitySample].verdictClass);
+          verdict.animate([{opacity:.2,transform:'translateY(10px)'},{opacity:1,transform:'none'}],{duration:480,easing:'ease-out'});
+        } else {
+          verdict.textContent = 'Periksa seluruh lensa sebelum memutuskan apakah pertanyaan layak dilanjutkan.';
+        }
+      }
+
+      function setEligibilityLens(i, immediate) {
+        eligibilityVisited.add(i);
+        document.querySelectorAll('.eligibility-lens').forEach(function(button, n) { button.classList.toggle('active', n === i); });
+        var track = document.getElementById('eligibilityTrack').getBoundingClientRect();
+        var icon = document.querySelectorAll('.eligibility-lens')[i].querySelector('.lens-index').getBoundingClientRect();
+        var scale = deck.getBoundingClientRect().width / 1600 || 1;
+        document.getElementById('lensGlider').style.transform = 'translateX(' + ((icon.left + icon.width / 2 - track.left) / scale - 29) + 'px)';
+        var d = eligibilityData[eligibilitySample].lenses[i];
+        var detail = document.getElementById('eligibilityDetail');
+        detail.innerHTML = '<div class="detail-title-row"><h3>' + d[0] + '</h3><span class="lens-status ' + d[1] + '">' + d[2] + '</span></div>' +
+          '<div class="eligibility-columns"><div class="eligibility-cell"><b>Yang diuji</b><p>' + d[3] + '</p></div>' +
+          '<div class="eligibility-cell"><b>Bukti yang dicari</b><p>' + d[4] + '</p></div>' +
+          '<div class="eligibility-cell"><b>Diagnosis contoh</b><p>' + d[5] + '</p></div></div>';
+        if (!immediate) detail.animate([{opacity:.18,transform:'translateX(22px)'},{opacity:1,transform:'none'}],{duration:460,easing:'ease-out'});
+        updateEligibilityProgress();
+        tone(490 + i * 48, .085);
+      }
+
+      function setEligibilitySample(i, immediate) {
+        eligibilitySample = i;
+        eligibilityVisited = new Set([0]);
+        document.querySelectorAll('#sampleSwitch button').forEach(function(button, n) { button.classList.toggle('active', n === i); });
+        var question = document.getElementById('eligibilityQuestion');
+        question.textContent = eligibilityData[i].question;
+        if (!immediate) question.animate([{opacity:.2,transform:'translateY(-15px)'},{opacity:1,transform:'none'}],{duration:450,easing:'ease-out'});
+        setEligibilityLens(0, immediate);
+      }
+
+      document.querySelectorAll('.eligibility-lens').forEach(function(button, i) { button.addEventListener('click', function() { setEligibilityLens(i); }); });
+      document.querySelectorAll('#sampleSwitch button').forEach(function(button, i) { button.addEventListener('click', function() { setEligibilitySample(i); }); });
+
+      /* Scene 12: method */
+      var methods=[
+        ['Kualitatif: memahami makna, pengalaman, dan proses','Pilih desain sesuai objek dan logika pertanyaan—bukan karena dianggap lebih mudah.',['Fenomenologi','Grounded theory','Studi kasus','Etnografi','Naratif']],
+        ['Kuantitatif: mengukur dan menguji dugaan teoretis','Teori membentuk variabel dan hipotesis; desain menentukan kekuatan bukti yang dapat diklaim.',['Survei deskriptif','Korelasi / regresi','Komparatif / ex post facto','Eksperimen / kuasi']],
+        ['Mixed methods: mengintegrasikan dua jenis bukti','Tentukan urutan, titik integrasi, dan meta-inferensi—hasil kualitatif dan kuantitatif harus saling menjawab.',['Explanatory sequential','Exploratory sequential','Convergent']],
+        ['Pengembangan: membangun dan menguji kualitas solusi','Alurnya iteratif: kebutuhan memberi arah desain, kemudian produk divalidasi, diuji, dan diperbaiki.',['Analisis','Desain','Prototipe','Validasi','Uji terbatas','Revisi','Uji lapangan','Final']]
+      ];
+      function setMethod(i, immediate){
+        document.querySelectorAll('.method-question').forEach(function(b,n){b.classList.toggle('active',n===i);});
+        document.querySelectorAll('.method-stop').forEach(function(s,n){s.classList.toggle('active',n===i);});
+        var rail=document.getElementById('methodRail').getBoundingClientRect();
+        var stop=document.querySelectorAll('.method-stop')[i].querySelector('i').getBoundingClientRect();
+        var scale=deck.getBoundingClientRect().width/1600||1;
+        document.getElementById('methodToken').style.transform='translateX('+((stop.left+stop.width/2-rail.left)/scale-99)+'px)';
+        var d=methods[i],detail=document.getElementById('methodDetail');
+        detail.innerHTML='<h3>'+d[0]+'</h3><p>'+d[1]+'</p><div class="method-options">'+d[2].map(function(x){return '<span class="tag">'+x+'</span>';}).join('')+'</div>';
+        if(!immediate)detail.animate([{opacity:.2,transform:'translateY(18px)'},{opacity:1,transform:'none'}],{duration:470,easing:'ease-out'});
+        tone(500+i*65,.09);
+      }
+      document.querySelectorAll('.method-question').forEach(function(b,i){b.addEventListener('click',function(){setMethod(i);});});
+
+      var resetters = {
+        1: resetTopics,
+        2: function(){setLensA(0,true);},
+        3: function(){domain='edu';document.querySelectorAll('#domainSwitch button').forEach(function(b){b.classList.toggle('active',b.dataset.domain==='edu');});setLensB(0,true);},
+        4: function(){setLit(0,true);},
+        6: function(){setFriction(0,true);},
+        7: function(){document.querySelectorAll('.route-card').forEach(function(b){b.classList.remove('active');});document.getElementById('routeToken').style.transform='';},
+        8: function(){setCase(0,true);},
+        9: function(){setNeed(0,true);},
+        10:function(){setEligibilitySample(0,true);},
+        11:function(){setMethod(0,true);}
+      };
+
+      resetTopics();
+      setLensA(0,true);
+      setLensB(0,true);
+      setLit(0,true);
+      setFriction(0,true);
+      setCase(0,true);
+      setNeed(0,true);
+      setEligibilitySample(0,true);
+      setMethod(0,true);
+      updateUI();
+      setTimeout(scheduleFit, 40);
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,498 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#eef5fb">
+  <title>Pengantar Metodologi Penelitian Kuantitatif</title>
+  <style>
+    :root{
+      --ink:#0b1f33;--muted:#52677c;--paper:#f8fbfe;--panel:#fff;
+      --navy:#123a63;--blue:#1687c9;--cyan:#25b9c6;--orange:#f39a36;
+      --green:#36a875;--red:#df5b59;--line:#d8e5ef;--soft:#eaf3f8;
+      --shadow:0 18px 50px rgba(13,50,79,.12);--radius:24px;
+    }
+    *{box-sizing:border-box}
+    html,body{width:100%;height:100%;margin:0;overflow:hidden;background:#dfe9f1;font-family:Inter,Aptos,"Segoe UI",Arial,sans-serif;color:var(--ink)}
+    button,input{font:inherit}
+    button{color:inherit}
+    #shell{position:fixed;inset:0;width:100%;height:100%;overflow:hidden;display:block;background:radial-gradient(circle at 20% 15%,#fff 0,#edf4f9 40%,#dce7ef 100%)}
+    #deck{position:absolute;left:50%;top:50%;width:1600px;height:900px;overflow:hidden;background:var(--paper);transform:translate(-50%,-50%) scale(1);transform-origin:center center;will-change:transform;contain:layout paint style;box-shadow:0 24px 80px rgba(9,35,58,.25)}
+    #deck:before{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(115deg,rgba(255,255,255,.85),transparent 46%),radial-gradient(circle at 94% 8%,rgba(37,185,198,.09),transparent 28%),radial-gradient(circle at 8% 92%,rgba(22,135,201,.07),transparent 30%)}
+    .topbar{position:absolute;z-index:50;left:0;right:0;top:0;height:64px;padding:0 34px;display:flex;align-items:center;gap:22px;background:rgba(255,255,255,.9);border-bottom:1px solid var(--line);backdrop-filter:blur(12px)}
+    .brand{display:flex;align-items:center;gap:12px;font-size:17px;font-weight:800;letter-spacing:.04em;color:var(--navy);white-space:nowrap}
+    .brand-mark{width:28px;height:28px;border-radius:9px;background:linear-gradient(135deg,var(--navy),var(--blue) 58%,var(--cyan));box-shadow:0 5px 14px rgba(22,135,201,.22);position:relative}
+    .brand-mark:after{content:"";position:absolute;width:8px;height:8px;border:2px solid #fff;border-radius:50%;left:8px;top:8px}
+    .progress-track{height:7px;flex:1;border-radius:999px;background:#e4edf3;overflow:hidden}
+    #progress{height:100%;width:5.55%;border-radius:inherit;background:linear-gradient(90deg,var(--navy),var(--blue),var(--cyan));transition:width .45s cubic-bezier(.22,.9,.3,1)}
+    .scene-count{min-width:92px;text-align:right;font-size:18px;font-weight:800;color:var(--navy)}
+    .scene{position:absolute;z-index:2;left:0;right:0;top:64px;bottom:74px;padding:34px 58px 26px;opacity:0;visibility:hidden;transform:translateX(22px);transition:opacity .28s ease,transform .28s ease,visibility 0s linear .28s;overflow:hidden}
+    .scene.active{opacity:1;visibility:visible;transform:none;transition-delay:0s}
+    .scene.leaving{opacity:0;transform:translateX(-18px)}
+    .scene-head{display:flex;align-items:flex-start;justify-content:space-between;gap:28px;margin-bottom:24px}
+    .eyebrow{font-size:16px;font-weight:900;text-transform:uppercase;letter-spacing:.16em;color:var(--blue);margin-bottom:7px}
+    h1,h2,h3,p{margin-top:0}
+    h2{margin-bottom:0;font-size:45px;line-height:1.06;letter-spacing:-.035em;color:var(--navy)}
+    h3{font-size:25px;line-height:1.2;margin-bottom:12px;color:var(--navy)}
+    p{font-size:22px;line-height:1.42;margin-bottom:13px}
+    .lead{font-size:27px;line-height:1.38;color:#29445d}
+    .section-no{font-size:16px;font-weight:850;color:#6d8193;border:1px solid var(--line);border-radius:999px;padding:9px 14px;background:#fff;white-space:nowrap}
+    .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+    .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+    .card{background:rgba(255,255,255,.94);border:1px solid var(--line);border-radius:var(--radius);box-shadow:0 10px 28px rgba(16,56,87,.075);padding:22px;position:relative}
+    .card.tint{background:linear-gradient(145deg,#fff,#eef8fb)}
+    .card.orange{background:linear-gradient(145deg,#fff,#fff4e7);border-color:#f7d7ae}
+    .card.green{background:linear-gradient(145deg,#fff,#eaf8f2);border-color:#c7ead9}
+    .card.red{background:linear-gradient(145deg,#fff,#fff0ef);border-color:#f3cecc}
+    .chip{display:inline-flex;align-items:center;gap:8px;padding:7px 12px;border-radius:999px;background:#e7f5fb;color:#0d6698;font-size:16px;font-weight:850}
+    .dot{width:10px;height:10px;border-radius:50%;background:currentColor}
+    .big-number{font-size:54px;line-height:1;font-weight:900;color:var(--blue)}
+    .muted{color:var(--muted)}
+    .accent{color:var(--blue)}
+    .orange-txt{color:#c96c0b}.green-txt{color:#20895c}.red-txt{color:#ba4140}
+    .note{position:absolute;left:58px;right:58px;bottom:14px;font-size:17px;line-height:1.25;color:#64798c}
+    .note a{color:#1a75aa;text-decoration:none;border-bottom:1px dotted #1a75aa}
+    .action{border:0;border-radius:14px;padding:12px 18px;font-size:18px;font-weight:850;background:var(--navy);color:#fff;cursor:pointer;box-shadow:0 8px 18px rgba(18,58,99,.18);transition:transform .18s,box-shadow .18s,background .18s}
+    .action:hover{transform:translateY(-2px);box-shadow:0 12px 24px rgba(18,58,99,.24)}
+    .action:active{transform:translateY(1px)}
+    .action.secondary{background:#fff;color:var(--navy);border:1px solid #b9cddd;box-shadow:none}
+    .action.cyan{background:#0f8fa1}.action.orange{background:#d87a18}
+    .reveal{opacity:0;transform:translateY(18px)}
+    .scene.active .reveal{animation:rise .58s cubic-bezier(.2,.8,.2,1) both;animation-delay:var(--d,0s)}
+    @keyframes rise{to{opacity:1;transform:none}}
+    @keyframes float{50%{transform:translateY(-12px)}}
+    @keyframes pulse{50%{box-shadow:0 0 0 13px rgba(37,185,198,0)}}
+    .controls{position:absolute;z-index:60;left:0;right:0;bottom:0;height:74px;display:flex;align-items:center;justify-content:space-between;padding:0 32px;background:rgba(255,255,255,.92);border-top:1px solid var(--line);backdrop-filter:blur(12px)}
+    .controls-left,.controls-right{display:flex;align-items:center;gap:10px}
+    .ctrl{width:44px;height:44px;border-radius:13px;border:1px solid #cbdbe6;background:#fff;color:var(--navy);display:grid;place-items:center;font-size:21px;font-weight:900;cursor:pointer;transition:.18s}
+    .ctrl.wide{width:auto;padding:0 15px;font-size:16px}
+    .ctrl:hover{background:#edf7fb;border-color:#8bc3db;transform:translateY(-1px)}
+    .ctrl:disabled{opacity:.35;cursor:default;transform:none}
+    .hint{font-size:16px;color:#62788b}.hint b{color:var(--navy)}
+    #toast{position:absolute;z-index:90;left:50%;bottom:88px;transform:translate(-50%,12px);background:#0e2d49;color:#fff;border-radius:14px;padding:12px 18px;font-size:17px;opacity:0;pointer-events:none;transition:.25s}
+    #toast.show{opacity:1;transform:translate(-50%,0)}
+    #help{position:absolute;z-index:100;inset:0;display:grid;place-items:center;background:rgba(8,27,44,.48);opacity:0;visibility:hidden;transition:.2s}
+    #help.open{opacity:1;visibility:visible}
+    .help-card{width:650px;padding:32px;border-radius:28px;background:#fff;box-shadow:0 30px 100px rgba(0,0,0,.28)}
+    .keys{display:grid;grid-template-columns:140px 1fr;gap:12px 20px;font-size:20px}.key{font-weight:900;color:var(--navy)}
+
+    /* Cover */
+    .cover{padding:0;display:grid;grid-template-columns:1.05fr .95fr}
+    .cover-copy{padding:92px 38px 50px 70px;display:flex;flex-direction:column;justify-content:center;position:relative}
+    .cover-kicker{font-size:18px;font-weight:900;text-transform:uppercase;letter-spacing:.2em;color:var(--blue);margin-bottom:20px}
+    .cover h1{font-size:72px;line-height:1.02;letter-spacing:-.055em;margin:0 0 23px;color:var(--navy);max-width:780px}
+    .cover .subtitle{font-size:29px;font-weight:650;line-height:1.35;color:#3d5c74;max-width:680px;margin-bottom:46px}
+    .identity{display:flex;align-items:center;gap:16px}.avatar{width:52px;height:52px;border-radius:16px;background:linear-gradient(135deg,var(--navy),var(--cyan));display:grid;place-items:center;color:#fff;font-weight:900;font-size:20px}
+    .identity strong{display:block;font-size:22px;color:var(--navy)}.identity span{font-size:18px;color:var(--muted)}
+    .cover-visual{position:relative;overflow:hidden;background:linear-gradient(145deg,#eaf5fa,#fff 50%,#e9f7f5)}
+    .cover-visual:before{content:"";position:absolute;width:560px;height:560px;border-radius:50%;border:1px solid rgba(22,135,201,.17);left:100px;top:70px;box-shadow:0 0 0 75px rgba(22,135,201,.035),0 0 0 150px rgba(37,185,198,.025)}
+    .research-orbit{position:absolute;left:116px;top:120px;width:500px;height:500px;animation:float 5s ease-in-out infinite}
+    .core{position:absolute;left:162px;top:162px;width:176px;height:176px;border-radius:42px;background:linear-gradient(145deg,var(--navy),#1c6b9d);box-shadow:0 25px 55px rgba(13,71,108,.25);display:grid;place-items:center;color:#fff;text-align:center;font-size:24px;font-weight:900;line-height:1.15}
+    .orbit-node{position:absolute;width:116px;height:116px;border-radius:32px;background:#fff;border:1px solid var(--line);box-shadow:var(--shadow);display:grid;place-items:center;text-align:center;font-size:17px;font-weight:850;color:var(--navy)}
+    .orbit-node:after{content:"";position:absolute;width:14px;height:14px;border-radius:50%;background:var(--cyan);box-shadow:0 0 0 8px rgba(37,185,198,.12)}
+    .on1{left:0;top:40px}.on1:after{right:-8px;bottom:11px}.on2{right:0;top:72px}.on2:after{left:-7px;bottom:17px}.on3{left:45px;bottom:0}.on3:after{right:-3px;top:-5px}.on4{right:30px;bottom:8px}.on4:after{left:-6px;top:-2px}
+    .formula-strip{position:absolute;right:28px;bottom:30px;font-size:16px;font-weight:800;letter-spacing:.08em;color:#5d788d;writing-mode:vertical-rl}
+
+    /* Case */
+    .case-layout{display:grid;grid-template-columns:1.12fr .88fr;gap:24px;height:590px}
+    .classroom{height:100%;overflow:hidden;background:linear-gradient(160deg,#dff2fa,#fff 54%);position:relative}
+    .board{height:170px;border-radius:17px;background:#123a63;color:#fff;padding:24px 28px;position:relative;overflow:hidden}
+    .board:after{content:"";position:absolute;width:170px;height:170px;border:1px solid rgba(255,255,255,.17);border-radius:50%;right:-15px;top:-45px}
+    .board .board-title{font-size:25px;font-weight:900}.board .board-line{height:7px;border-radius:99px;background:rgba(255,255,255,.25);margin-top:18px;width:70%}.board .board-line.short{width:45%}
+    .students{display:flex;justify-content:space-around;align-items:end;height:240px;padding:18px 22px 0}
+    .student{width:130px;text-align:center;transition:.55s cubic-bezier(.2,.8,.2,1)}
+    .student .head{width:46px;height:46px;border-radius:50%;background:#f0b890;margin:auto;border:4px solid #fff;box-shadow:0 5px 12px rgba(0,0,0,.1)}
+    .student .body{width:88px;height:72px;border-radius:28px 28px 12px 12px;background:var(--blue);margin:-3px auto 0;position:relative}
+    .student:nth-child(2) .body{background:var(--orange)}.student:nth-child(3) .body{background:var(--green)}.student:nth-child(4) .body{background:#8c6cc6}
+    .phone{position:absolute;width:23px;height:39px;border:3px solid #0b1f33;border-radius:5px;right:5px;top:30px;background:#d6f6fb;transform:rotate(-9deg)}
+    .speech{height:32px;margin-top:8px;color:#6c8193;font-size:16px;font-weight:850;opacity:.35;transition:.4s}
+    .student.hot{transform:translateY(-12px)}.student.hot .speech{opacity:1;color:var(--red)}
+    .case-evidence{display:grid;grid-template-rows:repeat(3,1fr);gap:14px}
+    .evidence{display:grid;grid-template-columns:66px 1fr;gap:16px;align-items:center;padding:17px 20px;transition:.45s}
+    .evidence-icon{width:62px;height:62px;border-radius:19px;background:#eaf6fb;color:var(--blue);display:grid;place-items:center;font-size:27px;font-weight:900}
+    .evidence strong{font-size:22px;display:block;margin-bottom:4px;color:var(--navy)}.evidence span{font-size:18px;line-height:1.3;color:var(--muted)}
+    .evidence.hot{transform:translateX(-14px);border-color:var(--cyan);box-shadow:0 16px 36px rgba(22,135,201,.17)}
+
+    /* Sorting */
+    .sort-layout{display:grid;grid-template-columns:.8fr 1.2fr;gap:22px;height:558px}
+    .card-bank,.sort-bin{border:2px dashed #cbdce7;border-radius:24px;background:rgba(255,255,255,.62);padding:18px;position:relative}
+    .card-bank h3,.sort-bin h3{font-size:20px;margin-bottom:12px}
+    .sort-stack{display:grid;grid-template-columns:1fr 1fr;gap:12px;align-content:start}
+    .sort-card{min-height:68px;border:1px solid #c8dbe7;border-radius:16px;background:#fff;padding:12px 14px;font-size:17px;font-weight:780;line-height:1.2;cursor:pointer;display:flex;align-items:center;gap:10px;box-shadow:0 6px 15px rgba(14,49,75,.06);transition:border .2s,background .2s}
+    .sort-card:hover{border-color:var(--blue);background:#f3fbfe}.sort-card:before{content:attr(data-n);flex:0 0 auto;width:26px;height:26px;border-radius:9px;background:#e8f5fa;color:var(--blue);display:grid;place-items:center;font-size:14px;font-weight:900}
+    .bins{display:grid;grid-template-columns:repeat(3,1fr);gap:13px}
+    .sort-bin{padding:15px;min-width:0}.sort-bin[data-kind="fact"]{border-color:#8fd2cb}.sort-bin[data-kind="cause"]{border-color:#f0c17d}.sort-bin[data-kind="assume"]{border-color:#e6a1a0}
+    .sort-bin .bin-body{display:flex;flex-direction:column;gap:9px;min-height:420px}.sort-bin .sort-card{font-size:16px;min-height:58px}
+    .bin-title{display:flex;align-items:center;gap:8px}.bin-title i{width:12px;height:12px;border-radius:50%;background:var(--green)}.sort-bin[data-kind="cause"] i{background:var(--orange)}.sort-bin[data-kind="assume"] i{background:var(--red)}
+
+    /* Ladder */
+    .problem-layout{display:grid;grid-template-columns:1fr 430px;gap:28px;height:565px}
+    .problem-track{position:relative;padding-top:35px}
+    .problem-rail{position:absolute;left:145px;right:145px;top:95px;height:8px;border-radius:99px;background:#dce8f0}
+    .problem-fill{height:100%;width:0;border-radius:inherit;background:linear-gradient(90deg,var(--blue),var(--cyan));transition:.65s cubic-bezier(.2,.85,.2,1)}
+    .problem-steps{position:relative;display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+    .pstep{text-align:center}.pnode{width:82px;height:82px;border-radius:26px;background:#fff;border:2px solid #cbdce7;margin:0 auto 18px;display:grid;place-items:center;font-size:28px;font-weight:900;color:#8ba1b2;transition:.45s}
+    .pstep strong{font-size:19px;display:block;color:var(--navy)}.pstep span{font-size:16px;line-height:1.25;color:var(--muted);display:block;margin-top:6px}
+    .pstep.on .pnode{color:#fff;background:var(--blue);border-color:var(--blue);transform:translateY(-8px);box-shadow:0 15px 28px rgba(22,135,201,.23)}
+    .problem-token{position:absolute;left:121px;top:68px;width:48px;height:48px;border-radius:18px;background:var(--orange);border:5px solid #fff;box-shadow:0 8px 22px rgba(216,122,24,.3);transition:.65s cubic-bezier(.2,.85,.2,1)}
+    .problem-detail{height:100%;padding:26px;display:flex;flex-direction:column}
+    .detail-number{font-size:16px;font-weight:900;color:var(--blue);letter-spacing:.12em;text-transform:uppercase}
+    #problemTitle{font-size:31px;margin:14px 0 12px;color:var(--navy)}#problemText{font-size:22px;line-height:1.4;color:#39566d}
+    .quote-box{margin-top:auto;padding:18px;border-left:5px solid var(--orange);border-radius:0 16px 16px 0;background:#fff7ec;font-size:19px;font-weight:750;line-height:1.35}
+
+    /* Question selector */
+    .question-layout{display:grid;grid-template-columns:1.06fr .94fr;gap:24px;height:565px}
+    .question-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;position:relative;align-content:start}
+    .qcard{height:132px;border:1px solid #c9dce8;border-radius:20px;background:#fff;padding:17px;text-align:left;cursor:pointer;position:relative;overflow:hidden;transition:.28s}
+    .qcard:nth-child(5){grid-column:1/3;height:110px}.qcard b{display:block;color:var(--navy);font-size:21px;margin-bottom:7px}.qcard span{font-size:17px;line-height:1.28;color:var(--muted)}
+    .qcard.active{border-color:var(--cyan);background:#effbfb;transform:translateY(-5px);box-shadow:0 14px 26px rgba(25,139,157,.15)}
+    .qcard:after{content:"";position:absolute;width:12px;height:12px;border-radius:50%;right:14px;top:14px;background:#d9e6ee}.qcard.active:after{background:var(--cyan);box-shadow:0 0 0 7px rgba(37,185,198,.13)}
+    .procedure-panel{padding:26px;height:100%;overflow:hidden}
+    .proc-title{font-size:18px;font-weight:900;color:var(--blue);text-transform:uppercase;letter-spacing:.12em}
+    #qMain{font-size:28px;line-height:1.25;margin:12px 0 20px;color:var(--navy)}
+    .proc-list{display:grid;gap:10px}.proc-row{display:grid;grid-template-columns:130px 1fr;gap:12px;padding:11px 0;border-bottom:1px solid #e4edf3;font-size:18px;transition:.25s}.proc-row b{color:#385770}.proc-row span{color:var(--ink);font-weight:700}
+    .proc-panel-swap{animation:panelSwap .48s ease both}@keyframes panelSwap{0%{opacity:0;transform:translateX(35px)}100%{opacity:1;transform:none}}
+
+    /* Map */
+    .map-area{position:relative;height:520px;border-radius:28px;background:linear-gradient(150deg,#fff,#ecf7fb);border:1px solid var(--line);overflow:hidden}
+    .map-path{position:absolute;left:90px;right:90px;top:250px;height:8px;background:#dbe8f0;border-radius:99px}
+    .map-path:after{content:"";position:absolute;right:-2px;top:-8px;border-left:18px solid #a5c6d7;border-top:12px solid transparent;border-bottom:12px solid transparent}
+    .map-piece{position:absolute;width:155px;height:104px;border-radius:21px;background:#fff;border:1px solid #bfd4e1;box-shadow:0 12px 25px rgba(11,56,87,.1);display:grid;place-items:center;text-align:center;font-size:19px;font-weight:850;color:var(--navy);padding:12px;transition:1s cubic-bezier(.2,.9,.25,1)}
+    .map-piece small{display:block;font-size:14px;color:var(--muted);margin-top:5px}.map-piece:nth-of-type(1){left:80px;top:95px;transform:rotate(-9deg)}.map-piece:nth-of-type(2){left:300px;top:330px;transform:rotate(7deg)}.map-piece:nth-of-type(3){left:515px;top:84px;transform:rotate(10deg)}.map-piece:nth-of-type(4){left:738px;top:345px;transform:rotate(-8deg)}.map-piece:nth-of-type(5){left:965px;top:82px;transform:rotate(8deg)}.map-piece:nth-of-type(6){left:1185px;top:330px;transform:rotate(-7deg)}
+    .map-area.assembled .map-piece{top:199px;transform:rotate(0)}.map-area.assembled .map-piece:nth-of-type(1){left:55px}.map-area.assembled .map-piece:nth-of-type(2){left:280px}.map-area.assembled .map-piece:nth-of-type(3){left:505px}.map-area.assembled .map-piece:nth-of-type(4){left:730px}.map-area.assembled .map-piece:nth-of-type(5){left:955px}.map-area.assembled .map-piece:nth-of-type(6){left:1180px}
+    .map-label{position:absolute;right:30px;top:25px;width:390px;font-size:19px;line-height:1.35;color:#3d5a71;background:#fff;padding:15px 18px;border-radius:16px;border:1px solid var(--line)}
+    .map-action{position:absolute;left:30px;bottom:28px}
+
+    /* Gateway */
+    .gateway{height:535px;position:relative;border-radius:28px;background:linear-gradient(145deg,#eef7fb,#fff);border:1px solid var(--line);overflow:hidden}
+    .gate-center{position:absolute;left:633px;top:178px;width:200px;height:140px;border-radius:35px;background:var(--navy);color:#fff;display:grid;place-items:center;text-align:center;font-size:23px;font-weight:900;line-height:1.18;box-shadow:0 18px 35px rgba(18,58,99,.25);z-index:3;transition:.85s cubic-bezier(.2,.9,.25,1)}
+    .gate-choice{position:absolute;top:130px;width:380px;height:245px;border-radius:28px;padding:25px;background:#fff;border:2px solid #cbdce7;box-shadow:0 13px 32px rgba(16,57,88,.09);transition:.4s}.gate-choice h3{font-size:29px}.gate-choice ul{padding-left:22px;margin:0}.gate-choice li{font-size:18px;line-height:1.38;margin:8px 0;color:#426078}.gate-choice.qual{left:90px;border-color:#94cfdc}.gate-choice.quant{right:90px;border-color:#f0bd79}
+    .gate-choice.active{transform:translateY(-12px);box-shadow:0 20px 44px rgba(16,90,125,.17)}
+    .gate-buttons{position:absolute;left:50%;bottom:28px;transform:translateX(-50%);display:flex;gap:10px;z-index:4}
+    .gate-center.to-qual{transform:translate(-430px,-55px) scale(.68);background:var(--cyan)}.gate-center.to-quant{transform:translate(430px,-55px) scale(.68);background:var(--orange)}.gate-center.to-both{transform:translate(0,100px) scale(.68);background:var(--green)}
+    .both-label{position:absolute;left:50%;bottom:78px;transform:translateX(-50%);font-size:17px;font-weight:850;color:var(--green);opacity:0;transition:.35s}.gateway.both .both-label{opacity:1}
+
+    /* Fan */
+    .qual-layout{display:grid;grid-template-columns:400px 1fr;gap:26px;height:555px}
+    .qual-focus{padding:27px;display:flex;flex-direction:column}.lens{width:150px;height:150px;border-radius:50%;border:18px solid var(--cyan);margin:10px auto 18px;position:relative;box-shadow:inset 0 0 0 2px #fff,0 15px 35px rgba(37,185,198,.17)}.lens:after{content:"";position:absolute;width:92px;height:22px;background:var(--navy);border-radius:999px;right:-76px;bottom:-38px;transform:rotate(45deg)}
+    .qual-focus p{font-size:21px}.fan-area{position:relative;border-radius:28px;background:linear-gradient(145deg,#fff,#edf8f9);border:1px solid var(--line);overflow:hidden}
+    .fan-card{position:absolute;left:300px;top:170px;width:250px;height:195px;border-radius:24px;background:#fff;border:1px solid #bad8df;padding:21px;box-shadow:0 16px 33px rgba(16,70,91,.12);transition:.9s cubic-bezier(.2,.9,.24,1)}.fan-card h3{font-size:22px}.fan-card p{font-size:17px;line-height:1.35;color:var(--muted)}
+    .fan-card:nth-child(1){z-index:5;transform:rotate(-5deg)}.fan-card:nth-child(2){z-index:4;transform:rotate(4deg)}.fan-card:nth-child(3){z-index:3;transform:rotate(-2deg)}.fan-card:nth-child(4){z-index:2;transform:rotate(6deg)}
+    .fan-area.open .fan-card:nth-child(1){left:35px;top:55px;transform:rotate(0)}.fan-area.open .fan-card:nth-child(2){left:315px;top:55px;transform:rotate(0)}.fan-area.open .fan-card:nth-child(3){left:35px;top:295px;transform:rotate(0)}.fan-area.open .fan-card:nth-child(4){left:315px;top:295px;transform:rotate(0)}
+    .fan-button{position:absolute;right:25px;bottom:22px}
+
+    /* Pipelines */
+    .quant-layout{height:535px;display:grid;grid-template-rows:1fr 145px;gap:20px}.quant-track,.theory-track{position:relative;background:#fff;border:1px solid var(--line);border-radius:28px;padding:38px 35px}
+    .pipeline{display:grid;grid-template-columns:repeat(6,1fr);gap:12px;position:relative}.pipeline:before{content:"";position:absolute;left:8%;right:8%;top:56px;height:7px;border-radius:99px;background:#dce8f0}
+    .pipe-step{position:relative;text-align:center;z-index:2}.pipe-dot{width:76px;height:76px;border-radius:24px;background:#fff;border:3px solid #c5d9e5;margin:18px auto 14px;display:grid;place-items:center;font-size:22px;font-weight:900;color:#7c95a7;transition:.4s}.pipe-step strong{font-size:18px;color:var(--navy);display:block}.pipe-step span{font-size:15px;line-height:1.25;color:var(--muted);display:block;margin-top:5px}.pipe-step.on .pipe-dot{background:var(--blue);border-color:var(--blue);color:#fff;transform:translateY(-8px);box-shadow:0 13px 26px rgba(22,135,201,.22)}
+    .pipe-token{position:absolute;left:137px;top:74px;width:32px;height:32px;border-radius:12px;background:var(--orange);border:4px solid #fff;box-shadow:0 6px 16px rgba(216,122,24,.3);transition:.7s cubic-bezier(.2,.85,.2,1);z-index:5}
+    .quant-bottom{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px}.purpose{padding:16px 20px}.purpose strong{display:block;font-size:20px;color:var(--navy);margin-bottom:5px}.purpose span{font-size:17px;color:var(--muted)}
+
+    /* Comparison */
+    .compare-wrap{height:545px;display:grid;grid-template-columns:1fr 1fr;gap:22px;position:relative}.compare-col{padding:22px 25px}.compare-col h3{font-size:27px}.compare-table{display:grid;gap:0}.compare-row{display:grid;grid-template-columns:145px 1fr;gap:14px;padding:10px 0;border-bottom:1px solid #e3edf3;font-size:17px;line-height:1.25}.compare-row b{color:#587086}.compare-row span{font-weight:720}.focus-lens{position:absolute;z-index:5;left:705px;top:210px;width:90px;height:90px;border-radius:50%;border:11px solid var(--orange);background:rgba(255,255,255,.68);box-shadow:0 12px 25px rgba(150,80,10,.2);transition:.8s cubic-bezier(.2,.9,.22,1)}.focus-lens:after{content:"";position:absolute;width:60px;height:17px;border-radius:99px;background:var(--navy);right:-48px;bottom:-23px;transform:rotate(43deg)}.focus-lens.left{transform:translateX(-540px)}.focus-lens.right{transform:translateX(540px)}
+    .focus-buttons{position:absolute;left:50%;bottom:14px;transform:translateX(-50%);display:flex;gap:9px;z-index:6}
+
+    /* Theory chain */
+    .theory-stage{height:535px;position:relative;border:1px solid var(--line);border-radius:28px;background:linear-gradient(150deg,#fff,#eef7fb);padding:32px}
+    .theory-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:15px 30px;position:relative}.theory-grid:before{content:"";position:absolute;left:6%;right:6%;top:92px;height:6px;background:#d8e7f0;border-radius:99px;box-shadow:0 182px 0 #d8e7f0}.tstep{height:145px;border-radius:22px;background:#fff;border:1px solid #c9dce7;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:14px;z-index:2;transition:.4s}.tstep strong{font-size:21px;color:var(--navy)}.tstep span{font-size:15px;color:var(--muted);margin-top:6px;line-height:1.25}.tstep.on{transform:translateY(-8px);border-color:var(--cyan);box-shadow:0 14px 28px rgba(21,128,155,.14)}
+    .theory-token{position:absolute;width:36px;height:36px;border-radius:13px;background:var(--orange);border:4px solid #fff;box-shadow:0 7px 18px rgba(200,100,10,.3);left:180px;top:88px;z-index:5;transition:.7s cubic-bezier(.2,.88,.2,1)}
+    .theory-caption{position:absolute;left:32px;right:220px;bottom:20px;font-size:18px;color:#3e5b72}.theory-next{position:absolute;right:30px;bottom:18px}
+
+    /* 16 steps */
+    .procedure-stage{height:538px;position:relative}.steps16{height:468px;display:grid;grid-template-columns:repeat(4,1fr);grid-template-rows:repeat(4,1fr);gap:11px 14px}.step16{background:#fff;border:1px solid #cedee8;border-radius:17px;padding:11px 13px;display:grid;grid-template-columns:36px 1fr;gap:9px;align-items:center;transition:.35s}.step16 .num{width:34px;height:34px;border-radius:11px;background:#eaf4f9;color:var(--blue);display:grid;place-items:center;font-size:15px;font-weight:900}.step16 strong{font-size:16px;line-height:1.18;color:var(--navy)}.step16.on{border-color:var(--cyan);background:#eefbfb;transform:translateY(-4px);box-shadow:0 9px 20px rgba(24,132,150,.12)}.step16.on .num{background:var(--cyan);color:#fff}
+    .proc-token{position:absolute;width:26px;height:26px;border-radius:10px;background:var(--orange);border:3px solid #fff;box-shadow:0 6px 14px rgba(195,95,10,.3);left:16px;top:16px;z-index:6;transition:.65s cubic-bezier(.2,.88,.2,1)}
+    .proc-controls{position:absolute;right:12px;bottom:10px;display:flex;align-items:center;gap:12px}.proc-status{font-size:17px;font-weight:850;color:var(--navy);background:#fff;padding:10px 15px;border-radius:12px;border:1px solid var(--line)}
+
+    /* Researchers */
+    .researcher-grid{height:535px;display:grid;grid-template-columns:1fr 1fr;gap:24px}.researcher{position:relative;padding:22px 25px;overflow:hidden}.researcher-head{display:flex;align-items:center;justify-content:space-between}.badge{font-size:15px;font-weight:900;padding:7px 11px;border-radius:999px;background:#eef3f6;color:#607487}.researcher.good .badge{background:#e7f7ef;color:#268157}
+    .data-stack{display:flex;gap:12px;margin:18px 0}.data-card{flex:1;height:92px;border-radius:18px;background:#edf5f9;border:1px solid #cbdce6;display:grid;place-items:center;text-align:center;font-size:17px;font-weight:850;color:var(--navy);transition:.9s cubic-bezier(.2,.9,.22,1)}
+    .stat-machine{height:106px;border-radius:21px;background:var(--navy);color:#fff;padding:18px;display:grid;grid-template-columns:70px 1fr;gap:15px;align-items:center}.gear{width:62px;height:62px;border-radius:50%;border:8px dotted var(--cyan);display:grid;place-items:center;font-weight:900}.stat-machine strong{font-size:21px}.stat-machine span{display:block;font-size:16px;color:#bdd8ea;margin-top:4px}
+    .researcher.run .data-card{transform:translateY(117px) scale(.55);opacity:.18}.researcher.run .gear{animation:spin 1.2s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}
+    .evidence-meter{margin-top:20px}.meter-label{display:flex;justify-content:space-between;font-size:17px;font-weight:800}.meter{height:16px;border-radius:999px;background:#e5edf2;margin-top:8px;overflow:hidden}.meter-fill{height:100%;width:0;border-radius:inherit;background:var(--red);transition:1.2s .45s cubic-bezier(.2,.85,.2,1)}.good .meter-fill{background:var(--green)}.run .meter-fill{width:28%}.good.run .meter-fill{width:88%}
+    .limit-list{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:15px}.limit{font-size:15px;padding:8px 10px;border-radius:10px;background:#f4f7f9;color:#526b7e}.good .limit{background:#eef8f3}.research-run{position:absolute;left:50%;bottom:55px;transform:translateX(-50%);z-index:6}
+
+    /* Thesis */
+    .thesis-layout{height:535px;display:grid;grid-template-columns:590px 1fr;gap:26px}.chapter-stack{position:relative;padding:20px 20px 20px 0}.chapter{position:absolute;left:20px;width:510px;height:82px;border-radius:18px;background:#fff;border:1px solid #c8dae5;padding:16px 20px 16px 82px;cursor:pointer;transition:.55s cubic-bezier(.2,.85,.2,1);box-shadow:0 10px 22px rgba(16,57,86,.08)}.chapter:before{content:attr(data-bab);position:absolute;left:17px;top:14px;width:50px;height:50px;border-radius:15px;background:#e8f4f9;color:var(--blue);display:grid;place-items:center;font-weight:900}.chapter strong{display:block;font-size:20px;color:var(--navy)}.chapter span{font-size:15px;color:var(--muted)}.chapter:nth-child(1){top:12px}.chapter:nth-child(2){top:105px}.chapter:nth-child(3){top:198px}.chapter:nth-child(4){top:291px}.chapter:nth-child(5){top:384px}.chapter.active{left:48px;transform:scale(1.04);border-color:var(--cyan);box-shadow:0 16px 32px rgba(18,119,148,.15)}
+    .chapter-detail{padding:28px;display:flex;flex-direction:column}.chapter-detail h3{font-size:31px}.chapter-detail p{font-size:21px;color:#3d596f}.coherence{margin-top:auto;display:flex;flex-wrap:wrap;gap:8px}.coh{font-size:15px;font-weight:850;padding:8px 11px;border-radius:10px;background:#eaf5fa;color:#236789}.coh-arrow{align-self:center;color:#89a4b5;font-weight:900}
+
+    /* R&D */
+    .rnd-stage{height:540px;position:relative;border-radius:28px;border:1px solid var(--line);background:linear-gradient(145deg,#fff,#edf8f5);padding:28px 34px}.rnd-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:65px 24px;position:relative}.rnd-grid:before{content:"";position:absolute;left:8%;right:8%;top:80px;height:6px;background:#d9e8e2;border-radius:99px;box-shadow:0 220px 0 #d9e8e2}.rnd-step{height:120px;border-radius:21px;background:#fff;border:1px solid #c8dfd5;padding:16px;text-align:center;display:grid;place-items:center;position:relative;z-index:2;transition:.38s}.rnd-step strong{font-size:18px;color:var(--navy)}.rnd-step span{font-size:14px;color:var(--muted);display:block;margin-top:5px}.rnd-step.on{border-color:var(--green);transform:translateY(-7px);box-shadow:0 13px 26px rgba(43,141,95,.14)}
+    .product-token{position:absolute;width:54px;height:42px;border-radius:9px;background:var(--navy);border:5px solid #fff;box-shadow:0 7px 18px rgba(12,51,78,.28);left:175px;top:67px;z-index:7;transition:.75s cubic-bezier(.2,.9,.24,1)}.product-token:after{content:"HTML";font-size:9px;color:#fff;position:absolute;inset:0;display:grid;place-items:center;font-weight:900;letter-spacing:.06em}.rnd-caption{position:absolute;left:34px;bottom:22px;font-size:18px;color:#3f5e52}.rnd-next{position:absolute;right:28px;bottom:18px}
+
+    /* Integrated */
+    .integrated{height:540px;display:grid;grid-template-columns:1.15fr .85fr;gap:22px}.journey{position:relative;padding:22px}.journey-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px 12px;position:relative}.journey-node{height:130px;border-radius:19px;background:#fff;border:1px solid #ccdde7;padding:13px;display:flex;flex-direction:column;justify-content:center;text-align:center;transition:.35s}.journey-node strong{font-size:17px;color:var(--navy)}.journey-node span{font-size:14px;color:var(--muted);margin-top:6px}.journey-node.on{background:#eefafa;border-color:var(--cyan);transform:translateY(-5px)}.journey-token{position:absolute;width:34px;height:34px;border-radius:12px;background:var(--orange);border:4px solid #fff;box-shadow:0 6px 16px rgba(190,90,9,.3);left:92px;top:73px;transition:.7s cubic-bezier(.2,.88,.2,1);z-index:5}.journey-next{position:absolute;right:20px;bottom:18px}
+    .exit-card{padding:22px 24px;overflow:hidden}.exit-card h3{font-size:27px}.exit-list{display:grid;gap:9px}.exit-q{display:grid;grid-template-columns:32px 1fr;gap:10px;padding:9px 11px;border-radius:13px;background:#f0f6f9;transition:.3s}.exit-q b{width:28px;height:28px;border-radius:9px;background:#fff;color:var(--blue);display:grid;place-items:center;font-size:14px}.exit-q span{font-size:16px;line-height:1.25;color:#36536b;font-weight:700}.exit-q:hover{transform:translateX(7px);background:#e8f7f7}
+
+    /* Bibliography */
+    .bib-grid{display:grid;grid-template-columns:1fr 1fr;gap:13px 18px;height:550px}.bib-item{display:grid;grid-template-columns:48px 1fr 40px;gap:13px;align-items:center;padding:15px 17px;border-radius:18px;background:#fff;border:1px solid #d1e0e9;text-decoration:none;color:inherit;box-shadow:0 7px 18px rgba(15,56,84,.06);transition:.25s}.bib-item:hover{transform:translateY(-4px);border-color:var(--cyan);box-shadow:0 14px 28px rgba(16,111,137,.13)}.bib-num{width:42px;height:42px;border-radius:13px;background:#e9f5fa;color:var(--blue);display:grid;place-items:center;font-weight:900;font-size:17px}.bib-item strong{font-size:17px;line-height:1.25;color:var(--navy);display:block}.bib-item span{font-size:14px;color:var(--muted);display:block;margin-top:3px;line-height:1.25}.external{width:34px;height:34px;border-radius:11px;background:#eef6f9;display:grid;place-items:center;color:var(--blue);font-size:18px;font-weight:900}
+    .closing-layout{height:550px;display:grid;grid-template-columns:1.2fr .8fr;gap:24px}.closing-copy{border-radius:28px;background:linear-gradient(145deg,var(--navy),#1a638f);padding:42px;color:#fff;display:flex;flex-direction:column;justify-content:center;position:relative;overflow:hidden}.closing-copy:after{content:"";position:absolute;width:430px;height:430px;border-radius:50%;right:-160px;bottom:-230px;border:70px solid rgba(255,255,255,.06)}.closing-copy h3{font-size:52px;color:#fff;letter-spacing:-.035em;margin-bottom:16px}.closing-copy p{font-size:25px;color:#d7edf7;max-width:670px}.closing-sign{margin-top:34px;font-size:20px;font-weight:800}.closing-sign span{display:block;font-size:16px;color:#a9d3e6;margin-top:5px}.closing-links{display:grid;gap:12px}.closing-links .bib-item{grid-template-columns:44px 1fr 36px;padding:13px 15px}.closing-links .bib-item strong{font-size:16px}.closing-links .bib-item span{font-size:13px}
+    @media (prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important}}
+  </style>
+</head>
+<body>
+<div id="shell">
+  <main id="deck" aria-label="Media pembelajaran Pengantar Metodologi Penelitian Kuantitatif">
+    <header class="topbar">
+      <div class="brand"><span class="brand-mark"></span><span>METODOLOGI PENELITIAN KUANTITATIF</span></div>
+      <div class="progress-track" aria-hidden="true"><div id="progress"></div></div>
+      <div class="scene-count"><span id="currentNo">01</span> / 18</div>
+    </header>
+
+    <section class="scene cover active" data-title="Sampul">
+      <div class="cover-copy">
+        <div class="cover-kicker reveal" style="--d:.08s">Pengantar Metodologi Penelitian Kuantitatif</div>
+        <h1 class="reveal" style="--d:.18s">Dari Masalah Nyata Menjadi Bukti Ilmiah</h1>
+        <p class="subtitle reveal" style="--d:.3s">Belajar mengubah gejala sehari-hari menjadi pertanyaan, desain, data, dan kesimpulan yang dapat dipertanggungjawabkan.</p>
+        <div class="identity reveal" style="--d:.42s"><div class="avatar">NM</div><div><strong>Najib Mubarok, M.Sc.</strong><span>INISNU Temanggung</span></div></div>
+      </div>
+      <div class="cover-visual">
+        <div class="research-orbit">
+          <div class="core">MASALAH<br>NYATA</div>
+          <div class="orbit-node on1">Teori</div><div class="orbit-node on2">Desain</div><div class="orbit-node on3">Data</div><div class="orbit-node on4">Bukti</div>
+        </div>
+        <div class="formula-strip">OBSERVASI • PERTANYAAN • PROSEDUR • KESIMPULAN</div>
+      </div>
+    </section>
+
+    <section class="scene" data-title="Kasus nyata">
+      <div class="scene-head"><div><div class="eyebrow">Konkret · Observasi awal</div><h2>Aktif di ponsel, pasif di kelas</h2></div><div class="section-no">01 · KASUS</div></div>
+      <div class="case-layout">
+        <div class="card classroom reveal" style="--d:.08s">
+          <div class="board"><div class="board-title">Perkuliahan berjalan satu arah</div><div class="board-line"></div><div class="board-line short"></div></div>
+          <div class="students"><div class="student"><div class="head"></div><div class="body"><i class="phone"></i></div><div class="speech">diam saat ditanya</div></div><div class="student"><div class="head"></div><div class="body"><i class="phone"></i></div><div class="speech">tugas terlambat</div></div><div class="student"><div class="head"></div><div class="body"><i class="phone"></i></div><div class="speech">skor rendah</div></div><div class="student"><div class="head"></div><div class="body"><i class="phone"></i></div><div class="speech">aktif di layar</div></div></div>
+          <button class="action cyan" id="caseButton">Amati 3 gejala</button>
+        </div>
+        <div class="case-evidence">
+          <div class="card evidence reveal" style="--d:.16s"><div class="evidence-icon">01</div><div><strong>Partisipasi rendah</strong><span>Hanya sedikit mahasiswa bertanya atau menanggapi.</span></div></div>
+          <div class="card evidence reveal" style="--d:.24s"><div class="evidence-icon">02</div><div><strong>Tugas terlambat</strong><span>Banyak tugas dikumpulkan melewati tenggat.</span></div></div>
+          <div class="card evidence reveal" style="--d:.32s"><div class="evidence-icon">03</div><div><strong>Skor formatif rendah</strong><span>Hasil evaluasi belum mencapai target pembelajaran.</span></div></div>
+        </div>
+      </div>
+      <div class="note">Kasus simulatif. Lensa teori yang mungkin relevan: keterlibatan mahasiswa, pembelajaran multimedia, beban kognitif, dan motivasi (Fredricks et al., 2004; Mayer, 2020).</div>
+    </section>
+
+    <section class="scene" data-title="Masalah atau keluhan">
+      <div class="scene-head"><div><div class="eyebrow">Analisis · Pisahkan evidensi</div><h2>Masalah, dugaan, atau sekadar label?</h2></div><div class="section-no">02 · KLASIFIKASI</div></div>
+      <div class="sort-layout">
+        <div class="card-bank reveal" style="--d:.08s"><h3>Klik setiap kartu untuk memindahkan</h3><div class="sort-stack" id="sortBank">
+          <button class="sort-card" data-n="1" data-home="bank">Mahasiswa malas</button><button class="sort-card" data-n="2" data-home="bank">Sedikit mahasiswa berdiskusi</button><button class="sort-card" data-n="3" data-home="bank">Skor formatif rendah</button><button class="sort-card" data-n="4" data-home="bank">Media kurang interaktif</button><button class="sort-card" data-n="5" data-home="bank">Mahasiswa lebih suka ponsel</button><button class="sort-card" data-n="6" data-home="bank">HTML pasti menyelesaikan masalah</button>
+        </div></div>
+        <div class="bins reveal" style="--d:.18s">
+          <div class="sort-bin" data-kind="fact"><h3 class="bin-title"><i></i>Fakta / gejala</h3><div class="bin-body" id="binFact"></div></div>
+          <div class="sort-bin" data-kind="cause"><h3 class="bin-title"><i></i>Dugaan sebab</h3><div class="bin-body" id="binCause"></div></div>
+          <div class="sort-bin" data-kind="assume"><h3 class="bin-title"><i></i>Penilaian / asumsi</h3><div class="bin-body" id="binAssume"></div></div>
+        </div>
+      </div>
+      <div class="note">Prinsip: data awal menunjukkan <b>apa yang tampak</b>; penelitian diperlukan untuk menjelaskan <b>mengapa</b> dan menguji <b>apa yang mungkin bekerja</b>.</div>
+    </section>
+
+    <section class="scene" data-title="Merumuskan masalah">
+      <div class="scene-head"><div><div class="eyebrow">Analisis · Dari gejala ke fokus</div><h2>Mengubah masalah nyata menjadi masalah penelitian</h2></div><div class="section-no">03 · PEMETAAN</div></div>
+      <div class="problem-layout">
+        <div class="card problem-track reveal" style="--d:.08s"><div class="problem-rail"><div class="problem-fill" id="problemFill"></div></div><div class="problem-token" id="problemToken"></div><div class="problem-steps">
+          <div class="pstep on"><div class="pnode">1</div><strong>Kondisi kini</strong><span>Apa yang benar-benar terjadi?</span></div><div class="pstep"><div class="pnode">2</div><strong>Kondisi harapan</strong><span>Apa target yang seharusnya?</span></div><div class="pstep"><div class="pnode">3</div><strong>Kesenjangan</strong><span>Apa selisih keduanya?</span></div><div class="pstep"><div class="pnode">4</div><strong>Fokus riset</strong><span>Apa yang perlu dijelaskan atau diuji?</span></div>
+        </div><button class="action map-action" id="problemNext">Lanjutkan pemetaan →</button></div>
+        <div class="card problem-detail reveal" style="--d:.18s"><div class="detail-number" id="problemNo">TAHAP 1 / 4</div><div id="problemTitle">Masalah nyata</div><p id="problemText">Mahasiswa tampak pasif dalam diskusi, beberapa tugas terlambat, dan skor formatif rendah.</p><div class="quote-box" id="problemQuote">“Mahasiswa tidak aktif” adalah gejala awal—belum menjadi masalah penelitian yang tajam.</div></div>
+      </div>
+    </section>
+
+    <section class="scene" data-title="Pertanyaan dan prosedur">
+      <div class="scene-head"><div><div class="eyebrow">Abstraksi · Arah penelitian</div><h2>Pertanyaan menentukan prosedur</h2></div><div class="section-no">04 · LOGIKA DESAIN</div></div>
+      <div class="question-layout">
+        <div class="question-grid reveal" style="--d:.08s">
+          <button class="qcard active" data-q="0"><b>Mengapa pasif?</b><span>Mencari penjelasan, pengalaman, dan konteks.</span></button><button class="qcard" data-q="1"><b>Bagaimana pengalamannya?</b><span>Menggali makna dari sudut pandang mahasiswa.</span></button><button class="qcard" data-q="2"><b>Media apa yang dibutuhkan?</b><span>Memetakan kebutuhan dan spesifikasi solusi.</span></button><button class="qcard" data-q="3"><b>Apakah HTML berpengaruh?</b><span>Menguji hipotesis dengan desain kuantitatif.</span></button><button class="qcard" data-q="4"><b>Seberapa besar pengaruhnya?</b><span>Mengestimasi ukuran efek dan ketidakpastian.</span></button>
+        </div>
+        <div class="card procedure-panel reveal" style="--d:.18s" id="procedurePanel"><div class="proc-title">Konsekuensi metodologis</div><div id="qMain">Mengapa mahasiswa pasif?</div><div class="proc-list"><div class="proc-row"><b>Data</b><span id="qData">Narasi pengalaman dan observasi</span></div><div class="proc-row"><b>Sumber</b><span id="qSource">Mahasiswa dan situasi kelas</span></div><div class="proc-row"><b>Instrumen</b><span id="qInstrument">Wawancara / observasi</span></div><div class="proc-row"><b>Analisis</b><span id="qAnalysis">Tematik dan kontekstual</span></div><div class="proc-row"><b>Kesimpulan</b><span id="qConclusion">Pola sebab yang dipersepsikan</span></div></div></div>
+      </div>
+      <div class="note">Pemilihan pendekatan mengikuti tujuan pengetahuan dan pertanyaan penelitian—bukan sekadar selera peneliti (Creswell & Creswell, 2022).</div>
+    </section>
+
+    <section class="scene" data-title="Peta metodologi">
+      <div class="scene-head"><div><div class="eyebrow">Abstraksi · Definisi</div><h2>Metodologi adalah peta keputusan penelitian</h2></div><div class="section-no">05 · KEDUDUKAN</div></div>
+      <div class="map-area reveal" style="--d:.08s" id="mapArea">
+        <div class="map-piece">Masalah<small>kesenjangan yang layak diteliti</small></div><div class="map-piece">Teori<small>lensa dan konstruk</small></div><div class="map-piece">Pertanyaan<small>apa yang ingin diketahui</small></div><div class="map-piece">Desain<small>strategi memperoleh bukti</small></div><div class="map-piece">Data + Analisis<small>operasional dan statistik</small></div><div class="map-piece">Kesimpulan<small>jawaban yang terbatas bukti</small></div>
+        <div class="map-path"></div><div class="map-label"><b>Metodologi</b> menjelaskan alasan, logika, dan keselarasan seluruh keputusan. <b>Metode</b> adalah teknik khusus. <b>Statistika</b> adalah alat analisis data.</div><button class="action map-action" id="assembleMap">Susun peta penelitian</button>
+      </div>
+      <div class="note">Definisi kerja disarikan dari pembahasan desain penelitian dalam Creswell & Creswell (2022).</div>
+    </section>
+
+    <section class="scene" data-title="Gerbang pendekatan">
+      <div class="scene-head"><div><div class="eyebrow">Analisis · Pilihan pendekatan</div><h2>Kapan kualitatif, kapan kuantitatif?</h2></div><div class="section-no">06 · GERBANG</div></div>
+      <div class="gateway reveal" style="--d:.08s" id="gateway">
+        <div class="gate-choice qual"><h3>Kualitatif</h3><ul><li>Fenomena belum jelas atau sangat kontekstual</li><li>Mencari makna, proses, kategori, atau kebutuhan</li><li>Mengkonstruksi atau menyesuaikan gagasan/solusi</li></ul></div>
+        <div class="gate-center" id="gateToken">PERTANYAAN<br>ANDA</div>
+        <div class="gate-choice quant"><h3>Kuantitatif</h3><ul><li>Konstruk dan variabel telah cukup jelas</li><li>Teori/temuan sebelumnya memberi hipotesis</li><li>Butuh pengujian empiris, estimasi, atau prediksi</li></ul></div>
+        <div class="both-label">Tahapan dapat dikombinasikan jika tujuan penelitian memang memerlukannya.</div>
+        <div class="gate-buttons"><button class="action cyan" data-gate="qual">Arah kualitatif</button><button class="action orange" data-gate="quant">Arah kuantitatif</button><button class="action secondary" data-gate="both">Bertahap / kombinasi</button></div>
+      </div>
+    </section>
+
+    <section class="scene" data-title="Arah kualitatif">
+      <div class="scene-head"><div><div class="eyebrow">Abstraksi · Eksplorasi</div><h2>Kualitatif: memahami sebelum mengukur</h2></div><div class="section-no">07 · KUALITATIF</div></div>
+      <div class="qual-layout">
+        <div class="card qual-focus reveal" style="--d:.08s"><div class="lens"></div><p><b>Tujuan utama:</b> memahami makna, proses, konteks, pengalaman, atau kebutuhan yang belum terpetakan secara memadai.</p><p class="muted">Kualitatif tidak hanya untuk “ide baru”; ia juga dapat menilai, mengadaptasi, atau merekonstruksi solusi yang sudah ada.</p></div>
+        <div class="fan-area reveal" style="--d:.18s" id="fanArea"><div class="fan-card"><h3>Makna</h3><p>Bagaimana mahasiswa memaknai media, kelas, dan partisipasi?</p></div><div class="fan-card"><h3>Proses</h3><p>Bagaimana kepasifan terbentuk selama kegiatan belajar?</p></div><div class="fan-card"><h3>Kebutuhan</h3><p>Fitur apa yang benar-benar dibutuhkan pengguna?</p></div><div class="fan-card"><h3>Luaran</h3><p>Tema, model konseptual, atau spesifikasi solusi.</p></div><button class="action fan-button" id="openFan">Buka empat lensa</button></div>
+      </div>
+      <div class="note">Rujukan: Creswell & Poth (2018); Creswell & Creswell (2022).</div>
+    </section>
+
+    <section class="scene" data-title="Arah kuantitatif">
+      <div class="scene-head"><div><div class="eyebrow">Abstraksi · Pengujian empiris</div><h2>Kuantitatif: ketika gagasan sudah dapat diukur</h2></div><div class="section-no">08 · KUANTITATIF</div></div>
+      <div class="quant-layout">
+        <div class="quant-track reveal" style="--d:.08s"><div class="pipeline" id="quantPipeline"><div class="pipe-step on"><div class="pipe-dot">1</div><strong>Teori</strong><span>penjelasan awal</span></div><div class="pipe-step"><div class="pipe-dot">2</div><strong>Konstruk</strong><span>konsep yang jelas</span></div><div class="pipe-step"><div class="pipe-dot">3</div><strong>Variabel</strong><span>dapat dioperasionalkan</span></div><div class="pipe-step"><div class="pipe-dot">4</div><strong>Instrumen</strong><span>valid dan reliabel</span></div><div class="pipe-step"><div class="pipe-dot">5</div><strong>Data</strong><span>hasil pengukuran</span></div><div class="pipe-step"><div class="pipe-dot">6</div><strong>Uji empiris</strong><span>estimasi & ketidakpastian</span></div></div><div class="pipe-token" id="quantToken"></div><button class="action" style="position:absolute;right:28px;bottom:22px" id="quantNext">Gerakkan bukti →</button></div>
+        <div class="quant-bottom"><div class="card purpose"><strong>Perbedaan</strong><span>Apakah dua kondisi menghasilkan capaian berbeda?</span></div><div class="card purpose"><strong>Hubungan / pengaruh</strong><span>Apakah variabel bergerak bersama sesuai hipotesis?</span></div><div class="card purpose"><strong>Prediksi</strong><span>Seberapa baik data memperkirakan hasil?</span></div></div>
+      </div>
+      <div class="note">Kuantitatif menguji teori atau hipotesis secara empiris—bukan “membuktikan kebenaran absolut”.</div>
+    </section>
+
+    <section class="scene" data-title="Perbandingan pendekatan">
+      <div class="scene-head"><div><div class="eyebrow">Abstraksi · Dua cara mengetahui</div><h2>Perbedaan khas—bukan dua kotak yang kaku</h2></div><div class="section-no">09 · PERBANDINGAN</div></div>
+      <div class="compare-wrap">
+        <div class="card compare-col reveal" style="--d:.08s"><h3 class="accent">Kualitatif</h3><div class="compare-table"><div class="compare-row"><b>Arah</b><span>Eksplorasi & konstruksi</span></div><div class="compare-row"><b>Pertanyaan</b><span>Mengapa? Bagaimana?</span></div><div class="compare-row"><b>Teori</b><span>Lensa; dapat berkembang</span></div><div class="compare-row"><b>Data</b><span>Narasi, tindakan, dokumen</span></div><div class="compare-row"><b>Sampel</b><span>Informan kaya informasi</span></div><div class="compare-row"><b>Instrumen</b><span>Peneliti + pedoman</span></div><div class="compare-row"><b>Analisis</b><span>Tema, pola, konteks</span></div><div class="compare-row"><b>Luaran</b><span>Pemahaman/model/spesifikasi</span></div></div></div>
+        <div class="card compare-col reveal" style="--d:.16s"><h3 class="orange-txt">Kuantitatif</h3><div class="compare-table"><div class="compare-row"><b>Arah</b><span>Pengujian & estimasi</span></div><div class="compare-row"><b>Pertanyaan</b><span>Berapa? Adakah? Seberapa besar?</span></div><div class="compare-row"><b>Teori</b><span>Dasar kerangka & hipotesis</span></div><div class="compare-row"><b>Data</b><span>Hasil pengukuran terstruktur</span></div><div class="compare-row"><b>Sampel</b><span>Mewakili populasi sasaran</span></div><div class="compare-row"><b>Instrumen</b><span>Skala/tes/protokol baku</span></div><div class="compare-row"><b>Analisis</b><span>Estimasi & inferensi statistik</span></div><div class="compare-row"><b>Luaran</b><span>Efek, hubungan, prediksi</span></div></div></div>
+        <div class="focus-lens" id="focusLens"></div><div class="focus-buttons"><button class="action secondary" data-focus="left">Sorot kualitatif</button><button class="action secondary" data-focus="center">Lihat keduanya</button><button class="action secondary" data-focus="right">Sorot kuantitatif</button></div>
+      </div>
+      <div class="note"><b>Kuncinya:</b> pilihan pendekatan ditentukan oleh tujuan pengetahuan dan jenis kesimpulan—bukan semata-mata ada/tidaknya angka atau banyak/sedikitnya sampel.</div>
+    </section>
+
+    <section class="scene" data-title="Teori dan pengukuran">
+      <div class="scene-head"><div><div class="eyebrow">Abstraksi · Logika deduktif</div><h2>Teori bukan hiasan kutipan—ia mengarahkan pengukuran</h2></div><div class="section-no">10 · TEORI</div></div>
+      <div class="theory-stage reveal" style="--d:.08s" id="theoryStage"><div class="theory-grid"><div class="tstep on"><strong>Teori</strong><span>Multimedia learning</span></div><div class="tstep"><strong>Konstruk</strong><span>Keterlibatan belajar</span></div><div class="tstep"><strong>Kerangka</strong><span>HTML → engagement</span></div><div class="tstep"><strong>Hipotesis</strong><span>Ada peningkatan</span></div><div class="tstep"><strong>Variabel</strong><span>Media & hasil belajar</span></div><div class="tstep"><strong>Indikator</strong><span>Respons, waktu, skor</span></div><div class="tstep"><strong>Instrumen</strong><span>Skala dan tes</span></div><div class="tstep"><strong>Data</strong><span>Bukti terukur</span></div></div><div class="theory-token" id="theoryToken"></div><div class="theory-caption"><b>Contoh:</b> prinsip multimedia → rancangan HTML interaktif → keterlibatan → hasil belajar.</div><button class="action theory-next" id="theoryNext">Ikuti alur teori →</button></div>
+      <div class="note">Rujukan konseptual: Creswell &amp; Creswell (2022); Mayer (2020).</div>
+    </section>
+
+    <section class="scene" data-title="Prosedur kuantitatif">
+      <div class="scene-head"><div><div class="eyebrow">Abstraksi · Peta kerja</div><h2>Prosedur kuantitatif: 16 keputusan yang saling terkait</h2></div><div class="section-no">11 · PROSEDUR</div></div>
+      <div class="procedure-stage reveal" style="--d:.08s" id="procStage"><div class="steps16">
+        <div class="step16 on"><div class="num">1</div><strong>Identifikasi masalah nyata</strong></div><div class="step16"><div class="num">2</div><strong>Pemetaan masalah penelitian</strong></div><div class="step16"><div class="num">3</div><strong>Kajian teori & temuan</strong></div><div class="step16"><div class="num">4</div><strong>Rumusan pertanyaan</strong></div>
+        <div class="step16"><div class="num">5</div><strong>Kerangka konseptual</strong></div><div class="step16"><div class="num">6</div><strong>Hipotesis penelitian</strong></div><div class="step16"><div class="num">7</div><strong>Definisi variabel</strong></div><div class="step16"><div class="num">8</div><strong>Desain penelitian</strong></div>
+        <div class="step16"><div class="num">9</div><strong>Populasi & sampel</strong></div><div class="step16"><div class="num">10</div><strong>Indikator & instrumen</strong></div><div class="step16"><div class="num">11</div><strong>Validitas & reliabilitas</strong></div><div class="step16"><div class="num">12</div><strong>Pengumpulan data</strong></div>
+        <div class="step16"><div class="num">13</div><strong>Pengolahan & statistik</strong></div><div class="step16"><div class="num">14</div><strong>Interpretasi hasil</strong></div><div class="step16"><div class="num">15</div><strong>Kesimpulan</strong></div><div class="step16"><div class="num">16</div><strong>Keterbatasan & implikasi</strong></div>
+      </div><div class="proc-token" id="procToken"></div><div class="proc-controls"><span class="proc-status" id="procStatus">Langkah 1 / 16</span><button class="action" id="procNext">Langkah berikutnya →</button></div></div>
+    </section>
+
+    <section class="scene" data-title="Statistika dan desain">
+      <div class="scene-head"><div><div class="eyebrow">Kasus pembanding · Kekuatan bukti</div><h2>Statistika dapat menghitung—tetapi bisakah ia menyimpulkan?</h2></div><div class="section-no">12 · UJI KRITIS</div></div>
+      <div class="researcher-grid">
+        <div class="card researcher reveal" style="--d:.08s"><div class="researcher-head"><h3>Peneliti A</h3><span class="badge">DATA DULU</span></div><div class="data-stack"><div class="data-card">Dua kelompok skor</div><div class="data-card">Langsung uji-t</div></div><div class="stat-machine"><div class="gear">Σ</div><div><strong>p = 0,03</strong><span>perbedaan terdeteksi</span></div></div><div class="evidence-meter"><div class="meter-label"><span>Kekuatan kesimpulan</span><span>lemah</span></div><div class="meter"><div class="meter-fill"></div></div></div><div class="limit-list"><div class="limit">Teori?</div><div class="limit">Pretest?</div><div class="limit">Instrumen?</div><div class="limit">Kelompok setara?</div></div></div>
+        <div class="card researcher good reveal" style="--d:.16s"><div class="researcher-head"><h3>Peneliti B</h3><span class="badge">DESAIN + DATA</span></div><div class="data-stack"><div class="data-card">Teori + pretest</div><div class="data-card">Prosedur setara</div></div><div class="stat-machine"><div class="gear">Σ</div><div><strong>p = 0,03</strong><span>perbedaan terdeteksi</span></div></div><div class="evidence-meter"><div class="meter-label"><span>Kekuatan kesimpulan</span><span>lebih kuat</span></div><div class="meter"><div class="meter-fill"></div></div></div><div class="limit-list"><div class="limit">Instrumen tervalidasi</div><div class="limit">Pembanding jelas</div><div class="limit">Asumsi diperiksa</div><div class="limit">Batas klaim dinyatakan</div></div></div>
+      </div><button class="action research-run" id="researchRun">Jalankan analisis keduanya</button>
+      <div class="note">Statistika tidak dapat sendiri menetapkan validitas konstruk, keterwakilan sampel, kesetaraan awal, faktor pengganggu, atau kausalitas (ASA, 2022; NIST/SEMATECH, n.d.).</div>
+    </section>
+
+    <section class="scene" data-title="Metodologi dan skripsi">
+      <div class="scene-head"><div><div class="eyebrow">Praktis · Pedoman penulisan</div><h2>Metodologi menjaga skripsi tetap koheren</h2></div><div class="section-no">13 · BAB I–V</div></div>
+      <div class="thesis-layout">
+        <div class="chapter-stack reveal" style="--d:.08s"><button class="chapter active" data-bab="I" data-ch="0"><strong>Pendahuluan</strong><span>masalah, fokus, tujuan</span></button><button class="chapter" data-bab="II" data-ch="1"><strong>Landasan Teori</strong><span>konstruk, temuan, hipotesis</span></button><button class="chapter" data-bab="III" data-ch="2"><strong>Metode Penelitian</strong><span>desain, sampel, instrumen, analisis</span></button><button class="chapter" data-bab="IV" data-ch="3"><strong>Hasil & Pembahasan</strong><span>data, pengujian, interpretasi</span></button><button class="chapter" data-bab="V" data-ch="4"><strong>Penutup</strong><span>jawaban, batas, implikasi</span></button></div>
+        <div class="card chapter-detail reveal" style="--d:.18s"><span class="chip" id="chapterChip">BAB I</span><h3 id="chapterTitle">Pendahuluan: apa yang menjadi masalah?</h3><p id="chapterText">Bab I menjelaskan kondisi nyata, kesenjangan, masalah penelitian, pertanyaan, serta tujuan. Semua keputusan berikutnya harus menjawab fokus ini.</p><div class="coherence"><span class="coh">Judul</span><span class="coh-arrow">→</span><span class="coh">Masalah</span><span class="coh-arrow">→</span><span class="coh">Teori</span><span class="coh-arrow">→</span><span class="coh">Hipotesis</span><span class="coh-arrow">→</span><span class="coh">Variabel</span><span class="coh-arrow">→</span><span class="coh">Instrumen</span><span class="coh-arrow">→</span><span class="coh">Analisis</span><span class="coh-arrow">→</span><span class="coh">Kesimpulan</span></div></div>
+      </div>
+      <div class="note">Pelaporan yang transparan membantu pembaca menilai konsistensi antara pertanyaan, metode, hasil, dan klaim (APA JARS, n.d.).</div>
+    </section>
+
+    <section class="scene" data-title="Kuantitatif dalam pengembangan">
+      <div class="scene-head"><div><div class="eyebrow">Integrasi · Penelitian pengembangan</div><h2>Kuantitatif sebagai salah satu tahap dalam R&amp;D</h2></div><div class="section-no">14 · PENGEMBANGAN</div></div>
+      <div class="rnd-stage reveal" style="--d:.08s" id="rndStage"><div class="rnd-grid"><div class="rnd-step on"><div><strong>Analisis kebutuhan</strong><span>sering kualitatif</span></div></div><div class="rnd-step"><div><strong>Konstruksi solusi</strong><span>teori + konteks</span></div></div><div class="rnd-step"><div><strong>Prototipe HTML</strong><span>produk awal</span></div></div><div class="rnd-step"><div><strong>Validasi ahli</strong><span>kelayakan isi/media</span></div></div><div class="rnd-step"><div><strong>Uji terbatas</strong><span>keterpakaian</span></div></div><div class="rnd-step"><div><strong>Revisi</strong><span>perbaikan produk</span></div></div><div class="rnd-step"><div><strong>Uji lapangan</strong><span>data kuantitatif</span></div></div><div class="rnd-step"><div><strong>Produk akhir</strong><span>hasil + batas penggunaan</span></div></div></div><div class="product-token" id="productToken"></div><div class="rnd-caption"><b>Catatan:</b> R&amp;D dapat memakai data kualitatif dan kuantitatif per tahap, tetapi tidak otomatis menjadi mixed methods.</div><button class="action rnd-next" id="rndNext">Majukan produk →</button></div>
+      <div class="note">Rujukan: Plomp & Nieveen (2013), <i>Educational Design Research</i>.</div>
+    </section>
+
+    <section class="scene" data-title="Refleksi terpadu">
+      <div class="scene-head"><div><div class="eyebrow">Refleksi · Satukan seluruh alur</div><h2>Dari kelas yang pasif menuju penelitian yang dapat diuji</h2></div><div class="section-no">15 · INTEGRASI</div></div>
+      <div class="integrated">
+        <div class="card journey reveal" style="--d:.08s" id="journey"><div class="journey-grid"><div class="journey-node on"><strong>1 · Gejala</strong><span>kelas pasif</span></div><div class="journey-node"><strong>2 · Masalah riset</strong><span>penyebab/bukti belum jelas</span></div><div class="journey-node"><strong>3 · Eksplorasi</strong><span>kebutuhan pengguna</span></div><div class="journey-node"><strong>4 · Konstruksi</strong><span>prototipe HTML</span></div><div class="journey-node"><strong>5 · Teori</strong><span>kerangka & hipotesis</span></div><div class="journey-node"><strong>6 · Uji kuantitatif</strong><span>desain & pengukuran</span></div><div class="journey-node"><strong>7 · Statistika</strong><span>estimasi & uji</span></div><div class="journey-node"><strong>8 · Kesimpulan</strong><span>jawaban + batas klaim</span></div></div><div class="journey-token" id="journeyToken"></div><button class="action journey-next" id="journeyNext">Ikuti alur →</button></div>
+        <div class="card exit-card reveal" style="--d:.18s"><span class="chip">EXIT ACTIVITY</span><h3>Pilih satu masalah di sekitar Anda</h3><div class="exit-list"><div class="exit-q"><b>1</b><span>Apa gejala yang dapat diamati?</span></div><div class="exit-q"><b>2</b><span>Apa yang baru asumsi atau penilaian?</span></div><div class="exit-q"><b>3</b><span>Apa masalah penelitiannya?</span></div><div class="exit-q"><b>4</b><span>Perlu eksplorasi atau pengujian?</span></div><div class="exit-q"><b>5</b><span>Teori apa yang menjadi lensa?</span></div><div class="exit-q"><b>6</b><span>Bukti apa yang dibutuhkan?</span></div></div></div>
+      </div>
+      <div class="note">Refleksi akhir: desain yang transparan, dapat ditelusuri, dan direplikasi memperkuat kepercayaan terhadap temuan (NASEM, 2019).</div>
+    </section>
+
+    <section class="scene" data-title="Bibliografi I">
+      <div class="scene-head"><div><div class="eyebrow">Rujukan utama · Klik untuk membuka</div><h2>Bibliografi</h2></div><div class="section-no">16 · SUMBER 1–6</div></div>
+      <div class="bib-grid">
+        <a class="bib-item reveal" style="--d:.05s" href="https://books.google.com/books/about/Research_Design.html?id=Pr2VEAAAQBAJ" target="_blank" rel="noopener"><span class="bib-num">1</span><span><strong>Creswell, J. W., &amp; Creswell, J. D. (2022). <i>Research Design</i> (6th ed.).</strong><span>SAGE · pendekatan kualitatif, kuantitatif, dan mixed methods</span></span><span class="external">↗</span></a>
+        <a class="bib-item reveal" style="--d:.10s" href="https://books.google.com/books?id=DLbBDQAAQBAJ" target="_blank" rel="noopener"><span class="bib-num">2</span><span><strong>Creswell, J. W., &amp; Poth, C. N. (2018). <i>Qualitative Inquiry &amp; Research Design</i>.</strong><span>SAGE · desain dan tradisi penelitian kualitatif</span></span><span class="external">↗</span></a>
+        <a class="bib-item reveal" style="--d:.15s" href="https://doi.org/10.3102/00346543074001059" target="_blank" rel="noopener"><span class="bib-num">3</span><span><strong>Fredricks, J. A., Blumenfeld, P. C., &amp; Paris, A. H. (2004).</strong><span>School engagement: potential, evidence, and directions</span></span><span class="external">↗</span></a>
+        <a class="bib-item reveal" style="--d:.20s" href="https://books.google.com/books/about/Multimedia_Learning.html?id=kIFVzQEACAAJ" target="_blank" rel="noopener"><span class="bib-num">4</span><span><strong>Mayer, R. E. (2020). <i>Multimedia Learning</i> (3rd ed.).</strong><span>Cambridge University Press · prinsip pembelajaran multimedia</span></span><span class="external">↗</span></a>
+        <a class="bib-item reveal" style="--d:.25s" href="https://apastyle.apa.org/jars" target="_blank" rel="noopener"><span class="bib-num">5</span><span><strong>American Psychological Association. (n.d.). JARS.</strong><span>Journal Article Reporting Standards untuk pelaporan riset</span></span><span class="external">↗</span></a>
+        <a class="bib-item reveal" style="--d:.30s" href="https://www.amstat.org/your-career/ethical-guidelines-for-statistical-practice" target="_blank" rel="noopener"><span class="bib-num">6</span><span><strong>American Statistical Association. (2022). Ethical Guidelines.</strong><span>Integritas data, metode, interpretasi, dan komunikasi statistik</span></span><span class="external">↗</span></a>
+      </div>
+    </section>
+
+    <section class="scene" data-title="Bibliografi II dan penutup">
+      <div class="scene-head"><div><div class="eyebrow">Rujukan lanjutan · Klik untuk membuka</div><h2>Bacaan lanjutan &amp; penutup</h2></div><div class="section-no">17 · SUMBER 7–12</div></div>
+      <div class="closing-layout">
+        <div class="closing-copy reveal" style="--d:.08s"><h3>Mulai dari masalah.<br>Berakhir pada bukti.</h3><p>Metodologi bukan sekadar Bab III. Ia adalah logika yang menyatukan pertanyaan, teori, desain, data, dan batas kesimpulan.</p><div class="closing-sign">Najib Mubarok, M.Sc.<span>INISNU Temanggung</span></div></div>
+        <div class="closing-links">
+          <a class="bib-item reveal" style="--d:.10s" href="https://www.itl.nist.gov/div898/handbook/pri/pri.htm" target="_blank" rel="noopener"><span class="bib-num">7</span><span><strong>NIST/SEMATECH. e-Handbook of Statistical Methods.</strong><span>Desain eksperimen, asumsi, analisis, interpretasi</span></span><span class="external">↗</span></a>
+          <a class="bib-item reveal" style="--d:.15s" href="https://www.nationalacademies.org/projects/DBASSE-BBCSS-17-03/publication/25303" target="_blank" rel="noopener"><span class="bib-num">8</span><span><strong>NASEM. (2019). <i>Reproducibility and Replicability in Science</i>.</strong><span>Transparansi, reproduksibilitas, dan replikasi</span></span><span class="external">↗</span></a>
+          <a class="bib-item reveal" style="--d:.20s" href="https://www.slo.nl/publish/pages/2904/educational-design-research-part-a.pdf" target="_blank" rel="noopener"><span class="bib-num">9</span><span><strong>Plomp, T., &amp; Nieveen, N. (Eds.). (2013).</strong><span><i>Educational Design Research</i> · buku terbuka tentang pengembangan solusi pendidikan</span></span><span class="external">↗</span></a>
+          <a class="bib-item reveal" style="--d:.25s" href="https://www.worldbank.org/en/programs/sief-trust-fund/publication/impact-evaluation-in-practice" target="_blank" rel="noopener"><span class="bib-num">10</span><span><strong>Gertler, P. J., et al. (2016). <i>Impact Evaluation in Practice</i>.</strong><span>Desain evaluasi dampak dan inferensi kausal</span></span><span class="external">↗</span></a>
+          <a class="bib-item reveal" style="--d:.30s" href="https://openstax.org/details/books/introductory-statistics-2e" target="_blank" rel="noopener"><span class="bib-num">11</span><span><strong>Illowsky, B., &amp; Dean, S. <i>Introductory Statistics 2e</i>.</strong><span>OpenStax · bacaan statistik terbuka</span></span><span class="external">↗</span></a>
+          <a class="bib-item reveal" style="--d:.35s" href="https://us.sagepub.com/en-us/nam/scale-development/book269114" target="_blank" rel="noopener"><span class="bib-num">12</span><span><strong>DeVellis, R. F., &amp; Thorpe, C. T. (2021). <i>Scale Development</i>.</strong><span>SAGE · konstruk, indikator, validitas, reliabilitas</span></span><span class="external">↗</span></a>
+        </div>
+      </div>
+    </section>
+
+    <footer class="controls">
+      <div class="controls-left"><button class="ctrl" id="prev" aria-label="Scene sebelumnya">←</button><button class="ctrl" id="next" aria-label="Scene berikutnya">→</button><span class="hint"><b>← →</b> navigasi · <b>Space</b> jeda</span></div>
+      <div class="controls-right"><button class="ctrl wide" id="reset" title="Reset scene">R&nbsp; Reset</button><button class="ctrl wide" id="sound" title="Suara">M&nbsp; Suara</button><button class="ctrl wide" id="fullscreen" title="Layar penuh">F&nbsp; Penuh</button><button class="ctrl" id="helpButton" title="Bantuan">?</button></div>
+    </footer>
+    <div id="toast" role="status"></div>
+    <div id="help"><div class="help-card"><h3>Kontrol media</h3><div class="keys"><span class="key">← / →</span><span>Pindah scene</span><span class="key">Space</span><span>Jeda / lanjutkan animasi</span><span class="key">R</span><span>Reset interaksi scene aktif</span><span class="key">F</span><span>Masuk / keluar layar penuh</span><span class="key">M</span><span>Aktifkan / matikan bunyi</span><span class="key">Esc / ?</span><span>Tutup panel bantuan</span></div><button class="action" id="closeHelp" style="margin-top:24px">Tutup</button></div></div>
+  </main>
+</div>
+<script>
+(()=>{
+  'use strict';
+  const shell=document.getElementById('shell'),deck=document.getElementById('deck');
+  const scenes=[...document.querySelectorAll('.scene')],progress=document.getElementById('progress'),currentNo=document.getElementById('currentNo');
+  const prev=document.getElementById('prev'),next=document.getElementById('next'),toast=document.getElementById('toast');
+  let index=0,soundOn=false,paused=false,audioCtx,toastTimer;
+  function fit(){const root=document.documentElement,vv=window.visualViewport;let w=root.clientWidth||innerWidth||1600,h=root.clientHeight||innerHeight||900;if(vv&&vv.width&&vv.height){w=Math.min(w,vv.width);h=Math.min(h,vv.height)}const gap=document.fullscreenElement?8:12;let scale=Math.min((w-gap*2)/1600,(h-gap*2)/900);if(!isFinite(scale)||scale<=0)scale=1;deck.style.transform=`translate(-50%,-50%) scale(${scale})`}
+  function scheduleFit(){fit();requestAnimationFrame(()=>{fit();requestAnimationFrame(fit)});setTimeout(fit,120);setTimeout(fit,360)}
+  addEventListener('resize',scheduleFit);addEventListener('orientationchange',scheduleFit);document.addEventListener('fullscreenchange',scheduleFit);if(window.visualViewport)window.visualViewport.addEventListener('resize',scheduleFit);scheduleFit();
+  function beep(freq=520,dur=.045){if(!soundOn)return;try{audioCtx=audioCtx||new (window.AudioContext||window.webkitAudioContext)();const o=audioCtx.createOscillator(),g=audioCtx.createGain();o.type='sine';o.frequency.value=freq;g.gain.setValueAtTime(.025,audioCtx.currentTime);g.gain.exponentialRampToValueAtTime(.0001,audioCtx.currentTime+dur);o.connect(g).connect(audioCtx.destination);o.start();o.stop(audioCtx.currentTime+dur)}catch(e){}}
+  function say(msg){clearTimeout(toastTimer);toast.textContent=msg;toast.classList.add('show');toastTimer=setTimeout(()=>toast.classList.remove('show'),1500)}
+  function show(n){n=Math.max(0,Math.min(scenes.length-1,n));if(n===index&&scenes[n].classList.contains('active'))return;const old=scenes[index];old.classList.add('leaving');old.classList.remove('active');setTimeout(()=>old.classList.remove('leaving'),300);index=n;scenes[index].classList.add('active');progress.style.width=((index+1)/scenes.length*100)+'%';currentNo.textContent=String(index+1).padStart(2,'0');prev.disabled=index===0;next.disabled=index===scenes.length-1;beep(430+index*8);document.title=scenes[index].dataset.title+' — Pengantar Metodologi Penelitian Kuantitatif'}
+  function go(d){const n=index+d;if(n>=0&&n<scenes.length)show(n)}prev.onclick=()=>go(-1);next.onclick=()=>go(1);prev.disabled=true;
+  function togglePause(){paused=!paused;document.getAnimations().forEach(a=>{try{paused?a.pause():a.play()}catch(e){}});say(paused?'Animasi dijeda':'Animasi dilanjutkan')}
+  async function fullscreen(){try{if(!document.fullscreenElement)await shell.requestFullscreen();else await document.exitFullscreen();scheduleFit()}catch(e){say('Mode layar penuh tidak tersedia')}}
+  const help=document.getElementById('help');document.getElementById('helpButton').onclick=()=>help.classList.add('open');document.getElementById('closeHelp').onclick=()=>help.classList.remove('open');help.addEventListener('click',e=>{if(e.target===help)help.classList.remove('open')});
+  document.getElementById('fullscreen').onclick=fullscreen;document.getElementById('sound').onclick=()=>{soundOn=!soundOn;say(soundOn?'Suara aktif':'Suara nonaktif');beep(720,.08)};
+  document.addEventListener('keydown',e=>{if(e.target.matches('input,textarea,select'))return;if(e.key==='ArrowRight'){e.preventDefault();go(1)}else if(e.key==='ArrowLeft'){e.preventDefault();go(-1)}else if(e.code==='Space'){e.preventDefault();togglePause()}else if(e.key.toLowerCase()==='f'){fullscreen()}else if(e.key.toLowerCase()==='m'){soundOn=!soundOn;say(soundOn?'Suara aktif':'Suara nonaktif');beep(720,.08)}else if(e.key.toLowerCase()==='r'){resetScene()}else if(e.key==='?' ){help.classList.toggle('open')}else if(e.key==='Escape'&&help.classList.contains('open'))help.classList.remove('open')});
+
+  let caseStep=0;document.getElementById('caseButton').onclick=()=>{const evid=[...document.querySelectorAll('.evidence')],stud=[...document.querySelectorAll('.student')];evid.forEach(x=>x.classList.remove('hot'));stud.forEach(x=>x.classList.remove('hot'));evid[caseStep%3].classList.add('hot');stud[(caseStep%3)+1].classList.add('hot');caseStep++;beep(560)};
+
+  const sortCards=[...document.querySelectorAll('.sort-card')],sortTargets=[document.getElementById('sortBank'),document.getElementById('binFact'),document.getElementById('binCause'),document.getElementById('binAssume')];
+  function flipMove(el,target){const first=el.getBoundingClientRect();target.appendChild(el);const last=el.getBoundingClientRect();el.animate([{transform:`translate(${first.left-last.left}px,${first.top-last.top}px)`,zIndex:20},{transform:'translate(0,0)',zIndex:20}],{duration:650,easing:'cubic-bezier(.2,.85,.2,1)'});beep(500)}
+  sortCards.forEach(card=>card.onclick=()=>{const parent=card.parentElement;let i=sortTargets.indexOf(parent);flipMove(card,sortTargets[(i+1)%sortTargets.length])});
+
+  const problemData=[['Masalah nyata','Mahasiswa tampak pasif dalam diskusi, beberapa tugas terlambat, dan skor formatif rendah.','“Mahasiswa tidak aktif” adalah gejala awal—belum menjadi masalah penelitian yang tajam.'],['Masalah penelitian','Penyebab kepasifan dan faktor pembelajaran yang terkait belum diketahui secara sistematis.','Pertanyaan bergeser dari “apa yang terjadi?” menjadi “mengapa hal itu terjadi?”'],['Masalah pengembangan','Belum tersedia media interaktif yang dirancang berdasarkan kebutuhan pengguna dan teori pembelajaran.','Solusi perlu dikonstruksi dan diuji, bukan diasumsikan pasti berhasil.'],['Masalah kuantitatif','Belum ada bukti empiris mengenai pengaruh media HTML terhadap keterlibatan atau hasil belajar.','Fokus dapat dirumuskan menjadi hubungan, perbedaan, pengaruh, atau besarnya efek.']];let problemStep=0;
+  function renderProblem(){document.querySelectorAll('.pstep').forEach((x,i)=>x.classList.toggle('on',i<=problemStep));document.getElementById('problemFill').style.width=(problemStep/3*100)+'%';document.getElementById('problemToken').style.transform=`translateX(${problemStep*245}px)`;document.getElementById('problemNo').textContent=`TAHAP ${problemStep+1} / 4`;document.getElementById('problemTitle').textContent=problemData[problemStep][0];document.getElementById('problemText').textContent=problemData[problemStep][1];document.getElementById('problemQuote').textContent=problemData[problemStep][2]}
+  document.getElementById('problemNext').onclick=()=>{problemStep=(problemStep+1)%4;renderProblem();beep(540)};
+
+  const qData=[['Mengapa mahasiswa pasif?','Narasi pengalaman dan observasi','Mahasiswa dan situasi kelas','Wawancara / observasi','Tematik dan kontekstual','Pola sebab yang dipersepsikan'],['Bagaimana mahasiswa mengalami perkuliahan?','Cerita pengalaman belajar','Mahasiswa terpilih','Wawancara mendalam','Fenomenologis / tematik','Makna pengalaman'],['Media seperti apa yang dibutuhkan?','Kebutuhan, hambatan, preferensi','Mahasiswa, dosen, dokumen','FGD / wawancara / analisis dokumen','Analisis kebutuhan','Spesifikasi solusi'],['Apakah media HTML meningkatkan hasil?','Skor sebelum dan sesudah','Kelompok sasaran / pembanding','Tes tervalidasi','Uji perbedaan / model','Dukungan empiris bagi hipotesis'],['Seberapa besar pengaruh media HTML?','Skor dan ukuran ketidakpastian','Sampel yang relevan','Tes / skala terukur','Estimasi efek + interval','Besaran efek dan batas presisi']];
+  document.querySelectorAll('.qcard').forEach(btn=>btn.onclick=()=>{const i=+btn.dataset.q;document.querySelectorAll('.qcard').forEach(x=>x.classList.toggle('active',x===btn));const p=document.getElementById('procedurePanel');p.classList.remove('proc-panel-swap');void p.offsetWidth;p.classList.add('proc-panel-swap');['qMain','qData','qSource','qInstrument','qAnalysis','qConclusion'].forEach((id,j)=>document.getElementById(id).textContent=qData[i][j]);beep(520)});
+
+  document.getElementById('assembleMap').onclick=()=>{const m=document.getElementById('mapArea');m.classList.toggle('assembled');document.getElementById('assembleMap').textContent=m.classList.contains('assembled')?'Acak kembali':'Susun peta penelitian';beep(600)};
+  document.querySelectorAll('[data-gate]').forEach(b=>b.onclick=()=>{const mode=b.dataset.gate,g=document.getElementById('gateway'),t=document.getElementById('gateToken');t.className='gate-center '+(mode==='qual'?'to-qual':mode==='quant'?'to-quant':'to-both');g.classList.toggle('both',mode==='both');g.querySelector('.qual').classList.toggle('active',mode==='qual'||mode==='both');g.querySelector('.quant').classList.toggle('active',mode==='quant'||mode==='both');beep(580)});
+  document.getElementById('openFan').onclick=()=>{const f=document.getElementById('fanArea');f.classList.toggle('open');document.getElementById('openFan').textContent=f.classList.contains('open')?'Tutup lensa':'Buka empat lensa';beep(610)};
+
+  let quantStep=0;function setLinear(stageSel,tokenId,step,count,start,span){document.querySelectorAll(stageSel).forEach((x,i)=>x.classList.toggle('on',i<=step));document.getElementById(tokenId).style.transform=`translateX(${step*(span/(count-1))}px)`}
+  document.getElementById('quantNext').onclick=()=>{quantStep=(quantStep+1)%6;setLinear('#quantPipeline .pipe-step','quantToken',quantStep,6,0,1185);beep(540)};
+  document.querySelectorAll('[data-focus]').forEach(b=>b.onclick=()=>{document.getElementById('focusLens').className='focus-lens '+(b.dataset.focus==='center'?'':b.dataset.focus);beep(510)});
+
+  const theoryPos=[[0,0],[345,0],[690,0],[1035,0],[0,182],[345,182],[690,182],[1035,182]];let theoryStep=0;document.getElementById('theoryNext').onclick=()=>{theoryStep=(theoryStep+1)%8;document.querySelectorAll('.tstep').forEach((x,i)=>x.classList.toggle('on',i<=theoryStep));document.getElementById('theoryToken').style.transform=`translate(${theoryPos[theoryStep][0]}px,${theoryPos[theoryStep][1]}px)`;beep(550)};
+  const procPos=[];for(let r=0;r<4;r++)for(let c=0;c<4;c++)procPos.push([c*366,r*119]);let procStep=0;function renderProc(){document.querySelectorAll('.step16').forEach((x,i)=>x.classList.toggle('on',i<=procStep));document.getElementById('procToken').style.transform=`translate(${procPos[procStep][0]}px,${procPos[procStep][1]}px)`;document.getElementById('procStatus').textContent=`Langkah ${procStep+1} / 16`}document.getElementById('procNext').onclick=()=>{procStep=(procStep+1)%16;renderProc();beep(520)};
+  document.getElementById('researchRun').onclick=()=>{document.querySelectorAll('.researcher').forEach(x=>x.classList.toggle('run'));beep(620,.09)};
+
+  const chData=[['BAB I','Pendahuluan: apa yang menjadi masalah?','Bab I menjelaskan kondisi nyata, kesenjangan, masalah penelitian, pertanyaan, serta tujuan. Semua keputusan berikutnya harus menjawab fokus ini.'],['BAB II','Landasan teori: dengan lensa apa masalah dipahami?','Bab II membangun konstruk, menelaah temuan sebelumnya, menyusun kerangka konseptual, dan menurunkan hipotesis yang layak diuji.'],['BAB III','Metode: bagaimana bukti akan diperoleh?','Bab III menerjemahkan pertanyaan menjadi desain, populasi-sampel, variabel, instrumen, prosedur, serta teknik analisis yang selaras.'],['BAB IV','Hasil dan pembahasan: apa arti data?','Bab IV melaporkan hasil secara transparan, lalu menafsirkan temuan dengan teori, riset terdahulu, konteks, dan keterbatasan desain.'],['BAB V','Penutup: jawaban apa yang sah diberikan?','Bab V menjawab pertanyaan sesuai bukti—tidak lebih luas dari desain—serta menyatakan implikasi, keterbatasan, dan saran.']];
+  document.querySelectorAll('.chapter').forEach(b=>b.onclick=()=>{const i=+b.dataset.ch;document.querySelectorAll('.chapter').forEach(x=>x.classList.toggle('active',x===b));document.getElementById('chapterChip').textContent=chData[i][0];document.getElementById('chapterTitle').textContent=chData[i][1];document.getElementById('chapterText').textContent=chData[i][2];beep(530)});
+  const rndPos=[[0,0],[360,0],[720,0],[1080,0],[0,185],[360,185],[720,185],[1080,185]];let rndStep=0;document.getElementById('rndNext').onclick=()=>{rndStep=(rndStep+1)%8;document.querySelectorAll('.rnd-step').forEach((x,i)=>x.classList.toggle('on',i<=rndStep));document.getElementById('productToken').style.transform=`translate(${rndPos[rndStep][0]}px,${rndPos[rndStep][1]}px)`;beep(560)};
+  const journeyPos=[[0,0],[215,0],[430,0],[645,0],[0,150],[215,150],[430,150],[645,150]];let journeyStep=0;document.getElementById('journeyNext').onclick=()=>{journeyStep=(journeyStep+1)%8;document.querySelectorAll('.journey-node').forEach((x,i)=>x.classList.toggle('on',i<=journeyStep));document.getElementById('journeyToken').style.transform=`translate(${journeyPos[journeyStep][0]}px,${journeyPos[journeyStep][1]}px)`;beep(550)};
+
+  function resetScene(){const scene=scenes[index];if(index===1){caseStep=0;scene.querySelectorAll('.hot').forEach(x=>x.classList.remove('hot'))}else if(index===2){sortCards.forEach(c=>document.getElementById('sortBank').appendChild(c))}else if(index===3){problemStep=0;renderProblem()}else if(index===4){document.querySelector('.qcard[data-q="0"]').click()}else if(index===5){document.getElementById('mapArea').classList.remove('assembled');document.getElementById('assembleMap').textContent='Susun peta penelitian'}else if(index===6){document.getElementById('gateToken').className='gate-center';document.getElementById('gateway').classList.remove('both');document.querySelectorAll('.gate-choice').forEach(x=>x.classList.remove('active'))}else if(index===7){document.getElementById('fanArea').classList.remove('open');document.getElementById('openFan').textContent='Buka empat lensa'}else if(index===8){quantStep=0;setLinear('#quantPipeline .pipe-step','quantToken',0,6,0,1185)}else if(index===9){document.getElementById('focusLens').className='focus-lens'}else if(index===10){theoryStep=0;document.getElementById('theoryToken').style.transform='';document.querySelectorAll('.tstep').forEach((x,i)=>x.classList.toggle('on',i===0))}else if(index===11){procStep=0;renderProc()}else if(index===12){document.querySelectorAll('.researcher').forEach(x=>x.classList.remove('run'))}else if(index===13){document.querySelector('.chapter[data-ch="0"]').click()}else if(index===14){rndStep=0;document.getElementById('productToken').style.transform='';document.querySelectorAll('.rnd-step').forEach((x,i)=>x.classList.toggle('on',i===0))}else if(index===15){journeyStep=0;document.getElementById('journeyToken').style.transform='';document.querySelectorAll('.journey-node').forEach((x,i)=>x.classList.toggle('on',i===0))}say('Scene direset');beep(460)}
+  document.getElementById('reset').onclick=resetScene;
+  show(0);
+})();
+</script>
+</body>
+</html>

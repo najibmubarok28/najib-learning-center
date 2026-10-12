@@ -1,0 +1,3141 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#f4f7fb">
+  <title>Pengantar Sistem Informasi Manajemen — Najib Mubarok, M.Sc.</title>
+  <style>
+    :root {
+      --ink: #132238;
+      --muted: #66758a;
+      --paper: #ffffff;
+      --paper-2: #f5f8fc;
+      --line: #dce5ef;
+      --navy: #173b68;
+      --blue: #2563eb;
+      --cyan: #0ea5c6;
+      --orange: #f97316;
+      --amber: #f5b51b;
+      --green: #16a36a;
+      --red: #e64b4b;
+      --purple: #7657d6;
+      --shadow: 0 22px 60px rgba(32, 59, 92, .13);
+      --soft-shadow: 0 12px 32px rgba(32, 59, 92, .10);
+      --ease: cubic-bezier(.22, 1, .36, 1);
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 18% 18%, rgba(37, 99, 235, .10), transparent 28%),
+        radial-gradient(circle at 82% 78%, rgba(249, 115, 22, .09), transparent 25%),
+        #e9eef5;
+      color: var(--ink);
+      font-family: Aptos, Inter, "Segoe UI", Helvetica, Arial, sans-serif;
+    }
+
+    button, a { font: inherit; }
+
+    button:focus-visible,
+    a:focus-visible {
+      outline: 4px solid rgba(37, 99, 235, .28);
+      outline-offset: 4px;
+    }
+
+    #viewport {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 1600px;
+      height: 900px;
+      transform-origin: center;
+    }
+
+    #stage {
+      position: relative;
+      width: 1600px;
+      height: 900px;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 12% 14%, rgba(37, 99, 235, .055), transparent 24%),
+        radial-gradient(circle at 92% 88%, rgba(14, 165, 198, .055), transparent 24%),
+        linear-gradient(135deg, #ffffff 0%, #fbfdff 54%, #f6f9fc 100%);
+      box-shadow: 0 40px 120px rgba(13, 35, 62, .22);
+      isolation: isolate;
+    }
+
+    #stage::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 2;
+      opacity: .32;
+      background-image: radial-gradient(rgba(23, 59, 104, .14) .75px, transparent .75px);
+      background-size: 24px 24px;
+      mask-image: linear-gradient(to bottom, rgba(0,0,0,.6), transparent 68%);
+    }
+
+    #ambient {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+      pointer-events: none;
+      opacity: .32;
+      transition: opacity .6s ease;
+    }
+
+    #stage.cover-mode #ambient,
+    #stage.closing-mode #ambient { opacity: .8; }
+
+    .scene {
+      position: absolute;
+      inset: 0;
+      z-index: 5;
+      display: flex;
+      flex-direction: column;
+      visibility: hidden;
+      opacity: 0;
+      pointer-events: none;
+      padding: 70px 88px 94px;
+      transform: translateX(48px) scale(.99);
+      filter: blur(5px);
+    }
+
+    .scene.active {
+      visibility: visible;
+      opacity: 1;
+      pointer-events: auto;
+      transform: none;
+      filter: none;
+      animation: scene-in .72s var(--ease) both;
+    }
+
+    .scene.active.from-left { animation-name: scene-in-left; }
+
+    .scene.leaving-next,
+    .scene.leaving-prev {
+      visibility: visible;
+      pointer-events: none;
+      animation: scene-out .48s ease both;
+    }
+
+    .scene.leaving-prev { animation-name: scene-out-right; }
+
+    @keyframes scene-in {
+      from { opacity: 0; transform: translateX(62px) scale(.988); filter: blur(7px); }
+      to { opacity: 1; transform: none; filter: none; }
+    }
+
+    @keyframes scene-in-left {
+      from { opacity: 0; transform: translateX(-62px) scale(.988); filter: blur(7px); }
+      to { opacity: 1; transform: none; filter: none; }
+    }
+
+    @keyframes scene-out {
+      to { opacity: 0; transform: translateX(-52px) scale(.992); filter: blur(5px); }
+    }
+
+    @keyframes scene-out-right {
+      to { opacity: 0; transform: translateX(52px) scale(.992); filter: blur(5px); }
+    }
+
+    [data-anim] {
+      opacity: 0;
+      transform: translateY(25px) scale(.985);
+    }
+
+    .scene.active [data-anim] {
+      animation: item-in .78s var(--ease) forwards;
+      animation-delay: var(--d, 90ms);
+    }
+
+    @keyframes item-in {
+      to { opacity: 1; transform: none; }
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      width: fit-content;
+      margin: 0 0 16px;
+      color: var(--blue);
+      font-size: 17px;
+      font-weight: 800;
+      letter-spacing: .13em;
+      text-transform: uppercase;
+    }
+
+    .eyebrow::before {
+      content: "";
+      width: 32px;
+      height: 4px;
+      border-radius: 99px;
+      background: linear-gradient(90deg, var(--blue), var(--cyan));
+    }
+
+    h1, h2, h3, p { margin-top: 0; }
+    p { margin-bottom: 0; }
+
+    h1, h2, h3 {
+      letter-spacing: -.035em;
+      text-wrap: balance;
+    }
+
+    h2 {
+      margin-bottom: 14px;
+      font-size: 49px;
+      line-height: 1.08;
+      font-weight: 790;
+    }
+
+    .lead {
+      max-width: 1060px;
+      color: var(--muted);
+      font-size: 24px;
+      line-height: 1.48;
+    }
+
+    .accent { color: var(--blue); }
+    .accent-orange { color: var(--orange); }
+    .accent-green { color: var(--green); }
+
+    .scene-number {
+      position: absolute;
+      right: 76px;
+      top: 42px;
+      color: rgba(23, 59, 104, .07);
+      font-size: 106px;
+      font-weight: 850;
+      letter-spacing: -.08em;
+      line-height: 1;
+      pointer-events: none;
+    }
+
+    .bodynote {
+      position: absolute;
+      left: 88px;
+      bottom: 74px;
+      color: #718097;
+      font-size: 16px;
+      font-weight: 600;
+      letter-spacing: .01em;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      min-height: 34px;
+      padding: 7px 13px;
+      border: 1px solid var(--line);
+      border-radius: 99px;
+      background: rgba(255,255,255,.86);
+      color: var(--navy);
+      font-size: 15px;
+      font-weight: 750;
+      box-shadow: 0 6px 18px rgba(23, 59, 104, .06);
+    }
+
+    .pill-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--blue);
+      box-shadow: 0 0 0 5px rgba(37, 99, 235, .12);
+    }
+
+    .primary-btn,
+    .ghost-btn,
+    .mini-btn {
+      border: 0;
+      cursor: pointer;
+      transition: transform .22s var(--ease), box-shadow .22s ease, background .22s ease, color .22s ease;
+    }
+
+    .primary-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      min-height: 56px;
+      padding: 0 24px;
+      border-radius: 16px;
+      background: linear-gradient(135deg, var(--navy), var(--blue));
+      color: white;
+      font-size: 18px;
+      font-weight: 760;
+      box-shadow: 0 16px 34px rgba(37, 99, 235, .24);
+    }
+
+    .primary-btn:hover { transform: translateY(-3px); box-shadow: 0 20px 42px rgba(37, 99, 235, .29); }
+    .primary-btn:active, .ghost-btn:active, .mini-btn:active { transform: translateY(1px) scale(.99); }
+
+    .ghost-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 9px;
+      min-height: 44px;
+      padding: 0 16px;
+      border: 1px solid var(--line);
+      border-radius: 13px;
+      background: rgba(255,255,255,.88);
+      color: var(--navy);
+      font-size: 15px;
+      font-weight: 750;
+      box-shadow: 0 7px 20px rgba(23, 59, 104, .07);
+    }
+
+    .ghost-btn:hover { transform: translateY(-2px); background: white; box-shadow: var(--soft-shadow); }
+
+    /* Cover */
+    .cover {
+      padding: 72px 94px 82px;
+      justify-content: center;
+    }
+
+    .cover-grid {
+      position: relative;
+      display: grid;
+      grid-template-columns: 1.02fr .98fr;
+      align-items: center;
+      gap: 60px;
+      height: 100%;
+    }
+
+    .cover-copy { position: relative; z-index: 2; }
+
+    .cover-meta {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 30px;
+    }
+
+    .cover h1 {
+      max-width: 780px;
+      margin: 0 0 24px;
+      font-size: 78px;
+      line-height: .99;
+      font-weight: 820;
+      color: var(--ink);
+    }
+
+    .cover h1 span {
+      display: block;
+      background: linear-gradient(100deg, var(--blue), var(--cyan));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .cover-subtitle {
+      max-width: 690px;
+      margin-bottom: 32px;
+      color: var(--muted);
+      font-size: 25px;
+      line-height: 1.42;
+      font-weight: 520;
+    }
+
+    .cover-byline {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      margin: 0 0 34px;
+    }
+
+    .avatar-mark {
+      display: grid;
+      place-items: center;
+      width: 48px;
+      height: 48px;
+      border-radius: 15px;
+      background: linear-gradient(135deg, var(--navy), var(--blue));
+      color: white;
+      font-weight: 850;
+      box-shadow: 0 12px 28px rgba(37, 99, 235, .2);
+    }
+
+    .byline-name { margin: 0; color: var(--ink); font-size: 19px; font-weight: 790; }
+    .byline-campus { margin: 4px 0 0; color: var(--muted); font-size: 15px; font-weight: 620; }
+
+    .hero-visual {
+      position: relative;
+      height: 650px;
+      display: grid;
+      place-items: center;
+    }
+
+    .hero-halo {
+      position: absolute;
+      width: 530px;
+      height: 530px;
+      border-radius: 50%;
+      background:
+        radial-gradient(circle at 48% 44%, rgba(255,255,255,.96) 0 31%, rgba(37,99,235,.12) 32% 48%, rgba(14,165,198,.08) 49% 62%, transparent 63%);
+      filter: drop-shadow(0 30px 60px rgba(37,99,235,.13));
+      animation: breathe 6s ease-in-out infinite;
+    }
+
+    @keyframes breathe { 50% { transform: scale(1.035); } }
+
+    .hero-system {
+      position: relative;
+      width: 620px;
+      height: 620px;
+      overflow: visible;
+      filter: drop-shadow(0 24px 30px rgba(23, 59, 104, .12));
+    }
+
+    .flow-path {
+      fill: none;
+      stroke: url(#flowGradient);
+      stroke-width: 5;
+      stroke-linecap: round;
+      stroke-dasharray: 9 15;
+      animation: flow 2.2s linear infinite;
+    }
+
+    @keyframes flow { to { stroke-dashoffset: -48; } }
+
+    .orbit-ring {
+      fill: none;
+      stroke: rgba(37, 99, 235, .18);
+      stroke-width: 2;
+      stroke-dasharray: 5 13;
+      transform-origin: center;
+      animation: rotate 28s linear infinite;
+    }
+
+    @keyframes rotate { to { transform: rotate(360deg); } }
+
+    .float-node { transform-box: fill-box; transform-origin: center; animation: node-float 4.2s ease-in-out infinite; }
+    .float-node.n2 { animation-delay: -.8s; }
+    .float-node.n3 { animation-delay: -1.7s; }
+    .float-node.n4 { animation-delay: -2.6s; }
+    @keyframes node-float { 50% { transform: translateY(-9px); } }
+
+    /* Hook */
+    .hook-scene { justify-content: center; text-align: center; }
+
+    .hook-kicker {
+      margin: 0 auto 24px;
+      color: var(--orange);
+      font-size: 18px;
+      font-weight: 820;
+      letter-spacing: .15em;
+      text-transform: uppercase;
+    }
+
+    .hook-question {
+      max-width: 1180px;
+      margin: 0 auto 36px;
+      font-size: 72px;
+      line-height: 1.06;
+      font-weight: 820;
+    }
+
+    .hook-question em { color: var(--blue); font-style: normal; }
+
+    .hook-orbit {
+      position: relative;
+      width: 1120px;
+      height: 180px;
+      margin: 0 auto 24px;
+    }
+
+    .icon-bubble {
+      position: absolute;
+      display: grid;
+      place-items: center;
+      width: 112px;
+      height: 112px;
+      border: 1px solid rgba(37, 99, 235, .16);
+      border-radius: 32px;
+      background: rgba(255,255,255,.92);
+      color: var(--blue);
+      box-shadow: var(--soft-shadow);
+      animation: bubble 4.4s ease-in-out infinite;
+    }
+
+    .icon-bubble:nth-child(1) { left: 20px; top: 36px; }
+    .icon-bubble:nth-child(2) { left: 190px; top: 4px; animation-delay: -.7s; color: var(--green); }
+    .icon-bubble:nth-child(3) { left: 360px; top: 48px; animation-delay: -1.3s; color: var(--orange); }
+    .icon-bubble:nth-child(4) { left: 530px; top: 3px; animation-delay: -2s; color: var(--purple); }
+    .icon-bubble:nth-child(5) { left: 700px; top: 43px; animation-delay: -2.7s; color: var(--cyan); }
+    .icon-bubble:nth-child(6) { left: 870px; top: 2px; animation-delay: -3.4s; color: var(--red); }
+    .icon-bubble:nth-child(7) { left: 1030px; top: 44px; animation-delay: -4s; color: var(--navy); }
+
+    @keyframes bubble { 50% { transform: translateY(-13px) rotate(1.5deg); box-shadow: 0 21px 42px rgba(23,59,104,.14); } }
+
+    .icon-bubble svg { width: 57px; height: 57px; }
+    .hook-note { color: var(--muted); font-size: 22px; font-weight: 600; }
+
+    /* Case cards */
+    .case-grid {
+      display: grid;
+      gap: 24px;
+      flex: 1;
+      align-items: stretch;
+      margin-top: 24px;
+    }
+
+    .case-grid.three { grid-template-columns: repeat(3, 1fr); }
+    .case-grid.four { grid-template-columns: repeat(4, 1fr); }
+
+    .case-card {
+      position: relative;
+      overflow: hidden;
+      min-height: 450px;
+      padding: 30px;
+      border: 1px solid rgba(188, 203, 220, .68);
+      border-radius: 28px;
+      background: rgba(255,255,255,.89);
+      box-shadow: var(--soft-shadow);
+      transition: transform .35s var(--ease), box-shadow .35s ease, border-color .35s ease;
+    }
+
+    .case-grid.four .case-card { min-height: 410px; padding: 25px; }
+
+    .case-card:hover {
+      transform: translateY(-8px);
+      border-color: rgba(37, 99, 235, .28);
+      box-shadow: 0 25px 54px rgba(32, 59, 92, .15);
+    }
+
+    .case-card::after {
+      content: "";
+      position: absolute;
+      right: -46px;
+      bottom: -46px;
+      width: 150px;
+      height: 150px;
+      border-radius: 50%;
+      background: var(--card-glow, rgba(37,99,235,.10));
+      filter: blur(2px);
+    }
+
+    .case-index {
+      position: absolute;
+      right: 24px;
+      top: 20px;
+      color: rgba(23,59,104,.14);
+      font-size: 44px;
+      font-weight: 850;
+    }
+
+    .case-icon {
+      display: grid;
+      place-items: center;
+      width: 116px;
+      height: 116px;
+      margin-bottom: 31px;
+      border-radius: 30px;
+      background: var(--icon-bg, #edf4ff);
+      color: var(--icon-color, var(--blue));
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,.8), 0 14px 32px rgba(37,99,235,.10);
+    }
+
+    .case-grid.four .case-icon { width: 96px; height: 96px; margin-bottom: 22px; border-radius: 26px; }
+    .case-icon svg { width: 66px; height: 66px; }
+    .case-grid.four .case-icon svg { width: 55px; height: 55px; }
+
+    .case-card h3 { margin: 0 0 13px; font-size: 29px; font-weight: 790; }
+    .case-grid.four .case-card h3 { font-size: 25px; }
+
+    .case-card p {
+      position: relative;
+      z-index: 1;
+      margin: 0;
+      color: var(--muted);
+      font-size: 20px;
+      line-height: 1.5;
+    }
+
+    .case-grid.four .case-card p { font-size: 18px; line-height: 1.45; }
+
+    .case-question {
+      position: absolute;
+      left: 29px;
+      bottom: 27px;
+      z-index: 2;
+      color: var(--blue);
+      font-size: 17px;
+      font-weight: 800;
+    }
+
+    /* Classifier */
+    .classifier {
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      gap: 20px;
+      flex: 1;
+      min-height: 0;
+      margin-top: 18px;
+    }
+
+    .sort-bank {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: center;
+      gap: 11px;
+      min-height: 82px;
+      padding: 13px;
+      border: 2px dashed rgba(37,99,235,.20);
+      border-radius: 21px;
+      background: rgba(239,245,255,.58);
+    }
+
+    .sort-card {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      min-height: 46px;
+      padding: 8px 14px 8px 10px;
+      border: 1px solid #d6e1ed;
+      border-radius: 14px;
+      background: white;
+      color: var(--ink);
+      font-size: 15px;
+      font-weight: 750;
+      cursor: grab;
+      box-shadow: 0 7px 18px rgba(23,59,104,.08);
+      transition: transform .2s var(--ease), box-shadow .2s ease, border-color .2s ease;
+    }
+
+    .sort-card:hover { transform: translateY(-3px); box-shadow: 0 11px 24px rgba(23,59,104,.12); }
+    .sort-card.selected { border-color: var(--blue); box-shadow: 0 0 0 4px rgba(37,99,235,.13), 0 11px 24px rgba(23,59,104,.12); }
+    .sort-card.dragging { opacity: .45; }
+
+    .sort-glyph {
+      display: grid;
+      place-items: center;
+      width: 30px;
+      height: 30px;
+      border-radius: 10px;
+      background: #edf4ff;
+      color: var(--blue);
+      font-size: 12px;
+      font-weight: 900;
+    }
+
+    .bins {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      min-height: 0;
+    }
+
+    .drop-zone {
+      position: relative;
+      overflow: hidden;
+      min-height: 285px;
+      padding: 20px 15px 16px;
+      border: 2px solid var(--zone-border, #d6e1ed);
+      border-radius: 23px;
+      background: var(--zone-bg, rgba(255,255,255,.78));
+      transition: transform .2s var(--ease), border-color .2s ease, box-shadow .2s ease;
+    }
+
+    .drop-zone.over,
+    .drop-zone:hover { transform: translateY(-3px); box-shadow: var(--soft-shadow); }
+
+    .drop-zone h3 {
+      margin: 0 0 4px;
+      color: var(--zone-color, var(--navy));
+      font-size: 20px;
+      font-weight: 820;
+    }
+
+    .drop-zone > p {
+      margin: 0 0 15px;
+      min-height: 36px;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.3;
+    }
+
+    .drop-slot {
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+      gap: 8px;
+      min-height: 160px;
+    }
+
+    .drop-zone .sort-card { width: 100%; justify-content: flex-start; min-height: 39px; padding: 5px 8px; font-size: 13px; }
+    .drop-zone .sort-glyph { width: 27px; height: 27px; flex: 0 0 auto; }
+    .zone-count { position: absolute; right: 14px; top: 13px; color: var(--zone-color); font-size: 13px; font-weight: 850; }
+
+    .classifier-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      color: var(--muted);
+      font-size: 16px;
+    }
+
+    .classifier-status { font-weight: 650; }
+    .classifier-status strong { color: var(--blue); }
+
+    /* Diagnostic lenses */
+    .lens-layout {
+      position: relative;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 22px;
+      width: 1120px;
+      margin: 34px auto 0;
+    }
+
+    .lens-card {
+      position: relative;
+      display: grid;
+      grid-template-columns: 74px 1fr;
+      align-items: center;
+      gap: 20px;
+      min-height: 172px;
+      padding: 26px;
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      background: rgba(255,255,255,.88);
+      box-shadow: var(--soft-shadow);
+      overflow: hidden;
+    }
+
+    .lens-card::after {
+      content: attr(data-no);
+      position: absolute;
+      right: 16px;
+      bottom: -18px;
+      color: rgba(37,99,235,.055);
+      font-size: 112px;
+      font-weight: 900;
+    }
+
+    .lens-icon {
+      display: grid;
+      place-items: center;
+      width: 74px;
+      height: 74px;
+      border-radius: 22px;
+      background: var(--lens-bg, #edf4ff);
+      color: var(--lens-color, var(--blue));
+      font-size: 27px;
+      font-weight: 900;
+    }
+
+    .lens-card h3 { margin: 0 0 7px; font-size: 24px; font-weight: 800; }
+    .lens-card p { position: relative; z-index: 1; margin: 0; color: var(--muted); font-size: 18px; line-height: 1.42; }
+
+    .lens-center {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      z-index: 3;
+      display: grid;
+      place-items: center;
+      width: 112px;
+      height: 112px;
+      border: 8px solid white;
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      background: linear-gradient(135deg, var(--navy), var(--blue));
+      color: white;
+      box-shadow: 0 18px 45px rgba(37,99,235,.28);
+      text-align: center;
+      font-size: 14px;
+      font-weight: 830;
+      line-height: 1.2;
+      animation: center-pulse 3s ease-in-out infinite;
+    }
+
+    @keyframes center-pulse { 50% { transform: translate(-50%, -50%) scale(1.05); } }
+
+    /* Form laboratory */
+    .lab-grid {
+      display: grid;
+      grid-template-columns: .78fr 1.22fr;
+      gap: 30px;
+      flex: 1;
+      min-height: 0;
+      margin-top: 22px;
+    }
+
+    .form-mock,
+    .system-lab {
+      border: 1px solid var(--line);
+      border-radius: 28px;
+      background: rgba(255,255,255,.9);
+      box-shadow: var(--soft-shadow);
+    }
+
+    .form-mock { position: relative; overflow: hidden; padding: 30px; }
+    .form-band { position: absolute; left: 0; top: 0; width: 100%; height: 13px; background: linear-gradient(90deg, var(--purple), var(--blue)); }
+    .form-mock h3 { margin: 14px 0 8px; font-size: 27px; }
+    .form-mock > p { color: var(--muted); font-size: 17px; }
+
+    .fake-field { margin-top: 20px; }
+    .fake-label { margin-bottom: 8px; color: var(--navy); font-size: 14px; font-weight: 780; }
+    .fake-input { height: 46px; border: 1px solid #d8e2ee; border-radius: 12px; background: #f8fafc; }
+    .fake-submit { width: 114px; height: 43px; margin-top: 22px; border-radius: 12px; background: var(--purple); }
+
+    .tool-badge {
+      position: absolute;
+      right: 24px;
+      bottom: 22px;
+      padding: 9px 13px;
+      border-radius: 99px;
+      background: #fff3e9;
+      color: #b64a0b;
+      font-size: 14px;
+      font-weight: 800;
+    }
+
+    .system-lab {
+      display: grid;
+      grid-template-columns: 260px 1fr;
+      gap: 22px;
+      padding: 26px;
+    }
+
+    .lab-controls { display: flex; flex-direction: column; gap: 11px; }
+
+    .lab-add {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      width: 100%;
+      min-height: 54px;
+      padding: 9px 13px;
+      border: 1px solid #dce5ef;
+      border-radius: 14px;
+      background: #f8fbff;
+      color: var(--navy);
+      text-align: left;
+      font-size: 15px;
+      font-weight: 750;
+      cursor: pointer;
+      transition: .25s var(--ease);
+    }
+
+    .lab-add:hover { transform: translateX(4px); border-color: #a9c6f8; }
+    .lab-add.on { border-color: #78d3b0; background: #ebfbf4; color: #087a4b; }
+
+    .lab-plus {
+      display: grid;
+      place-items: center;
+      width: 30px;
+      height: 30px;
+      flex: 0 0 auto;
+      border-radius: 9px;
+      background: white;
+      color: var(--blue);
+      box-shadow: 0 4px 12px rgba(23,59,104,.1);
+      font-size: 20px;
+    }
+
+    .lab-add.on .lab-plus { background: var(--green); color: white; }
+
+    .lab-canvas {
+      position: relative;
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+      border-radius: 20px;
+      background:
+        radial-gradient(circle at center, rgba(37,99,235,.10), transparent 48%),
+        linear-gradient(135deg, #f7faff, #f2f7fb);
+    }
+
+    .lab-core {
+      position: relative;
+      z-index: 3;
+      display: grid;
+      place-items: center;
+      width: 188px;
+      height: 188px;
+      padding: 22px;
+      border: 2px solid #bad0ec;
+      border-radius: 50%;
+      background: white;
+      color: var(--navy);
+      box-shadow: 0 18px 44px rgba(23,59,104,.13);
+      text-align: center;
+      font-size: 18px;
+      font-weight: 820;
+      line-height: 1.25;
+      transition: .55s var(--ease);
+    }
+
+    .lab-core.complete {
+      border-color: var(--green);
+      background: linear-gradient(145deg, white, #edfbf5);
+      color: #087a4b;
+      box-shadow: 0 20px 50px rgba(22,163,106,.19);
+      transform: scale(1.06);
+    }
+
+    .module-node {
+      position: absolute;
+      z-index: 2;
+      display: grid;
+      place-items: center;
+      width: 118px;
+      min-height: 54px;
+      padding: 8px;
+      border: 1px solid #cfe0ef;
+      border-radius: 15px;
+      background: white;
+      color: var(--navy);
+      opacity: .22;
+      filter: grayscale(1);
+      transform: scale(.82);
+      font-size: 13px;
+      font-weight: 780;
+      text-align: center;
+      transition: .48s var(--ease);
+    }
+
+    .module-node.on { opacity: 1; filter: none; transform: none; box-shadow: 0 10px 24px rgba(23,59,104,.11); }
+    .module-node.m1 { left: 32px; top: 51px; }
+    .module-node.m2 { right: 32px; top: 51px; }
+    .module-node.m3 { left: 32px; bottom: 51px; }
+    .module-node.m4 { right: 32px; bottom: 51px; }
+
+    .lab-meter {
+      position: absolute;
+      left: 50%;
+      bottom: 21px;
+      z-index: 5;
+      width: 58%;
+      height: 8px;
+      border-radius: 99px;
+      background: #dce6f0;
+      overflow: hidden;
+      transform: translateX(-50%);
+    }
+
+    .lab-meter-fill { height: 100%; width: 0; border-radius: inherit; background: linear-gradient(90deg, var(--blue), var(--green)); transition: width .5s var(--ease); }
+
+    /* Answer reveal */
+    .answer-toolbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 10px;
+    }
+
+    .answer-hint { color: var(--muted); font-size: 16px; }
+
+    .answer-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 14px;
+      margin-top: 19px;
+    }
+
+    .answer-card {
+      position: relative;
+      display: grid;
+      grid-template-columns: 52px 175px 1fr;
+      align-items: center;
+      gap: 15px;
+      min-height: 86px;
+      padding: 13px 16px;
+      border: 1px solid var(--line);
+      border-radius: 19px;
+      background: rgba(255,255,255,.88);
+      text-align: left;
+      cursor: pointer;
+      box-shadow: 0 8px 22px rgba(23,59,104,.07);
+      transition: .3s var(--ease);
+      overflow: hidden;
+    }
+
+    .answer-card:hover { transform: translateY(-3px); box-shadow: var(--soft-shadow); }
+    .answer-card.revealed { border-color: var(--answer-color, #a8c5ec); background: var(--answer-bg, #f4f8ff); }
+
+    .answer-icon {
+      display: grid;
+      place-items: center;
+      width: 48px;
+      height: 48px;
+      border-radius: 14px;
+      background: #eef4fb;
+      color: var(--blue);
+      font-size: 14px;
+      font-weight: 900;
+    }
+
+    .answer-title { font-size: 17px; font-weight: 800; }
+    .answer-result { position: relative; min-height: 45px; }
+    .answer-result::before {
+      content: "Klik untuk membuka";
+      display: block;
+      color: #9aa7b7;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .answer-card.revealed .answer-result::before { display: none; }
+    .answer-label, .answer-why { display: none; }
+    .answer-card.revealed .answer-label,
+    .answer-card.revealed .answer-why { display: block; animation: answer-in .42s var(--ease) both; }
+    .answer-label { margin-bottom: 3px; color: var(--answer-color, var(--blue)); font-size: 14px; font-weight: 850; text-transform: uppercase; letter-spacing: .04em; }
+    .answer-why { color: var(--muted); font-size: 13px; line-height: 1.3; }
+    @keyframes answer-in { from { opacity: 0; transform: translateX(9px); } to { opacity: 1; transform: none; } }
+
+    /* System model */
+    .system-model {
+      position: relative;
+      display: grid;
+      grid-template-columns: 1fr 90px 1fr 90px 1fr;
+      align-items: center;
+      gap: 8px;
+      width: 1240px;
+      margin: 54px auto 0;
+    }
+
+    .system-block {
+      position: relative;
+      display: grid;
+      place-items: center;
+      min-height: 205px;
+      padding: 28px;
+      border: 1px solid var(--block-line, #cddcf0);
+      border-radius: 27px;
+      background: var(--block-bg, white);
+      box-shadow: var(--soft-shadow);
+      text-align: center;
+      overflow: hidden;
+    }
+
+    .system-block::after {
+      content: "";
+      position: absolute;
+      width: 140px;
+      height: 140px;
+      right: -45px;
+      bottom: -45px;
+      border-radius: 50%;
+      background: var(--block-glow, rgba(37,99,235,.08));
+    }
+
+    .system-block strong { position: relative; z-index: 1; display: block; margin-bottom: 9px; font-size: 30px; }
+    .system-block span { position: relative; z-index: 1; color: var(--muted); font-size: 18px; line-height: 1.42; }
+
+    .flow-arrow {
+      position: relative;
+      height: 4px;
+      border-radius: 99px;
+      background: linear-gradient(90deg, #8db2e5, var(--blue));
+      animation: arrow-glow 2s ease-in-out infinite;
+    }
+
+    .flow-arrow::after {
+      content: "";
+      position: absolute;
+      right: -2px;
+      top: 50%;
+      width: 17px;
+      height: 17px;
+      border-top: 4px solid var(--blue);
+      border-right: 4px solid var(--blue);
+      transform: translateY(-50%) rotate(45deg);
+    }
+
+    @keyframes arrow-glow { 50% { box-shadow: 0 0 18px rgba(37,99,235,.42); } }
+
+    .feedback-loop {
+      position: absolute;
+      left: 105px;
+      right: 105px;
+      top: 240px;
+      height: 93px;
+      border-right: 4px solid #7c9dc6;
+      border-bottom: 4px solid #7c9dc6;
+      border-left: 4px solid #7c9dc6;
+      border-radius: 0 0 38px 38px;
+      opacity: .85;
+    }
+
+    .feedback-loop::before {
+      content: "";
+      position: absolute;
+      left: -11px;
+      top: -3px;
+      width: 16px;
+      height: 16px;
+      border-top: 4px solid #7c9dc6;
+      border-left: 4px solid #7c9dc6;
+      transform: rotate(-45deg);
+    }
+
+    .feedback-label {
+      position: absolute;
+      left: 50%;
+      bottom: -17px;
+      padding: 7px 15px;
+      border-radius: 99px;
+      transform: translateX(-50%);
+      background: white;
+      color: var(--navy);
+      font-size: 15px;
+      font-weight: 800;
+      box-shadow: 0 5px 14px rgba(23,59,104,.1);
+    }
+
+    .definition-box {
+      width: 1180px;
+      margin: 48px auto 0;
+      padding: 23px 30px;
+      border-left: 6px solid var(--blue);
+      border-radius: 8px 20px 20px 8px;
+      background: rgba(239,245,255,.8);
+      color: var(--navy);
+      font-size: 22px;
+      line-height: 1.45;
+      font-weight: 650;
+    }
+
+    /* Data to information */
+    .data-grid {
+      display: grid;
+      grid-template-columns: 1fr 92px 1fr;
+      align-items: stretch;
+      gap: 22px;
+      flex: 1;
+      min-height: 0;
+      margin-top: 29px;
+    }
+
+    .data-panel,
+    .info-panel {
+      position: relative;
+      overflow: hidden;
+      padding: 31px;
+      border: 1px solid var(--line);
+      border-radius: 28px;
+      background: rgba(255,255,255,.9);
+      box-shadow: var(--soft-shadow);
+    }
+
+    .data-panel h3,
+    .info-panel h3 { margin: 0 0 8px; font-size: 29px; }
+    .panel-desc { color: var(--muted); font-size: 17px; }
+
+    .raw-numbers {
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+      height: 245px;
+    }
+
+    .raw-number {
+      display: grid;
+      place-items: center;
+      width: 122px;
+      height: 122px;
+      border-radius: 35px;
+      background: #f1f5f9;
+      color: #75859a;
+      font-size: 43px;
+      font-weight: 850;
+      box-shadow: inset 0 0 0 1px white;
+      animation: raw-float 3.7s ease-in-out infinite;
+    }
+
+    .raw-number:nth-child(2) { animation-delay: -1.2s; }
+    .raw-number:nth-child(3) { animation-delay: -2.4s; }
+    @keyframes raw-float { 50% { transform: translateY(-10px) rotate(2deg); } }
+
+    .transform-column { display: grid; place-items: center; }
+
+    .transform-btn {
+      display: grid;
+      place-items: center;
+      width: 78px;
+      height: 78px;
+      border: 0;
+      border-radius: 25px;
+      background: linear-gradient(135deg, var(--orange), var(--amber));
+      color: white;
+      font-size: 30px;
+      cursor: pointer;
+      box-shadow: 0 16px 35px rgba(249,115,22,.24);
+      transition: .3s var(--ease);
+      animation: transform-pulse 2.7s ease-in-out infinite;
+    }
+
+    .transform-btn:hover { transform: scale(1.08); }
+    @keyframes transform-pulse { 50% { box-shadow: 0 17px 45px rgba(249,115,22,.37); } }
+
+    .info-empty {
+      position: absolute;
+      inset: 115px 30px 30px;
+      display: grid;
+      place-items: center;
+      color: #a1adba;
+      font-size: 19px;
+      font-weight: 700;
+      text-align: center;
+      transition: .4s ease;
+    }
+
+    .info-content { opacity: 0; transform: translateY(18px); transition: .55s var(--ease); }
+    .data-grid.contextualized .info-empty { opacity: 0; transform: scale(.96); }
+    .data-grid.contextualized .info-content { opacity: 1; transform: none; }
+
+    .chart-title { margin: 19px 0 10px; color: var(--navy); font-size: 17px; font-weight: 800; }
+    .bar-chart { display: flex; align-items: end; gap: 30px; height: 230px; padding: 18px 24px 0; border-left: 2px solid #dce5ef; border-bottom: 2px solid #dce5ef; }
+    .bar-wrap { display: flex; flex: 1; flex-direction: column; justify-content: end; align-items: center; height: 100%; gap: 9px; }
+    .bar { position: relative; width: 72px; height: 0; border-radius: 14px 14px 5px 5px; background: linear-gradient(180deg, var(--blue), var(--cyan)); transition: height .8s var(--ease); box-shadow: 0 10px 25px rgba(37,99,235,.18); }
+    .bar::before { content: attr(data-value); position: absolute; left: 50%; top: -31px; transform: translateX(-50%); color: var(--navy); font-size: 19px; font-weight: 850; }
+    .bar-wrap span { color: var(--muted); font-size: 14px; font-weight: 700; }
+    .data-grid.contextualized .bar.b1 { height: 178px; }
+    .data-grid.contextualized .bar.b2 { height: 145px; transition-delay: .12s; }
+    .data-grid.contextualized .bar.b3 { height: 103px; transition-delay: .24s; }
+    .insight-chip { margin-top: 17px; padding: 12px 15px; border-radius: 14px; background: #eaf9f3; color: #087a4b; font-size: 15px; font-weight: 800; }
+
+    /* Components ecosystem */
+    .component-layout {
+      display: grid;
+      grid-template-columns: 1.08fr .92fr;
+      gap: 42px;
+      flex: 1;
+      min-height: 0;
+      margin-top: 14px;
+    }
+
+    .ecosystem {
+      position: relative;
+      display: grid;
+      place-items: center;
+      min-height: 520px;
+    }
+
+    .eco-ring {
+      position: absolute;
+      width: 440px;
+      height: 440px;
+      border: 2px dashed rgba(37,99,235,.23);
+      border-radius: 50%;
+      animation: rotate 36s linear infinite;
+    }
+
+    .eco-core {
+      position: relative;
+      z-index: 4;
+      display: grid;
+      place-items: center;
+      width: 205px;
+      height: 205px;
+      padding: 24px;
+      border-radius: 50%;
+      background: linear-gradient(145deg, var(--navy), var(--blue));
+      color: white;
+      box-shadow: 0 28px 58px rgba(37,99,235,.26);
+      text-align: center;
+      font-size: 24px;
+      font-weight: 830;
+      line-height: 1.18;
+    }
+
+    .eco-node {
+      position: absolute;
+      z-index: 5;
+      display: grid;
+      place-items: center;
+      width: 150px;
+      min-height: 82px;
+      padding: 13px;
+      border: 1px solid #d4e1ee;
+      border-radius: 21px;
+      background: white;
+      color: var(--navy);
+      font-size: 17px;
+      font-weight: 820;
+      cursor: pointer;
+      box-shadow: var(--soft-shadow);
+      transition: .3s var(--ease);
+    }
+
+    .eco-node:hover,
+    .eco-node.active { transform: translateY(-5px) scale(1.03); border-color: var(--node-color, var(--blue)); color: var(--node-color, var(--blue)); box-shadow: 0 17px 37px rgba(23,59,104,.14); }
+    .eco-node.e1 { left: 38px; top: 75px; }
+    .eco-node.e2 { right: 38px; top: 75px; }
+    .eco-node.e3 { left: 38px; bottom: 72px; }
+    .eco-node.e4 { right: 38px; bottom: 72px; }
+
+    .component-detail {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 38px;
+      border: 1px solid var(--line);
+      border-radius: 28px;
+      background: rgba(255,255,255,.9);
+      box-shadow: var(--soft-shadow);
+    }
+
+    .detail-label { color: var(--blue); font-size: 15px; font-weight: 850; letter-spacing: .1em; text-transform: uppercase; }
+    .component-detail h3 { margin: 13px 0 15px; font-size: 36px; }
+    .component-detail p { color: var(--muted); font-size: 21px; line-height: 1.55; }
+    .detail-purpose { margin-top: 25px; padding: 18px; border-radius: 17px; background: #eff6ff; color: var(--navy); font-size: 17px; font-weight: 720; line-height: 1.42; }
+
+    /* Technology vs IS */
+    .versus-grid {
+      position: relative;
+      display: grid;
+      grid-template-columns: 1fr 100px 1fr;
+      align-items: center;
+      gap: 20px;
+      flex: 1;
+      min-height: 0;
+      margin-top: 18px;
+    }
+
+    .versus-panel {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 495px;
+      padding: 32px;
+      border: 1px solid var(--line);
+      border-radius: 29px;
+      background: rgba(255,255,255,.9);
+      box-shadow: var(--soft-shadow);
+      text-align: center;
+      overflow: hidden;
+    }
+
+    .versus-panel h3 { margin: 22px 0 10px; font-size: 30px; }
+    .versus-panel p { max-width: 470px; margin: 0; color: var(--muted); font-size: 19px; line-height: 1.46; }
+
+    .tech-device {
+      position: relative;
+      width: 230px;
+      height: 150px;
+      border: 9px solid var(--navy);
+      border-radius: 17px;
+      background: linear-gradient(145deg, #eef5ff, #dcecff);
+      box-shadow: 0 18px 34px rgba(23,59,104,.15);
+    }
+
+    .tech-device::after { content: ""; position: absolute; left: 50%; bottom: -35px; width: 100px; height: 26px; border-radius: 0 0 10px 10px; transform: translateX(-50%); background: var(--navy); }
+    .tech-device::before { content: "APP"; position: absolute; inset: 0; display: grid; place-items: center; color: var(--blue); font-size: 34px; font-weight: 900; }
+
+    .vs-mark { display: grid; place-items: center; width: 70px; height: 70px; border-radius: 50%; background: var(--ink); color: white; font-size: 20px; font-weight: 900; box-shadow: 0 14px 28px rgba(19,34,56,.18); }
+
+    .assembled-system { position: relative; width: 330px; height: 230px; }
+    .assembly-core { position: absolute; left: 50%; top: 50%; display: grid; place-items: center; width: 120px; height: 120px; border-radius: 50%; transform: translate(-50%,-50%); background: linear-gradient(145deg, var(--navy), var(--blue)); color: white; font-weight: 850; box-shadow: 0 16px 36px rgba(37,99,235,.24); }
+    .assembly-chip { position: absolute; display: grid; place-items: center; width: 105px; height: 48px; border: 1px solid #d4e1ee; border-radius: 14px; background: white; color: var(--navy); font-size: 14px; font-weight: 800; box-shadow: 0 8px 18px rgba(23,59,104,.09); animation: chip-in 3.5s var(--ease) infinite; }
+    .assembly-chip.a1 { left: 2px; top: 14px; }
+    .assembly-chip.a2 { right: 2px; top: 14px; animation-delay: -.8s; }
+    .assembly-chip.a3 { left: 2px; bottom: 14px; animation-delay: -1.6s; }
+    .assembly-chip.a4 { right: 2px; bottom: 14px; animation-delay: -2.4s; }
+    @keyframes chip-in { 0%, 100% { transform: scale(.95); opacity: .75; } 50% { transform: none; opacity: 1; } }
+
+    .big-takeaway {
+      width: 1140px;
+      margin: 18px auto 0;
+      padding: 19px 26px;
+      border-radius: 18px;
+      background: linear-gradient(90deg, rgba(37,99,235,.10), rgba(14,165,198,.08));
+      color: var(--navy);
+      text-align: center;
+      font-size: 22px;
+      font-weight: 780;
+    }
+
+    /* MIS two meanings */
+    .meaning-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 29px;
+      flex: 1;
+      min-height: 0;
+      margin-top: 28px;
+    }
+
+    .meaning-card {
+      position: relative;
+      overflow: hidden;
+      padding: 36px;
+      border: 1px solid var(--line);
+      border-radius: 29px;
+      background: rgba(255,255,255,.91);
+      box-shadow: var(--soft-shadow);
+    }
+
+    .meaning-no { color: var(--blue); font-size: 16px; font-weight: 900; letter-spacing: .12em; text-transform: uppercase; }
+    .meaning-card h3 { margin: 18px 0 15px; font-size: 34px; }
+    .meaning-card > p { color: var(--muted); font-size: 21px; line-height: 1.52; }
+
+    .meaning-visual {
+      position: absolute;
+      left: 36px;
+      right: 36px;
+      bottom: 33px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+      height: 125px;
+      border-radius: 22px;
+      background: #f4f8fd;
+    }
+
+    .book-stack { position: relative; width: 160px; height: 91px; }
+    .book { position: absolute; left: 50%; width: 145px; height: 26px; border-radius: 7px; transform: translateX(-50%); background: var(--blue); }
+    .book:nth-child(1) { bottom: 0; }
+    .book:nth-child(2) { bottom: 32px; width: 126px; background: var(--cyan); }
+    .book:nth-child(3) { bottom: 64px; width: 108px; background: var(--purple); }
+
+    .report-to-manager { display: flex; align-items: center; gap: 18px; }
+    .report-page { position: relative; width: 105px; height: 82px; border: 3px solid var(--blue); border-radius: 12px; background: white; }
+    .report-page::before { content: ""; position: absolute; left: 15px; bottom: 14px; width: 15px; height: 28px; border-radius: 4px 4px 0 0; background: var(--cyan); box-shadow: 24px -17px 0 var(--blue), 48px -3px 0 var(--orange); }
+    .manager-node { display: grid; place-items: center; width: 76px; height: 76px; border-radius: 50%; background: var(--navy); color: white; font-size: 13px; font-weight: 800; }
+    .meaning-arrow { width: 48px; height: 4px; background: var(--blue); position: relative; }
+    .meaning-arrow::after { content: ""; position: absolute; right: -2px; top: -6px; width: 13px; height: 13px; border-top: 4px solid var(--blue); border-right: 4px solid var(--blue); transform: rotate(45deg); }
+
+    .meaning-footer { margin-top: 20px; padding: 15px 19px; border-radius: 15px; background: #fff5e9; color: #a64b0e; font-size: 17px; font-weight: 760; text-align: center; }
+
+    /* Revisit flow */
+    .revisit-flow {
+      position: relative;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 72px;
+      width: 1320px;
+      margin: 70px auto 0;
+    }
+
+    .revisit-flow::before {
+      content: "";
+      position: absolute;
+      left: 120px;
+      right: 120px;
+      top: 92px;
+      height: 5px;
+      border-radius: 99px;
+      background: linear-gradient(90deg, #a6b8cd, var(--blue), var(--cyan), var(--orange));
+      box-shadow: 0 0 24px rgba(37,99,235,.22);
+    }
+
+    .flow-step {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+    }
+
+    .flow-step-icon {
+      display: grid;
+      place-items: center;
+      width: 150px;
+      height: 150px;
+      margin: 17px auto 26px;
+      border: 10px solid white;
+      border-radius: 42px;
+      background: var(--step-bg, #edf4ff);
+      color: var(--step-color, var(--blue));
+      box-shadow: var(--soft-shadow);
+      font-size: 22px;
+      font-weight: 900;
+      animation: flow-node 4s ease-in-out infinite;
+    }
+
+    .flow-step:nth-child(2) .flow-step-icon { animation-delay: -.8s; }
+    .flow-step:nth-child(3) .flow-step-icon { animation-delay: -1.6s; }
+    .flow-step:nth-child(4) .flow-step-icon { animation-delay: -2.4s; }
+    @keyframes flow-node { 50% { transform: translateY(-8px); } }
+    .flow-step h3 { margin: 0 0 8px; font-size: 22px; }
+    .flow-step p { margin: 0; color: var(--muted); font-size: 16px; line-height: 1.4; }
+
+    .flow-braces {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+      width: 1120px;
+      margin: 48px auto 0;
+    }
+
+    .flow-brace {
+      padding: 15px;
+      border-top: 4px solid var(--brace-color, var(--blue));
+      border-radius: 10px;
+      background: var(--brace-bg, rgba(37,99,235,.07));
+      color: var(--brace-color, var(--blue));
+      text-align: center;
+      font-size: 18px;
+      font-weight: 850;
+    }
+
+    /* Summary */
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+      width: 1220px;
+      margin: 36px auto 0;
+    }
+
+    .summary-card {
+      display: grid;
+      grid-template-columns: 74px 1fr;
+      align-items: center;
+      gap: 19px;
+      min-height: 142px;
+      padding: 22px;
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      background: rgba(255,255,255,.9);
+      box-shadow: var(--soft-shadow);
+    }
+
+    .summary-no { display: grid; place-items: center; width: 67px; height: 67px; border-radius: 20px; background: var(--sum-bg, #edf4ff); color: var(--sum-color, var(--blue)); font-size: 27px; font-weight: 900; }
+    .summary-card p { margin: 0; color: var(--ink); font-size: 20px; line-height: 1.43; font-weight: 680; }
+
+    .core-statement {
+      width: 1220px;
+      margin: 22px auto 0;
+      padding: 22px 28px;
+      border-radius: 20px;
+      background: linear-gradient(100deg, var(--navy), var(--blue));
+      color: white;
+      text-align: center;
+      font-size: 24px;
+      font-weight: 790;
+      box-shadow: 0 18px 38px rgba(37,99,235,.22);
+    }
+
+    /* Reflection */
+    .reflection-grid {
+      display: grid;
+      grid-template-columns: 330px 1fr;
+      gap: 27px;
+      flex: 1;
+      min-height: 0;
+      margin-top: 25px;
+    }
+
+    .reflection-cases {
+      display: flex;
+      flex-direction: column;
+      gap: 13px;
+    }
+
+    .reflection-choice {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      min-height: 82px;
+      padding: 16px;
+      border: 1px solid var(--line);
+      border-radius: 19px;
+      background: rgba(255,255,255,.9);
+      color: var(--navy);
+      text-align: left;
+      font-size: 19px;
+      font-weight: 800;
+      cursor: pointer;
+      box-shadow: 0 8px 20px rgba(23,59,104,.07);
+      transition: .28s var(--ease);
+    }
+
+    .reflection-choice:hover,
+    .reflection-choice.active { transform: translateX(7px); border-color: var(--blue); box-shadow: var(--soft-shadow); }
+    .reflection-choice.active { background: #edf5ff; color: var(--blue); }
+
+    .choice-tag { display: grid; place-items: center; width: 45px; height: 45px; border-radius: 13px; background: #eff4f9; font-size: 13px; font-weight: 900; }
+    .reflection-choice.active .choice-tag { background: var(--blue); color: white; }
+
+    .reflection-board {
+      position: relative;
+      padding: 30px;
+      border: 1px solid var(--line);
+      border-radius: 28px;
+      background: rgba(255,255,255,.91);
+      box-shadow: var(--soft-shadow);
+    }
+
+    .reflection-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
+    .reflection-head h3 { margin: 0; font-size: 28px; }
+    .timer-pill { padding: 9px 14px; border-radius: 99px; background: #fff2e8; color: #b64a0b; font-size: 15px; font-weight: 850; }
+
+    .prompt-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
+    .prompt-card { min-height: 116px; padding: 18px; border-radius: 18px; background: #f5f8fc; border: 1px solid #e1e8f0; }
+    .prompt-card.wide { grid-column: 1 / -1; min-height: 100px; background: #eef6ff; }
+    .prompt-label { display: block; margin-bottom: 7px; color: var(--blue); font-size: 14px; font-weight: 900; letter-spacing: .08em; text-transform: uppercase; }
+    .prompt-question { margin: 0; color: var(--ink); font-size: 18px; line-height: 1.38; font-weight: 690; }
+
+    /* Bibliography */
+    .bibliography-list {
+      display: grid;
+      gap: 19px;
+      width: 1290px;
+      margin: 38px auto 0;
+    }
+
+    .reference-card {
+      position: relative;
+      display: grid;
+      grid-template-columns: 72px 1fr 145px;
+      align-items: center;
+      gap: 22px;
+      min-height: 142px;
+      padding: 22px 25px;
+      border: 1px solid var(--line);
+      border-radius: 23px;
+      background: rgba(255,255,255,.91);
+      box-shadow: var(--soft-shadow);
+    }
+
+    .reference-year { display: grid; place-items: center; width: 66px; height: 66px; border-radius: 20px; background: #edf4ff; color: var(--blue); font-size: 17px; font-weight: 900; }
+    .reference-text { margin: 0; color: var(--ink); font-size: 18px; line-height: 1.47; }
+    .reference-text em { font-weight: 650; }
+    .reference-link { justify-self: end; color: var(--blue); font-size: 15px; font-weight: 800; text-decoration: none; }
+    .reference-link:hover { text-decoration: underline; }
+
+    /* Closing */
+    .closing { justify-content: center; text-align: center; }
+    .closing-mark { position: relative; width: 200px; height: 200px; margin: 0 auto 30px; }
+    .closing-core { position: absolute; inset: 34px; z-index: 2; display: grid; place-items: center; border-radius: 50%; background: linear-gradient(145deg, var(--navy), var(--blue)); color: white; font-size: 25px; font-weight: 900; box-shadow: 0 22px 48px rgba(37,99,235,.28); }
+    .closing-ring { position: absolute; inset: 0; border: 2px dashed rgba(37,99,235,.36); border-radius: 50%; animation: rotate 16s linear infinite; }
+    .closing-dot { position: absolute; width: 25px; height: 25px; border: 6px solid white; border-radius: 50%; background: var(--blue); box-shadow: 0 5px 14px rgba(23,59,104,.18); }
+    .closing-dot.d1 { left: 15px; top: 78px; }
+    .closing-dot.d2 { right: 23px; top: 35px; background: var(--orange); }
+    .closing-dot.d3 { right: 29px; bottom: 27px; background: var(--green); }
+    .closing h2 { margin-bottom: 16px; font-size: 72px; }
+    .closing-quote { max-width: 1000px; margin: 0 auto 30px; color: var(--muted); font-size: 25px; line-height: 1.5; }
+    .closing-name { color: var(--navy); font-size: 19px; font-weight: 800; }
+
+    /* Persistent controls */
+    .deck-chrome {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 50;
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+      gap: 20px;
+      height: 66px;
+      padding: 0 24px 0 30px;
+      border-top: 1px solid rgba(198,210,224,.72);
+      background: rgba(255,255,255,.86);
+      backdrop-filter: blur(16px);
+    }
+
+    .chrome-title {
+      overflow: hidden;
+      color: #68788c;
+      font-size: 14px;
+      font-weight: 700;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .progress-center { display: flex; align-items: center; gap: 14px; }
+    .slide-count { min-width: 66px; color: var(--navy); font-size: 14px; font-weight: 850; text-align: center; }
+    .progress-track { position: relative; width: 260px; height: 6px; overflow: hidden; border-radius: 99px; background: #dfe7f0; }
+    .progress-fill { width: 5.555%; height: 100%; border-radius: inherit; background: linear-gradient(90deg, var(--blue), var(--cyan)); transition: width .5s var(--ease); }
+
+    .controls { display: flex; justify-content: flex-end; align-items: center; gap: 7px; }
+    .control-btn {
+      position: relative;
+      display: grid;
+      place-items: center;
+      width: 42px;
+      height: 42px;
+      border: 1px solid #d8e2ec;
+      border-radius: 13px;
+      background: rgba(255,255,255,.9);
+      color: var(--navy);
+      cursor: pointer;
+      transition: .22s var(--ease);
+    }
+
+    .control-btn:hover { transform: translateY(-2px); border-color: #aac5e7; background: white; box-shadow: 0 8px 20px rgba(23,59,104,.11); }
+    .control-btn:disabled { opacity: .34; cursor: not-allowed; transform: none; box-shadow: none; }
+    .control-btn svg { width: 20px; height: 20px; }
+
+    .control-key {
+      position: absolute;
+      right: -3px;
+      bottom: -4px;
+      display: grid;
+      place-items: center;
+      min-width: 15px;
+      height: 15px;
+      padding: 0 3px;
+      border: 1px solid #cdd9e6;
+      border-radius: 5px;
+      background: white;
+      color: #718097;
+      font-size: 8px;
+      font-weight: 900;
+    }
+
+    .control-btn.sound-off { color: #9da9b7; }
+
+    /* Help overlay */
+    .overlay {
+      position: absolute;
+      inset: 0;
+      z-index: 100;
+      display: grid;
+      place-items: center;
+      visibility: hidden;
+      opacity: 0;
+      background: rgba(16,31,52,.38);
+      backdrop-filter: blur(12px);
+      transition: .28s ease;
+    }
+
+    .overlay.open { visibility: visible; opacity: 1; }
+
+    .help-card {
+      width: 650px;
+      padding: 34px;
+      border: 1px solid rgba(255,255,255,.8);
+      border-radius: 28px;
+      background: rgba(255,255,255,.96);
+      box-shadow: 0 35px 90px rgba(8,25,48,.28);
+      transform: translateY(18px) scale(.98);
+      transition: .35s var(--ease);
+    }
+
+    .overlay.open .help-card { transform: none; }
+    .help-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; }
+    .help-head h3 { margin: 0; font-size: 29px; }
+    .close-help { display: grid; place-items: center; width: 38px; height: 38px; border: 0; border-radius: 12px; background: #eef3f8; color: var(--navy); cursor: pointer; font-size: 22px; }
+    .shortcut-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 13px; }
+    .shortcut { display: flex; align-items: center; gap: 13px; padding: 14px; border-radius: 15px; background: #f5f8fc; color: var(--muted); font-size: 15px; font-weight: 680; }
+    kbd { display: grid; place-items: center; min-width: 43px; height: 34px; padding: 0 9px; border: 1px solid #cad7e5; border-bottom-width: 3px; border-radius: 9px; background: white; color: var(--navy); font-family: inherit; font-size: 13px; font-weight: 850; }
+
+    .pause-indicator {
+      position: absolute;
+      left: 50%;
+      top: 48%;
+      z-index: 80;
+      display: flex;
+      align-items: center;
+      gap: 13px;
+      visibility: hidden;
+      opacity: 0;
+      padding: 15px 21px;
+      border: 1px solid rgba(255,255,255,.9);
+      border-radius: 18px;
+      transform: translate(-50%,-50%) scale(.92);
+      background: rgba(19,34,56,.86);
+      color: white;
+      font-size: 17px;
+      font-weight: 800;
+      backdrop-filter: blur(12px);
+      transition: .25s var(--ease);
+    }
+
+    #stage.paused .pause-indicator { visibility: visible; opacity: 1; transform: translate(-50%,-50%); }
+    #stage.paused *, #stage.paused *::before, #stage.paused *::after { animation-play-state: paused !important; }
+    #stage.paused .deck-chrome, #stage.paused .deck-chrome *, #stage.paused .pause-indicator { animation-play-state: running !important; }
+
+    /* Revision 2 — readability and cinematic motion */
+    .eyebrow { font-size: 20px; }
+    .pill { min-height: 38px; padding: 8px 15px; font-size: 17px; }
+    .ghost-btn { font-size: 17px; }
+    .cover-subtitle { font-size: 28px; line-height: 1.46; }
+    .byline-name { font-size: 22px; }
+    .byline-campus { font-size: 18px; }
+    .lead { max-width: 1160px; font-size: 27px; line-height: 1.46; }
+    .hook-kicker { font-size: 21px; }
+    .hook-note { font-size: 25px; }
+    .case-card h3 { font-size: 32px; }
+    .case-card p { font-size: 22px; }
+    .case-grid.four .case-card h3 { font-size: 28px; }
+    .case-grid.four .case-card p { font-size: 20px; }
+    .case-question { font-size: 20px; }
+    .sort-card { font-size: 17px; }
+    .sort-glyph { font-size: 14px; }
+    .drop-zone h3 { font-size: 23px; }
+    .drop-zone > p { min-height: 43px; font-size: 16px; line-height: 1.38; }
+    .drop-zone .sort-card { min-height: 42px; font-size: 15px; }
+    .zone-count { font-size: 16px; }
+    .classifier-footer { font-size: 18px; }
+    .lens-card h3 { font-size: 27px; }
+    .lens-card p { font-size: 20px; }
+    .lens-center { font-size: 16px; }
+    .fake-label { font-size: 17px; }
+    .form-mock > p { font-size: 20px; }
+    .tool-badge { font-size: 17px; }
+    .lab-add { min-height: 58px; font-size: 17px; }
+    .module-node { font-size: 16px; }
+    .lab-core { font-size: 20px; }
+    .answer-hint { font-size: 19px; }
+    .answer-card { min-height: 96px; grid-template-columns: 54px 190px 1fr; }
+    .answer-icon { font-size: 16px; }
+    .answer-title { font-size: 20px; }
+    .answer-result::before { font-size: 16px; }
+    .answer-label { font-size: 16px; }
+    .answer-why { font-size: 15px; line-height: 1.38; }
+    .system-block span { font-size: 21px; }
+    .definition-box { font-size: 25px; }
+    .feedback-label { font-size: 17px; }
+    .bodynote { font-size: 18px; }
+    .panel-desc { font-size: 20px; }
+    .chart-title { font-size: 20px; }
+    .bar-wrap span { font-size: 17px; }
+    .insight-chip { font-size: 18px; }
+    .eco-node { font-size: 20px; }
+    .detail-label { font-size: 18px; }
+    .component-detail p { font-size: 23px; }
+    .detail-purpose { font-size: 20px; }
+    .versus-panel p { font-size: 22px; }
+    .assembly-chip { font-size: 16px; }
+    .big-takeaway { font-size: 25px; }
+    .meaning-no { font-size: 18px; }
+    .meaning-card > p { font-size: 23px; }
+    .manager-node { font-size: 16px; }
+    .meaning-footer { font-size: 20px; }
+    .flow-step p { font-size: 19px; }
+    .flow-brace { font-size: 21px; }
+    .summary-card p { font-size: 23px; }
+    .reflection-choice { font-size: 21px; }
+    .choice-tag { font-size: 15px; }
+    .timer-pill { font-size: 17px; }
+    .prompt-label { font-size: 16px; }
+    .prompt-question { font-size: 21px; }
+    .reference-card { min-height: 150px; }
+    .reference-text { font-size: 20px; }
+    .reference-link { font-size: 17px; }
+    .chrome-title, .slide-count { font-size: 16px; }
+    .control-key { min-width: 18px; height: 18px; font-size: 11px; }
+    .shortcut { font-size: 18px; }
+    kbd { font-size: 15px; }
+
+    [data-anim] {
+      filter: blur(9px);
+      transform: translateY(38px) scale(.965);
+    }
+
+    .scene.active [data-anim] {
+      animation-duration: .94s;
+    }
+
+    @keyframes item-in {
+      0% { opacity: 0; transform: translateY(38px) scale(.965); filter: blur(9px); }
+      72% { opacity: 1; transform: translateY(-4px) scale(1.004); filter: blur(0); }
+      100% { opacity: 1; transform: none; filter: none; }
+    }
+
+    .scene:not(.cover):not(.closing) h2 {
+      position: relative;
+      width: fit-content;
+    }
+
+    .scene:not(.cover):not(.closing) h2::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      bottom: -8px;
+      width: min(220px, 42%);
+      height: 5px;
+      border-radius: 99px;
+      background: linear-gradient(90deg, var(--blue), var(--cyan), transparent);
+      transform: scaleX(0);
+      transform-origin: left;
+      opacity: 0;
+    }
+
+    .scene.active:not(.cover):not(.closing) h2::after {
+      animation: title-streak 1s .62s var(--ease) forwards;
+    }
+
+    @keyframes title-streak {
+      0% { transform: scaleX(0); opacity: 0; filter: blur(3px); }
+      65% { transform: scaleX(1.12); opacity: 1; filter: none; box-shadow: 0 0 18px rgba(37,99,235,.32); }
+      100% { transform: scaleX(1); opacity: .9; filter: none; }
+    }
+
+    .scene.active .case-card[data-anim]:nth-child(odd) { animation-name: card-in-left; }
+    .scene.active .case-card[data-anim]:nth-child(even) { animation-name: card-in-right; }
+
+    @keyframes card-in-left {
+      0% { opacity: 0; transform: translate(-54px, 25px) rotateY(10deg) scale(.94); filter: blur(10px); }
+      70% { opacity: 1; transform: translate(5px, -5px) rotateY(-1deg) scale(1.005); filter: none; }
+      100% { opacity: 1; transform: none; filter: none; }
+    }
+
+    @keyframes card-in-right {
+      0% { opacity: 0; transform: translate(54px, 25px) rotateY(-10deg) scale(.94); filter: blur(10px); }
+      70% { opacity: 1; transform: translate(-5px, -5px) rotateY(1deg) scale(1.005); filter: none; }
+      100% { opacity: 1; transform: none; filter: none; }
+    }
+
+    .case-card::before {
+      content: "";
+      position: absolute;
+      z-index: 0;
+      left: -55%;
+      top: -70%;
+      width: 36%;
+      height: 230%;
+      transform: rotate(22deg);
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,.85), transparent);
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .scene.active .case-card::before {
+      animation: card-sheen 1.45s calc(var(--d, 200ms) + .38s) ease-out 1;
+    }
+
+    @keyframes card-sheen {
+      0% { left: -55%; opacity: 0; }
+      20% { opacity: .7; }
+      100% { left: 125%; opacity: 0; }
+    }
+
+    .scene.active .case-icon {
+      animation: icon-land .95s calc(var(--d, 200ms) + .32s) var(--ease) both;
+    }
+
+    @keyframes icon-land {
+      0% { transform: scale(.55) rotate(-13deg); opacity: 0; }
+      65% { transform: scale(1.09) rotate(2deg); opacity: 1; }
+      100% { transform: none; opacity: 1; }
+    }
+
+    .scene.active .drop-zone { animation: zone-rise .8s var(--ease) both; }
+    .scene.active .drop-zone:nth-child(1) { animation-delay: .25s; }
+    .scene.active .drop-zone:nth-child(2) { animation-delay: .34s; }
+    .scene.active .drop-zone:nth-child(3) { animation-delay: .43s; }
+    .scene.active .drop-zone:nth-child(4) { animation-delay: .52s; }
+
+    @keyframes zone-rise {
+      0% { opacity: 0; transform: translateY(48px) scale(.94); filter: blur(8px); }
+      72% { opacity: 1; transform: translateY(-5px) scale(1.01); filter: none; }
+      100% { opacity: 1; transform: none; filter: none; }
+    }
+
+    .hero-system { animation: hero-drift 8s ease-in-out infinite; }
+    @keyframes hero-drift {
+      0%, 100% { transform: translateY(0) rotate(-.7deg); }
+      50% { transform: translateY(-12px) rotate(.8deg); }
+    }
+
+    .scene.active .system-block:nth-of-type(1),
+    .scene.active .flow-step:nth-child(1) { animation-delay: .2s; }
+
+    .system-block::before,
+    .versus-panel::before,
+    .meaning-card::before,
+    .reference-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      background: linear-gradient(115deg, transparent 26%, rgba(37,99,235,.07) 48%, transparent 70%);
+      background-size: 240% 100%;
+      background-position: 160% 0;
+      pointer-events: none;
+    }
+
+    .scene.active .system-block::before,
+    .scene.active .versus-panel::before,
+    .scene.active .meaning-card::before,
+    .scene.active .reference-card::before {
+      animation: surface-scan 2.2s .55s ease-out 1;
+    }
+
+    @keyframes surface-scan { to { background-position: -60% 0; } }
+
+    .flow-arrow::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 50%;
+      width: 13px;
+      height: 13px;
+      border: 4px solid white;
+      border-radius: 50%;
+      transform: translate(-50%,-50%);
+      background: var(--cyan);
+      box-shadow: 0 0 18px rgba(14,165,198,.55);
+      animation: arrow-particle 1.65s linear infinite;
+    }
+
+    @keyframes arrow-particle { from { left: 0; } to { left: 100%; } }
+
+    .definition-box { position: relative; overflow: hidden; }
+    .definition-box::after {
+      content: "";
+      position: absolute;
+      left: -25%;
+      top: 0;
+      width: 20%;
+      height: 100%;
+      transform: skewX(-22deg);
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,.85), transparent);
+    }
+    .scene.active .definition-box::after { animation: definition-glint 1.4s 1.2s ease-out 1; }
+    @keyframes definition-glint { to { left: 120%; } }
+
+    /* Motion happens inside each scene, tied to what the learner does. */
+    .sort-card.motion-active {
+      position: relative;
+      z-index: 40;
+      pointer-events: none;
+      will-change: transform;
+    }
+
+    .drop-zone.receiving { animation: zone-receive .7s var(--ease) both; }
+    .sort-bank.receiving { animation: bank-receive .65s var(--ease) both; }
+
+    @keyframes zone-receive {
+      0%, 100% { box-shadow: none; }
+      42% { transform: translateY(-5px) scale(1.018); box-shadow: 0 20px 42px color-mix(in srgb, var(--zone-color) 24%, transparent); }
+    }
+
+    @keyframes bank-receive {
+      0%, 100% { border-color: rgba(37,99,235,.20); background: rgba(239,245,255,.58); }
+      45% { border-color: rgba(37,99,235,.62); background: rgba(219,233,255,.88); }
+    }
+
+    .motion-ghost {
+      position: absolute;
+      z-index: 46;
+      display: grid;
+      place-items: center;
+      pointer-events: none;
+      will-change: transform, opacity;
+    }
+
+    .flying-module {
+      min-width: 170px;
+      min-height: 52px;
+      padding: 10px 16px;
+      border: 1px solid #9fc5f6;
+      border-radius: 14px;
+      background: linear-gradient(135deg, #ffffff, #eaf3ff);
+      color: var(--blue);
+      font-size: 16px;
+      font-weight: 820;
+      box-shadow: 0 20px 45px rgba(37,99,235,.24);
+      white-space: nowrap;
+    }
+
+    .module-node.arrived { animation: module-arrive .62s var(--ease) both; }
+    @keyframes module-arrive {
+      0% { transform: scale(.72); filter: brightness(1.25); box-shadow: 0 0 0 rgba(37,99,235,0); }
+      62% { transform: scale(1.09); filter: none; box-shadow: 0 20px 40px rgba(37,99,235,.27); }
+      100% { transform: none; filter: none; }
+    }
+
+    .lab-core.just-completed { animation: core-complete .82s var(--ease) both; }
+    @keyframes core-complete {
+      0% { transform: scale(.92); filter: saturate(.7); }
+      58% { transform: scale(1.11); filter: saturate(1.35); box-shadow: 0 26px 65px rgba(22,163,106,.30); }
+      100% { transform: scale(1.06); filter: none; }
+    }
+
+    .answer-card.revealed { animation: answer-open .52s var(--ease) both; }
+    @keyframes answer-open {
+      0% { transform: translateX(-8px) scale(.985); filter: brightness(.98); }
+      62% { transform: translateX(5px) scale(1.012); filter: brightness(1.04); }
+      100% { transform: none; filter: none; }
+    }
+
+    .flying-datum {
+      width: 76px;
+      height: 76px;
+      border-radius: 23px;
+      background: linear-gradient(145deg, #ffffff, #e7f0ff);
+      color: var(--blue);
+      font-size: 27px;
+      font-weight: 900;
+      box-shadow: 0 18px 42px rgba(37,99,235,.27);
+    }
+
+    .info-panel.receiving-data { animation: information-arrives .95s var(--ease) both; }
+    @keyframes information-arrives {
+      0%, 35% { transform: scale(.985); border-color: var(--line); }
+      67% { transform: scale(1.018); border-color: rgba(22,163,106,.55); box-shadow: 0 22px 48px rgba(22,163,106,.16); }
+      100% { transform: none; border-color: var(--line); }
+    }
+
+    .component-detail.detail-switch { animation: detail-arrives .5s var(--ease) both; }
+    @keyframes detail-arrives {
+      0% { opacity: .25; transform: translateX(22px) scale(.985); filter: blur(5px); }
+      100% { opacity: 1; transform: none; filter: none; }
+    }
+
+    .reflection-board.board-switch { animation: board-switch .52s var(--ease) both; }
+    .reflection-board.board-switch .prompt-card { animation: prompt-rise .5s var(--ease) both; }
+    .reflection-board.board-switch .prompt-card:nth-child(2) { animation-delay: .07s; }
+    .reflection-board.board-switch .prompt-card:nth-child(3) { animation-delay: .14s; }
+    @keyframes board-switch {
+      0% { transform: translateX(18px) scale(.99); box-shadow: 0 8px 22px rgba(23,59,104,.06); }
+      100% { transform: none; box-shadow: var(--soft-shadow); }
+    }
+    @keyframes prompt-rise {
+      0% { opacity: .35; transform: translateY(16px); }
+      100% { opacity: 1; transform: none; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: .001ms !important; animation-iteration-count: 1 !important; scroll-behavior: auto !important; }
+    }
+  </style>
+</head>
+<body>
+  <div id="viewport">
+    <main id="stage" class="cover-mode" aria-label="Media pembelajaran Pengantar Sistem Informasi Manajemen">
+      <canvas id="ambient" width="1600" height="900" aria-hidden="true"></canvas>
+      <!-- 01 — Cover -->
+      <section class="scene cover active" data-title="Sampul" aria-hidden="false">
+        <div class="cover-grid">
+          <div class="cover-copy">
+            <div class="cover-meta" data-anim style="--d:100ms">
+              <span class="pill"><span class="pill-dot"></span>Pertemuan 01</span>
+              <span class="pill">Sistem Informasi Manajemen</span>
+            </div>
+            <h1 data-anim style="--d:190ms">Pengantar <span>Sistem Informasi Manajemen</span></h1>
+            <p class="cover-subtitle" data-anim style="--d:290ms">Dari contoh sehari-hari menuju pemahaman: kapan sebuah alat benar-benar menjadi sistem informasi—dan kapan ia membantu manajemen?</p>
+            <div class="cover-byline" data-anim style="--d:390ms">
+              <div class="avatar-mark">NM</div>
+              <div>
+                <p class="byline-name">Najib Mubarok, M.Sc.</p>
+                <p class="byline-campus">INISNU Temanggung</p>
+              </div>
+            </div>
+            <button class="primary-btn" id="startBtn" type="button" data-anim style="--d:490ms">
+              Mulai pembelajaran
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            </button>
+          </div>
+
+          <div class="hero-visual" data-anim style="--d:260ms" aria-hidden="true">
+            <div class="hero-halo"></div>
+            <svg class="hero-system" viewBox="0 0 620 620" role="img" aria-label="Ilustrasi aliran data menjadi informasi dan keputusan">
+              <defs>
+                <linearGradient id="flowGradient" x1="0" x2="1"><stop stop-color="#2563eb"/><stop offset=".55" stop-color="#0ea5c6"/><stop offset="1" stop-color="#f97316"/></linearGradient>
+                <linearGradient id="coreGradient" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#173b68"/><stop offset="1" stop-color="#2563eb"/></linearGradient>
+                <filter id="softGlow"><feGaussianBlur stdDeviation="7" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+              </defs>
+              <circle class="orbit-ring" cx="310" cy="310" r="242"/>
+              <circle class="orbit-ring" cx="310" cy="310" r="183" style="animation-direction:reverse; animation-duration:22s"/>
+              <path class="flow-path" d="M133 171 C218 190 209 256 265 278"/>
+              <path class="flow-path" d="M487 175 C410 196 421 253 358 282"/>
+              <path class="flow-path" d="M128 449 C210 418 227 372 267 347"/>
+              <path class="flow-path" d="M491 449 C409 420 395 377 355 348"/>
+
+              <g class="float-node n1" transform="translate(72 110)">
+                <rect width="132" height="112" rx="27" fill="#fff" stroke="#cddcf0" stroke-width="2"/>
+                <ellipse cx="66" cy="34" rx="34" ry="12" fill="#dcecff" stroke="#2563eb" stroke-width="3"/>
+                <path d="M32 34v39c0 7 15 13 34 13s34-6 34-13V34" fill="#edf5ff" stroke="#2563eb" stroke-width="3"/>
+                <path d="M32 52c0 7 15 13 34 13s34-6 34-13" fill="none" stroke="#2563eb" stroke-width="3"/>
+              </g>
+              <g class="float-node n2" transform="translate(417 116)">
+                <rect width="132" height="112" rx="27" fill="#fff" stroke="#cddcf0" stroke-width="2"/>
+                <rect x="27" y="25" width="78" height="58" rx="10" fill="#edf9fb" stroke="#0ea5c6" stroke-width="3"/>
+                <path d="M43 66l14-15 12 9 20-24" fill="none" stroke="#0ea5c6" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+                <circle cx="89" cy="36" r="5" fill="#f97316"/>
+              </g>
+              <g class="float-node n3" transform="translate(64 399)">
+                <rect width="132" height="112" rx="27" fill="#fff" stroke="#cddcf0" stroke-width="2"/>
+                <circle cx="66" cy="40" r="18" fill="#fff0e6" stroke="#f97316" stroke-width="3"/>
+                <path d="M35 88c6-21 18-31 31-31s25 10 31 31" fill="#fff6ef" stroke="#f97316" stroke-width="3" stroke-linecap="round"/>
+              </g>
+              <g class="float-node n4" transform="translate(423 399)">
+                <rect width="132" height="112" rx="27" fill="#fff" stroke="#cddcf0" stroke-width="2"/>
+                <path d="M35 76l19-19 13 10 29-33" fill="none" stroke="#16a36a" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M82 34h14v14" fill="none" stroke="#16a36a" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M31 88h70" stroke="#aac9bc" stroke-width="3" stroke-linecap="round"/>
+              </g>
+
+              <g filter="url(#softGlow)">
+                <circle cx="310" cy="310" r="98" fill="url(#coreGradient)"/>
+                <circle cx="310" cy="310" r="80" fill="none" stroke="rgba(255,255,255,.25)" stroke-width="2" stroke-dasharray="5 9"/>
+                <path d="M280 329h60M280 308h38M280 287h50" stroke="#fff" stroke-width="7" stroke-linecap="round"/>
+                <circle cx="354" cy="287" r="8" fill="#f5b51b"/>
+              </g>
+              <text x="310" y="437" text-anchor="middle" fill="#173b68" font-size="20" font-weight="800">INFORMASI → KEPUTUSAN</text>
+            </svg>
+          </div>
+        </div>
+      </section>
+
+      <!-- 02 — Hook -->
+      <section class="scene hook-scene" data-title="Pertanyaan pemantik" aria-hidden="true">
+        <div class="hook-kicker" data-anim style="--d:80ms">Jangan buru-buru membuka definisi</div>
+        <h2 class="hook-question" data-anim style="--d:160ms">Apakah <em>setiap aplikasi</em> adalah sistem informasi?</h2>
+        <div class="hook-orbit" data-anim style="--d:260ms" aria-hidden="true">
+          <div class="icon-bubble"><svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3"><rect x="14" y="7" width="36" height="50" rx="7"/><path d="M21 17h22M22 28h5m6 0h5m-16 9h5m6 0h5m-16 9h5m6 0h5"/></svg></div>
+          <div class="icon-bubble"><svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3"><path d="M10 13h44v32H29L17 54v-9h-7z"/><path d="M20 25h24M20 33h16"/></svg></div>
+          <div class="icon-bubble"><svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3"><path d="M14 9h31l6 7v39H14z"/><path d="M22 23h21M22 32h21M22 41h15"/></svg></div>
+          <div class="icon-bubble"><svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3"><rect x="11" y="10" width="42" height="44" rx="6"/><path d="M20 22h24M20 31h24M20 40h13"/><path d="M42 38l3 3 6-8"/></svg></div>
+          <div class="icon-bubble"><svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3"><path d="M13 12h38v30H13zM21 50h22M32 42v8"/><path d="M21 32v-8m11 8V18m11 14V13"/></svg></div>
+          <div class="icon-bubble"><svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3"><path d="M12 53V22l20-12 20 12v31"/><path d="M8 53h48M22 28h20M22 37h20M22 46h20"/></svg></div>
+          <div class="icon-bubble"><svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3"><rect x="9" y="10" width="46" height="40" rx="7"/><path d="M18 39l8-9 7 5 12-15M18 44h28"/><circle cx="47" cy="18" r="3" fill="currentColor" stroke="none"/></svg></div>
+        </div>
+        <p class="hook-note" data-anim style="--d:360ms">Kita mulai dari benda yang dekat—lalu mencari batas yang membedakannya.</p>
+      </section>
+
+      <!-- 03 — Cases I -->
+      <section class="scene" data-title="Contoh sehari-hari I" aria-hidden="true">
+        <span class="scene-number">01</span>
+        <div class="eyebrow" data-anim>Kasus · Putaran pertama</div>
+        <h2 data-anim style="--d:120ms">Tiga benda. Tiga cara mengelola informasi.</h2>
+        <p class="lead" data-anim style="--d:180ms">Amati fungsi nyata setiap benda—bukan sekadar apakah benda tersebut menggunakan teknologi.</p>
+        <div class="case-grid three">
+          <article class="case-card" data-anim style="--d:250ms;--icon-bg:#edf4ff;--icon-color:#2563eb;--card-glow:rgba(37,99,235,.11)">
+            <span class="case-index">01</span>
+            <div class="case-icon"><svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3"><rect x="14" y="7" width="36" height="50" rx="7"/><path d="M21 17h22M22 28h5m6 0h5m-16 9h5m6 0h5m-16 9h5m6 0h5"/></svg></div>
+            <h3>Kalkulator</h3>
+            <p>Menerima angka, melakukan operasi, lalu menghasilkan angka baru.</p>
+            <span class="case-question">Sistem informasi?</span>
+          </article>
+          <article class="case-card" data-anim style="--d:330ms;--icon-bg:#eaf9f3;--icon-color:#16a36a;--card-glow:rgba(22,163,106,.11)">
+            <span class="case-index">02</span>
+            <div class="case-icon"><svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3"><path d="M10 13h44v32H29L17 54v-9h-7z"/><path d="M20 25h24M20 33h16"/></svg></div>
+            <h3>Grup WhatsApp</h3>
+            <p>Dosen dan mahasiswa bertukar pengumuman, pertanyaan, serta berkas kuliah.</p>
+            <span class="case-question">Sistem atau saluran?</span>
+          </article>
+          <article class="case-card" data-anim style="--d:410ms;--icon-bg:#fff4ea;--icon-color:#f97316;--card-glow:rgba(249,115,22,.12)">
+            <span class="case-index">03</span>
+            <div class="case-icon"><svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3"><path d="M14 9h31l6 7v39H14z"/><path d="M22 23h21M22 32h21M22 41h15"/></svg></div>
+            <h3>Buku Peminjaman</h3>
+            <p>Petugas mencatat siapa meminjam buku, tanggal pinjam, dan tanggal kembali.</p>
+            <span class="case-question">Tanpa komputer, masih SI?</span>
+          </article>
+        </div>
+      </section>
+
+      <!-- 04 — Cases II -->
+      <section class="scene" data-title="Contoh sehari-hari II" aria-hidden="true">
+        <span class="scene-number">02</span>
+        <div class="eyebrow" data-anim>Kasus · Putaran pertama</div>
+        <h2 data-anim style="--d:120ms">Sekarang, contoh yang tampak lebih “canggih”.</h2>
+        <p class="lead" data-anim style="--d:180ms">Apakah semakin digital berarti semakin layak disebut sistem informasi manajemen?</p>
+        <div class="case-grid four">
+          <article class="case-card" data-anim style="--d:240ms;--icon-bg:#f2edff;--icon-color:#7657d6;--card-glow:rgba(118,87,214,.11)">
+            <span class="case-index">04</span>
+            <div class="case-icon"><svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3"><rect x="11" y="10" width="42" height="44" rx="6"/><path d="M20 22h24M20 31h24M20 40h13"/><path d="M42 38l3 3 6-8"/></svg></div>
+            <h3>Form Presensi Daring</h3>
+            <p>Mengumpulkan nama, waktu hadir, dan jawaban mahasiswa.</p>
+            <span class="case-question">Alat atau sistem?</span>
+          </article>
+          <article class="case-card" data-anim style="--d:300ms;--icon-bg:#eaf9f3;--icon-color:#16a36a;--card-glow:rgba(22,163,106,.10)">
+            <span class="case-index">05</span>
+            <div class="case-icon"><svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3"><path d="M13 12h38v30H13zM21 50h22M32 42v8"/><path d="M21 32v-8m11 8V18m11 14V13"/></svg></div>
+            <h3>Mesin Kasir / POS</h3>
+            <p>Mencatat transaksi dan memperbarui data penjualan.</p>
+            <span class="case-question">SI atau SIM?</span>
+          </article>
+          <article class="case-card" data-anim style="--d:360ms;--icon-bg:#edf4ff;--icon-color:#2563eb;--card-glow:rgba(37,99,235,.11)">
+            <span class="case-index">06</span>
+            <div class="case-icon"><svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3"><path d="M12 53V22l20-12 20 12v31"/><path d="M8 53h48M22 28h20M22 37h20M22 46h20"/></svg></div>
+            <h3>SIAKAD</h3>
+            <p>Mengelola KRS, jadwal, nilai, status mahasiswa, dan laporan akademik.</p>
+            <span class="case-question">Di bagian mana menjadi SIM?</span>
+          </article>
+          <article class="case-card" data-anim style="--d:420ms;--icon-bg:#fff4ea;--icon-color:#f97316;--card-glow:rgba(249,115,22,.12)">
+            <span class="case-index">07</span>
+            <div class="case-icon"><svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3"><rect x="9" y="10" width="46" height="40" rx="7"/><path d="M18 39l8-9 7 5 12-15M18 44h28"/><circle cx="47" cy="18" r="3" fill="currentColor" stroke="none"/></svg></div>
+            <h3>Dashboard Pimpinan</h3>
+            <p>Merangkum indikator agar pimpinan dapat memantau dan menentukan tindakan.</p>
+            <span class="case-question">Apakah ini pasti SIM?</span>
+          </article>
+        </div>
+      </section>
+
+      <!-- 05 — Classification -->
+      <section class="scene" data-title="Klasifikasi bersama" aria-hidden="true">
+        <span class="scene-number">03</span>
+        <div class="eyebrow" data-anim>Aktivitas · Klasifikasikan</div>
+        <h2 data-anim style="--d:110ms">Letakkan berdasarkan fungsi nyatanya.</h2>
+        <p class="lead" data-anim style="--d:170ms">Pilih satu kartu, lalu klik kolom tujuan—atau seret kartunya. Jawaban boleh berubah setelah diskusi.</p>
+        <div class="classifier" data-anim style="--d:240ms">
+          <div class="sort-bank" id="sortBank" aria-label="Kartu yang belum diklasifikasikan">
+            <button class="sort-card" type="button" draggable="true" data-card="calculator"><span class="sort-glyph">01</span>Kalkulator</button>
+            <button class="sort-card" type="button" draggable="true" data-card="whatsapp"><span class="sort-glyph">02</span>Grup WhatsApp</button>
+            <button class="sort-card" type="button" draggable="true" data-card="ledger"><span class="sort-glyph">03</span>Buku peminjaman</button>
+            <button class="sort-card" type="button" draggable="true" data-card="form"><span class="sort-glyph">04</span>Form presensi</button>
+            <button class="sort-card" type="button" draggable="true" data-card="pos"><span class="sort-glyph">05</span>POS</button>
+            <button class="sort-card" type="button" draggable="true" data-card="siakad"><span class="sort-glyph">06</span>SIAKAD</button>
+            <button class="sort-card" type="button" draggable="true" data-card="dashboard"><span class="sort-glyph">07</span>Dashboard</button>
+          </div>
+          <div class="bins">
+            <div class="drop-zone" data-zone="tool" style="--zone-color:#6b7280;--zone-border:#d8dee7;--zone-bg:#f8fafc" tabindex="0" role="button" aria-label="Kategori alat atau kanal saja">
+              <span class="zone-count">0</span><h3>Alat / kanal saja</h3><p>Memiliki fungsi, tetapi belum membentuk sistem organisasi.</p><div class="drop-slot"></div>
+            </div>
+            <div class="drop-zone" data-zone="is" style="--zone-color:#2563eb;--zone-border:#bed3f4;--zone-bg:#f1f6ff" tabindex="0" role="button" aria-label="Kategori sistem informasi">
+              <span class="zone-count">0</span><h3>Sistem informasi</h3><p>Mengolah data untuk mendukung kegiatan yang terstruktur.</p><div class="drop-slot"></div>
+            </div>
+            <div class="drop-zone" data-zone="mis" style="--zone-color:#16a36a;--zone-border:#bce6d4;--zone-bg:#f0fbf6" tabindex="0" role="button" aria-label="Kategori mendukung manajemen">
+              <span class="zone-count">0</span><h3>Mendukung manajemen</h3><p>Menyediakan informasi untuk pemantauan atau keputusan.</p><div class="drop-slot"></div>
+            </div>
+            <div class="drop-zone" data-zone="depends" style="--zone-color:#c65a12;--zone-border:#f3d0b5;--zone-bg:#fff7f0" tabindex="0" role="button" aria-label="Kategori tergantung konteks">
+              <span class="zone-count">0</span><h3>Tergantung konteks</h3><p>Statusnya berubah menurut komponen, prosedur, dan tujuan.</p><div class="drop-slot"></div>
+            </div>
+          </div>
+          <div class="classifier-footer">
+            <span class="classifier-status" id="classifierStatus"><strong>0 dari 7</strong> kartu telah ditempatkan.</span>
+            <button class="ghost-btn" id="resetClassifier" type="button">Ulangi penempatan</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- 06 — Diagnostic -->
+      <section class="scene" data-title="Empat pertanyaan pembeda" aria-hidden="true">
+        <span class="scene-number">04</span>
+        <div class="eyebrow" data-anim>Analisis · Jangan menilai dari merek</div>
+        <h2 data-anim style="--d:110ms">Gunakan empat pertanyaan pembeda.</h2>
+        <p class="lead" data-anim style="--d:170ms">Satu benda baru dapat dipahami setelah kita melihat aliran kerja dan tujuan penggunaannya.</p>
+        <div class="lens-layout">
+          <article class="lens-card" data-no="1" data-anim style="--d:230ms;--lens-bg:#edf4ff;--lens-color:#2563eb">
+            <div class="lens-icon">IN</div><div><h3>Data apa yang masuk?</h3><p>Fakta apa yang dikumpulkan—dan dari mana asalnya?</p></div>
+          </article>
+          <article class="lens-card" data-no="2" data-anim style="--d:300ms;--lens-bg:#f2edff;--lens-color:#7657d6">
+            <div class="lens-icon">↻</div><div><h3>Bagaimana data diproses?</h3><p>Aturan, prosedur, validasi, atau perhitungan apa yang bekerja?</p></div>
+          </article>
+          <article class="lens-card" data-no="3" data-anim style="--d:370ms;--lens-bg:#eaf9f3;--lens-color:#16a36a">
+            <div class="lens-icon">WHO</div><div><h3>Siapa yang memakai hasilnya?</h3><p>Pengguna operasional, dosen, mahasiswa, atau pimpinan?</p></div>
+          </article>
+          <article class="lens-card" data-no="4" data-anim style="--d:440ms;--lens-bg:#fff4ea;--lens-color:#f97316">
+            <div class="lens-icon">GO</div><div><h3>Untuk tindakan apa?</h3><p>Hanya mencatat, menjalankan pekerjaan, atau menentukan keputusan?</p></div>
+          </article>
+          <div class="lens-center" aria-hidden="true">LIHAT<br>KONTEKS</div>
+        </div>
+      </section>
+
+      <!-- 07 — Form laboratory -->
+      <section class="scene" data-title="Dari alat menjadi sistem" aria-hidden="true">
+        <span class="scene-number">05</span>
+        <div class="eyebrow" data-anim>Analisis · Eksperimen kecil</div>
+        <h2 data-anim style="--d:110ms">Kapan sebuah form berubah menjadi bagian sistem informasi?</h2>
+        <p class="lead" data-anim style="--d:170ms">Tambahkan unsur di kanan satu per satu. Perhatikan bagaimana statusnya berubah.</p>
+        <div class="lab-grid" data-anim style="--d:230ms">
+          <div class="form-mock">
+            <div class="form-band"></div>
+            <h3>Presensi Perkuliahan</h3>
+            <p>Sebuah form yang hanya menerima kiriman jawaban.</p>
+            <div class="fake-field"><div class="fake-label">Nama mahasiswa</div><div class="fake-input"></div></div>
+            <div class="fake-field"><div class="fake-label">Kode pertemuan</div><div class="fake-input"></div></div>
+            <div class="fake-submit"></div>
+            <span class="tool-badge">Awal: alat pengumpul data</span>
+          </div>
+          <div class="system-lab">
+            <div class="lab-controls">
+              <button class="lab-add" type="button" data-module="1"><span class="lab-plus">+</span>Identitas & pengguna</button>
+              <button class="lab-add" type="button" data-module="2"><span class="lab-plus">+</span>Aturan presensi</button>
+              <button class="lab-add" type="button" data-module="3"><span class="lab-plus">+</span>Penyimpanan terstruktur</button>
+              <button class="lab-add" type="button" data-module="4"><span class="lab-plus">+</span>Rekap & tindak lanjut</button>
+              <button class="ghost-btn" id="resetLab" type="button" style="margin-top:auto">Reset eksperimen</button>
+            </div>
+            <div class="lab-canvas">
+              <div class="module-node m1" data-node="1">Mahasiswa<br>& dosen</div>
+              <div class="module-node m2" data-node="2">Validasi<br>& prosedur</div>
+              <div class="module-node m3" data-node="3">Basis data<br>presensi</div>
+              <div class="module-node m4" data-node="4">Laporan<br>& keputusan</div>
+              <div class="lab-core" id="labCore">Alat pengumpul data</div>
+              <div class="lab-meter"><div class="lab-meter-fill" id="labMeter"></div></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 08 — Reveal -->
+      <section class="scene" data-title="Membuka klasifikasi" aria-hidden="true">
+        <span class="scene-number">06</span>
+        <div class="eyebrow" data-anim>Analisis · Buka alasannya</div>
+        <h2 data-anim style="--d:110ms">Jawabannya tidak selalu hitam-putih.</h2>
+        <div class="answer-toolbar" data-anim style="--d:170ms">
+          <span class="answer-hint">Klik setiap baris. Fokus pada alasan, bukan label.</span>
+          <button class="ghost-btn" id="revealAll" type="button">Buka semua jawaban</button>
+        </div>
+        <div class="answer-grid">
+          <button class="answer-card" type="button" data-answer data-anim style="--d:220ms;--answer-color:#66758a;--answer-bg:#f8fafc"><span class="answer-icon">01</span><span class="answer-title">Kalkulator</span><span class="answer-result"><span class="answer-label">Alat saja</span><span class="answer-why">Mengolah angka, tetapi tidak membentuk proses informasi organisasi.</span></span></button>
+          <button class="answer-card" type="button" data-answer data-anim style="--d:270ms;--answer-color:#c65a12;--answer-bg:#fff7f0"><span class="answer-icon">02</span><span class="answer-title">Grup WhatsApp</span><span class="answer-result"><span class="answer-label">Tergantung konteks</span><span class="answer-why">Biasanya kanal komunikasi; dapat menjadi komponen dalam proses yang lebih luas.</span></span></button>
+          <button class="answer-card" type="button" data-answer data-anim style="--d:320ms;--answer-color:#2563eb;--answer-bg:#f1f6ff"><span class="answer-icon">03</span><span class="answer-title">Buku peminjaman</span><span class="answer-result"><span class="answer-label">Sistem informasi</span><span class="answer-why">Ada data, petugas, prosedur, keluaran, dan tujuan—meski manual.</span></span></button>
+          <button class="answer-card" type="button" data-answer data-anim style="--d:370ms;--answer-color:#c65a12;--answer-bg:#fff7f0"><span class="answer-icon">04</span><span class="answer-title">Form presensi</span><span class="answer-result"><span class="answer-label">Tergantung konteks</span><span class="answer-why">Form saja adalah alat; menjadi sistem saat terhubung dengan pengguna dan proses.</span></span></button>
+          <button class="answer-card" type="button" data-answer data-anim style="--d:420ms;--answer-color:#2563eb;--answer-bg:#f1f6ff"><span class="answer-icon">05</span><span class="answer-title">POS</span><span class="answer-result"><span class="answer-label">SI operasional</span><span class="answer-why">Mencatat transaksi; ringkasannya dapat menjadi masukan untuk manajemen.</span></span></button>
+          <button class="answer-card" type="button" data-answer data-anim style="--d:470ms;--answer-color:#2563eb;--answer-bg:#f1f6ff"><span class="answer-icon">06</span><span class="answer-title">SIAKAD</span><span class="answer-result"><span class="answer-label">SI + dapat mendukung SIM</span><span class="answer-why">Mengelola operasi akademik; laporan tertentu membantu keputusan pimpinan.</span></span></button>
+          <button class="answer-card" type="button" data-answer data-anim style="--d:520ms;--answer-color:#16a36a;--answer-bg:#f0fbf6"><span class="answer-icon">07</span><span class="answer-title">Dashboard</span><span class="answer-result"><span class="answer-label">Mendukung manajemen</span><span class="answer-why">Jika datanya relevan dan dipakai untuk memantau serta mengambil keputusan.</span></span></button>
+          <div class="answer-card revealed" data-anim style="--d:570ms;--answer-color:#7657d6;--answer-bg:#f5f1ff;cursor:default"><span class="answer-icon">!</span><span class="answer-title">Kuncinya</span><span class="answer-result"><span class="answer-label">Lihat batas sistem</span><span class="answer-why">Objek yang sama dapat berbeda status ketika konteks penggunaannya berubah.</span></span></div>
+        </div>
+      </section>
+
+      <!-- 09 — System -->
+      <section class="scene" data-title="Apa itu sistem?" aria-hidden="true">
+        <span class="scene-number">07</span>
+        <div class="eyebrow" data-anim>Abstraksi · Konsep pertama</div>
+        <h2 data-anim style="--d:110ms">Sistem: unsur yang bekerja sebagai satu kesatuan.</h2>
+        <p class="lead" data-anim style="--d:170ms">Sebuah sistem memiliki tujuan, menerima masukan, menjalankan proses, menghasilkan keluaran, lalu menggunakan umpan balik untuk menyesuaikan diri.</p>
+        <div class="system-model" data-anim style="--d:240ms">
+          <div class="system-block" style="--block-bg:#f2f6fc;--block-glow:rgba(103,117,138,.10)"><div><strong>Input</strong><span>Sumber daya atau data yang masuk</span></div></div>
+          <div class="flow-arrow"></div>
+          <div class="system-block" style="--block-bg:#edf4ff;--block-line:#bed3f4;--block-glow:rgba(37,99,235,.12)"><div><strong class="accent">Proses</strong><span>Aturan dan aktivitas yang mengubah masukan</span></div></div>
+          <div class="flow-arrow"></div>
+          <div class="system-block" style="--block-bg:#effaf5;--block-line:#bce6d4;--block-glow:rgba(22,163,106,.12)"><div><strong class="accent-green">Output</strong><span>Hasil yang digunakan untuk mencapai tujuan</span></div></div>
+          <div class="feedback-loop"><span class="feedback-label">Umpan balik</span></div>
+        </div>
+        <div class="definition-box" data-anim style="--d:380ms">Bukan kumpulan bagian yang kebetulan berdampingan, melainkan bagian-bagian yang <strong>saling berhubungan dan bergerak menuju tujuan yang sama.</strong></div>
+        <p class="bodynote">(Stair et al., 2025)</p>
+      </section>
+
+      <!-- 10 — Data vs information -->
+      <section class="scene" data-title="Dari data menjadi informasi" aria-hidden="true">
+        <span class="scene-number">08</span>
+        <div class="eyebrow" data-anim>Abstraksi · Konsep kedua</div>
+        <h2 data-anim style="--d:110ms">Data belum tentu berbicara.</h2>
+        <p class="lead" data-anim style="--d:170ms">Klik tombol di tengah untuk menambahkan konteks dan mengubah data menjadi informasi.</p>
+        <div class="data-grid" id="dataTransform" data-anim style="--d:240ms">
+          <div class="data-panel">
+            <h3>Data</h3><p class="panel-desc">Fakta mentah, belum cukup menjawab “tentang apa?”.</p>
+            <div class="raw-numbers"><div class="raw-number">42</div><div class="raw-number">37</div><div class="raw-number">28</div></div>
+          </div>
+          <div class="transform-column"><button class="transform-btn" id="transformData" type="button" aria-label="Tambahkan konteks">→</button></div>
+          <div class="info-panel">
+            <h3>Informasi</h3><p class="panel-desc">Data yang diberi konteks sehingga bermakna bagi pengguna.</p>
+            <div class="info-empty">Belum ada konteks.<br>Apa arti 42, 37, dan 28?</div>
+            <div class="info-content">
+              <div class="chart-title">Mahasiswa yang belum melakukan KRS</div>
+              <div class="bar-chart">
+                <div class="bar-wrap"><div class="bar b1" data-value="42"></div><span>Senin</span></div>
+                <div class="bar-wrap"><div class="bar b2" data-value="37"></div><span>Rabu</span></div>
+                <div class="bar-wrap"><div class="bar b3" data-value="28"></div><span>Jumat</span></div>
+              </div>
+              <div class="insight-chip">Makna: jumlah mahasiswa yang belum KRS turun sekitar 33% dalam lima hari.</div>
+            </div>
+          </div>
+        </div>
+        <p class="bodynote">(Bourgeois et al., 2019)</p>
+      </section>
+
+      <!-- 11 — Components -->
+      <section class="scene" data-title="Apa itu sistem informasi?" aria-hidden="true">
+        <span class="scene-number">09</span>
+        <div class="eyebrow" data-anim>Abstraksi · Konsep ketiga</div>
+        <h2 data-anim style="--d:110ms">Sistem informasi adalah sebuah ekosistem.</h2>
+        <p class="lead" data-anim style="--d:170ms">Klik satu unsur untuk melihat perannya. Teknologi hanya satu bagian dari keseluruhan.</p>
+        <div class="component-layout" data-anim style="--d:230ms">
+          <div class="ecosystem">
+            <div class="eco-ring"></div>
+            <div class="eco-core">SISTEM<br>INFORMASI</div>
+            <button class="eco-node e1 active" type="button" data-component="people" style="--node-color:#2563eb">Manusia</button>
+            <button class="eco-node e2" type="button" data-component="process" style="--node-color:#7657d6">Proses</button>
+            <button class="eco-node e3" type="button" data-component="data" style="--node-color:#f97316">Data</button>
+            <button class="eco-node e4" type="button" data-component="technology" style="--node-color:#16a36a">Teknologi</button>
+          </div>
+          <div class="component-detail" aria-live="polite">
+            <span class="detail-label">Unsur yang dipilih</span>
+            <h3 id="componentTitle">Manusia</h3>
+            <p id="componentText">Pengguna, pengelola, dan pihak yang mengambil tindakan berdasarkan informasi yang dihasilkan.</p>
+            <div class="detail-purpose">Seluruh unsur diarahkan oleh <strong>tujuan organisasi</strong>. Tanpa tujuan, aliran data tidak memiliki arah yang jelas.</div>
+          </div>
+        </div>
+        <p class="bodynote">(Laudon et al., 2026; Stair et al., 2025)</p>
+      </section>
+
+      <!-- 12 — IT vs IS -->
+      <section class="scene" data-title="Teknologi bukan keseluruhan sistem" aria-hidden="true">
+        <span class="scene-number">10</span>
+        <div class="eyebrow" data-anim>Abstraksi · Meluruskan miskonsepsi</div>
+        <h2 data-anim style="--d:110ms">Aplikasi ≠ sistem informasi yang utuh.</h2>
+        <div class="versus-grid" data-anim style="--d:210ms">
+          <div class="versus-panel">
+            <div class="tech-device" aria-hidden="true"></div>
+            <h3>Teknologi saja</h3>
+            <p>Perangkat keras dan perangkat lunak menyediakan kemampuan teknis.</p>
+          </div>
+          <div class="vs-mark">VS</div>
+          <div class="versus-panel">
+            <div class="assembled-system" aria-hidden="true">
+              <div class="assembly-core">SI</div>
+              <div class="assembly-chip a1">Manusia</div><div class="assembly-chip a2">Proses</div><div class="assembly-chip a3">Data</div><div class="assembly-chip a4">Teknologi</div>
+            </div>
+            <h3>Sistem informasi</h3>
+            <p>Teknologi masuk ke dalam proses kerja nyata dan digunakan manusia untuk mencapai tujuan.</p>
+          </div>
+        </div>
+        <div class="big-takeaway" data-anim style="--d:360ms">Sebuah alat menjadi bermakna ketika terhubung dengan <strong>orang, aturan, data, dan tindakan.</strong></div>
+        <p class="bodynote">(Laudon et al., 2026)</p>
+      </section>
+
+      <!-- 13 — MIS -->
+      <section class="scene" data-title="Apa itu sistem informasi manajemen?" aria-hidden="true">
+        <span class="scene-number">11</span>
+        <div class="eyebrow" data-anim>Abstraksi · Konsep keempat</div>
+        <h2 data-anim style="--d:110ms">Istilah SIM digunakan dalam dua makna.</h2>
+        <div class="meaning-grid">
+          <article class="meaning-card" data-anim style="--d:200ms">
+            <span class="meaning-no">Makna luas</span>
+            <h3>SIM sebagai bidang kajian</h3>
+            <p>Mempelajari bagaimana sistem informasi dikembangkan, digunakan, dan memengaruhi organisasi serta manajemen.</p>
+            <div class="meaning-visual" aria-hidden="true"><div class="book-stack"><span class="book"></span><span class="book"></span><span class="book"></span></div></div>
+          </article>
+          <article class="meaning-card" data-anim style="--d:290ms">
+            <span class="meaning-no" style="color:var(--green)">Makna khusus</span>
+            <h3>SIM sebagai jenis sistem</h3>
+            <p>Menyediakan ringkasan dan laporan yang membantu manajer memantau kegiatan serta mengambil keputusan.</p>
+            <div class="meaning-visual" aria-hidden="true"><div class="report-to-manager"><div class="report-page"></div><div class="meaning-arrow"></div><div class="manager-node">MANAJER</div></div></div>
+          </article>
+        </div>
+        <div class="meaning-footer" data-anim style="--d:380ms">Untuk klasifikasi hari ini, kita menggunakan <strong>makna khusus</strong>: sistem informasi yang outputnya ditujukan bagi kebutuhan manajemen.</div>
+        <p class="bodynote">(Laudon et al., 2026)</p>
+      </section>
+
+      <!-- 14 — Revisit -->
+      <section class="scene" data-title="Kapan SI menjadi SIM?" aria-hidden="true">
+        <span class="scene-number">12</span>
+        <div class="eyebrow" data-anim>Integrasi · Kembali ke kasus</div>
+        <h2 data-anim style="--d:110ms">Kapan POS mulai berperan sebagai SIM?</h2>
+        <p class="lead" data-anim style="--d:170ms">Ikuti perjalanannya dari transaksi hingga menjadi keputusan pengelola toko.</p>
+        <div class="revisit-flow">
+          <div class="flow-step" data-anim style="--d:230ms"><div class="flow-step-icon" style="--step-bg:#f2f6fc;--step-color:#66758a">01</div><h3>Transaksi</h3><p>Barang, jumlah, harga, waktu</p></div>
+          <div class="flow-step" data-anim style="--d:300ms"><div class="flow-step-icon" style="--step-bg:#edf4ff;--step-color:#2563eb">02</div><h3>Pencatatan POS</h3><p>Data disimpan secara terstruktur</p></div>
+          <div class="flow-step" data-anim style="--d:370ms"><div class="flow-step-icon" style="--step-bg:#eaf9f3;--step-color:#16a36a">03</div><h3>Ringkasan</h3><p>Tren penjualan dan stok</p></div>
+          <div class="flow-step" data-anim style="--d:440ms"><div class="flow-step-icon" style="--step-bg:#fff4ea;--step-color:#f97316">04</div><h3>Keputusan</h3><p>Tambah stok atau ubah promosi</p></div>
+        </div>
+        <div class="flow-braces" data-anim style="--d:520ms">
+          <div class="flow-brace">Sistem Informasi Operasional</div>
+          <div class="flow-brace" style="--brace-color:#16a36a;--brace-bg:rgba(22,163,106,.08)">Informasi untuk Manajemen</div>
+        </div>
+        <div class="big-takeaway" data-anim style="--d:590ms">SIM bukan ditentukan oleh kecanggihan aplikasi, melainkan oleh <strong>informasi yang dihasilkan dan keputusan yang didukung.</strong></div>
+      </section>
+
+      <!-- 15 — Summary -->
+      <section class="scene" data-title="Rangkuman" aria-hidden="true">
+        <span class="scene-number">13</span>
+        <div class="eyebrow" data-anim>Refleksi akhir · Rangkuman</div>
+        <h2 data-anim style="--d:110ms">Empat gagasan yang perlu dibawa pulang.</h2>
+        <div class="summary-grid">
+          <article class="summary-card" data-anim style="--d:190ms"><span class="summary-no">1</span><p><strong>Sistem</strong> adalah unsur-unsur yang saling terhubung untuk mencapai tujuan.</p></article>
+          <article class="summary-card" data-anim style="--d:260ms"><span class="summary-no" style="--sum-bg:#fff4ea;--sum-color:#f97316">2</span><p><strong>Informasi</strong> adalah data yang telah diberi konteks dan makna.</p></article>
+          <article class="summary-card" data-anim style="--d:330ms"><span class="summary-no" style="--sum-bg:#f2edff;--sum-color:#7657d6">3</span><p><strong>Sistem informasi</strong> memadukan manusia, proses, data, dan teknologi.</p></article>
+          <article class="summary-card" data-anim style="--d:400ms"><span class="summary-no" style="--sum-bg:#eaf9f3;--sum-color:#16a36a">4</span><p><strong>SIM</strong> menghasilkan informasi yang membantu pengelolaan dan keputusan.</p></article>
+        </div>
+        <div class="core-statement" data-anim style="--d:500ms">Aplikasi belum tentu sistem informasi—dan sistem informasi belum tentu sistem informasi manajemen.</div>
+      </section>
+
+      <!-- 16 — Reflection -->
+      <section class="scene" data-title="Refleksi 60 detik" aria-hidden="true">
+        <span class="scene-number">14</span>
+        <div class="eyebrow" data-anim>Refleksi akhir · Transfer pemahaman</div>
+        <h2 data-anim style="--d:110ms">Uji konsep pada satu sistem yang dekat dengan Anda.</h2>
+        <p class="lead" data-anim style="--d:170ms">Pilih kasus, lalu jawab lima pertanyaan berikut secara lisan dalam 60 detik.</p>
+        <div class="reflection-grid" data-anim style="--d:230ms">
+          <div class="reflection-cases">
+            <button class="reflection-choice active" type="button" data-reflection="SIAKAD"><span class="choice-tag">A</span>SIAKAD</button>
+            <button class="reflection-choice" type="button" data-reflection="POS toko"><span class="choice-tag">B</span>POS toko</button>
+            <button class="reflection-choice" type="button" data-reflection="Presensi kelas"><span class="choice-tag">C</span>Presensi kelas</button>
+            <button class="reflection-choice" type="button" data-reflection="Sistem pilihan Anda"><span class="choice-tag">D</span>Sistem pilihan Anda</button>
+          </div>
+          <div class="reflection-board">
+            <div class="reflection-head"><h3 id="reflectionTitle">Menganalisis: SIAKAD</h3><span class="timer-pill">60 DETIK</span></div>
+            <div class="prompt-grid">
+              <article class="prompt-card"><span class="prompt-label">Input</span><p class="prompt-question">Data apa yang masuk?</p></article>
+              <article class="prompt-card"><span class="prompt-label">Proses</span><p class="prompt-question">Bagaimana data diolah atau divalidasi?</p></article>
+              <article class="prompt-card"><span class="prompt-label">Output</span><p class="prompt-question">Informasi apa yang dihasilkan?</p></article>
+              <article class="prompt-card"><span class="prompt-label">Pengguna</span><p class="prompt-question">Siapa yang memakai informasi itu?</p></article>
+              <article class="prompt-card wide"><span class="prompt-label">Keputusan</span><p class="prompt-question">Keputusan apa yang dapat didukung—dan pada titik mana sistem tersebut berperan sebagai SIM?</p></article>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 17 — Bibliography -->
+      <section class="scene" data-title="Bibliografi" aria-hidden="true">
+        <span class="scene-number">15</span>
+        <div class="eyebrow" data-anim>Referensi · APA 7</div>
+        <h2 data-anim style="--d:110ms">Bibliografi</h2>
+        <p class="lead" data-anim style="--d:170ms">Landasan konseptual yang digunakan dalam definisi dan abstraksi materi.</p>
+        <div class="bibliography-list">
+          <article class="reference-card" data-anim style="--d:230ms"><span class="reference-year">2026</span><p class="reference-text">Laudon, K. C., Laudon, J. P., &amp; Traver, C. G. (2026). <em>Management information systems: Managing the digital firm</em> (18th ed.). Pearson.</p><a class="reference-link" href="https://www.pearson.com/en-us/subject-catalog/p/management-information-systemsmanaging-the-digital-firm/P200000012266/9780138344108" target="_blank" rel="noopener">Sumber ↗</a></article>
+          <article class="reference-card" data-anim style="--d:310ms"><span class="reference-year" style="background:#eaf9f3;color:#16a36a">2025</span><p class="reference-text">Stair, R., Perew, M., &amp; Vance, L. M. (2025). <em>Principles of information systems</em> (15th ed.). Cengage.</p><a class="reference-link" href="https://www.cengageasia.com/title/default/detail?isbn=9798214000961" target="_blank" rel="noopener">Sumber ↗</a></article>
+          <article class="reference-card" data-anim style="--d:390ms"><span class="reference-year" style="background:#fff4ea;color:#f97316">2019</span><p class="reference-text">Bourgeois, D. T., Smith, J. L., Wang, S., &amp; Mortati, J. (2019). <em>Information systems for business and beyond</em>.</p><a class="reference-link" href="https://open.umn.edu/opentextbooks/textbooks/information-systems-for-business-and-beyond" target="_blank" rel="noopener">Sumber ↗</a></article>
+        </div>
+      </section>
+
+      <!-- 18 — Closing -->
+      <section class="scene closing" data-title="Penutup" aria-hidden="true">
+        <div class="closing-mark" data-anim style="--d:100ms" aria-hidden="true"><div class="closing-ring"></div><div class="closing-core">SIM</div><span class="closing-dot d1"></span><span class="closing-dot d2"></span><span class="closing-dot d3"></span></div>
+        <h2 data-anim style="--d:190ms">Terima kasih.</h2>
+        <p class="closing-quote" data-anim style="--d:280ms">Saat melihat sebuah aplikasi, jangan hanya bertanya <strong>“apa teknologinya?”</strong> Tanyakan pula: data apa, diproses bagaimana, digunakan siapa, dan untuk keputusan apa?</p>
+        <p class="closing-name" data-anim style="--d:370ms">Najib Mubarok, M.Sc. · INISNU Temanggung</p>
+      </section>
+
+      <div class="pause-indicator" aria-live="polite"><span>Ⅱ</span> Animasi dijeda</div>
+
+      <div class="deck-chrome" aria-label="Kontrol presentasi">
+        <div class="chrome-title" id="chromeTitle">Pengantar Sistem Informasi Manajemen · Sampul</div>
+        <div class="progress-center"><span class="slide-count" id="slideCount">01 / 18</span><div class="progress-track"><div class="progress-fill" id="progressFill"></div></div></div>
+        <nav class="controls">
+          <button class="control-btn" id="prevBtn" type="button" aria-label="Scene sebelumnya" title="Sebelumnya (Panah kiri)" disabled><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M15 18l-6-6 6-6"/></svg><span class="control-key">←</span></button>
+          <button class="control-btn" id="playBtn" type="button" aria-label="Jeda animasi" title="Play/Pause animasi (Spasi)"><svg class="pause-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M7 5h4v14H7zM13 5h4v14h-4z"/></svg><svg class="play-icon" viewBox="0 0 24 24" fill="currentColor" style="display:none"><path d="M8 5v14l11-7z"/></svg><span class="control-key">␣</span></button>
+          <button class="control-btn" id="nextBtn" type="button" aria-label="Scene berikutnya" title="Berikutnya (Panah kanan)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M9 6l6 6-6 6"/></svg><span class="control-key">→</span></button>
+          <button class="control-btn" id="resetBtn" type="button" aria-label="Mulai ulang" title="Mulai ulang (R)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4v6h6M5.5 15a8 8 0 1 0 .6-7.7L4 10"/></svg><span class="control-key">R</span></button>
+          <button class="control-btn" id="soundBtn" type="button" aria-label="Matikan suara" title="Suara (M)"><svg class="sound-on-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 5L6 9H3v6h3l5 4zM15 9a4 4 0 0 1 0 6M18 6a8 8 0 0 1 0 12"/></svg><svg class="sound-off-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:none"><path d="M11 5L6 9H3v6h3l5 4zM16 10l5 5M21 10l-5 5"/></svg><span class="control-key">M</span></button>
+          <button class="control-btn" id="fullscreenBtn" type="button" aria-label="Layar penuh" title="Layar penuh (F)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3H3v5M16 3h5v5M8 21H3v-5M16 21h5v-5"/></svg><span class="control-key">F</span></button>
+          <button class="control-btn" id="helpBtn" type="button" aria-label="Bantuan pintasan" title="Bantuan (?)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M9.8 9a2.4 2.4 0 1 1 3.2 2.25c-.65.3-1 .75-1 1.75M12 17h.01"/></svg><span class="control-key">?</span></button>
+        </nav>
+      </div>
+
+      <div class="overlay" id="helpOverlay" role="dialog" aria-modal="true" aria-labelledby="helpTitle">
+        <div class="help-card">
+          <div class="help-head"><h3 id="helpTitle">Kontrol presentasi</h3><button class="close-help" id="closeHelp" type="button" aria-label="Tutup bantuan">×</button></div>
+          <div class="shortcut-grid">
+            <div class="shortcut"><kbd>←</kbd>Scene sebelumnya</div><div class="shortcut"><kbd>→</kbd>Scene berikutnya</div>
+            <div class="shortcut"><kbd>Space</kbd>Jeda / lanjutkan animasi</div><div class="shortcut"><kbd>F</kbd>Masuk / keluar fullscreen</div>
+            <div class="shortcut"><kbd>R</kbd>Mulai ulang dari sampul</div><div class="shortcut"><kbd>M</kbd>Nyalakan / matikan suara</div>
+            <div class="shortcut"><kbd>Home</kbd>Ke sampul</div><div class="shortcut"><kbd>End</kbd>Ke penutup</div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    (() => {
+      'use strict';
+
+      const BASE_W = 1600;
+      const BASE_H = 900;
+      const viewport = document.getElementById('viewport');
+      const stage = document.getElementById('stage');
+      const scenes = [...document.querySelectorAll('.scene')];
+      const prevBtn = document.getElementById('prevBtn');
+      const nextBtn = document.getElementById('nextBtn');
+      const playBtn = document.getElementById('playBtn');
+      const resetBtn = document.getElementById('resetBtn');
+      const fullscreenBtn = document.getElementById('fullscreenBtn');
+      const soundBtn = document.getElementById('soundBtn');
+      const helpBtn = document.getElementById('helpBtn');
+      const helpOverlay = document.getElementById('helpOverlay');
+      const closeHelp = document.getElementById('closeHelp');
+      const progressFill = document.getElementById('progressFill');
+      const slideCount = document.getElementById('slideCount');
+      const chromeTitle = document.getElementById('chromeTitle');
+      let current = 0;
+      let paused = false;
+      let soundOn = true;
+      let transitionLock = false;
+      let revealTimers = [];
+
+      function fitStage() {
+        const scale = Math.min(window.innerWidth / BASE_W, window.innerHeight / BASE_H);
+        viewport.style.transform = `translate(-50%, -50%) scale(${scale})`;
+      }
+
+      window.addEventListener('resize', fitStage, { passive: true });
+      fitStage();
+
+      const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+      function motionEnabled() {
+        return !reducedMotion.matches && !paused && typeof Element.prototype.animate === 'function';
+      }
+
+      function replayClass(element, className, duration = 700) {
+        if (!element || !motionEnabled()) return;
+        element.classList.remove(className);
+        void element.offsetWidth;
+        element.classList.add(className);
+        window.setTimeout(() => element.classList.remove(className), duration);
+      }
+
+      function animateLayoutChange(elements, mutation, duration = 680) {
+        const stageRect = stage.getBoundingClientRect();
+        const scaleX = BASE_W / stageRect.width;
+        const scaleY = BASE_H / stageRect.height;
+        const first = new Map(elements.map(element => [element, element.getBoundingClientRect()]));
+        mutation();
+        if (!motionEnabled()) return;
+
+        elements.forEach(element => {
+          const before = first.get(element);
+          const after = element.getBoundingClientRect();
+          if (!before.width || !after.width) return;
+          const dx = (before.left + before.width / 2 - after.left - after.width / 2) * scaleX;
+          const dy = (before.top + before.height / 2 - after.top - after.height / 2) * scaleY;
+          const startScaleX = before.width / after.width;
+          const startScaleY = before.height / after.height;
+          if (Math.abs(dx) < 1 && Math.abs(dy) < 1 && Math.abs(startScaleX - 1) < .01 && Math.abs(startScaleY - 1) < .01) return;
+          element.classList.add('motion-active');
+          const moved = element.animate([
+            { transform: `translate(${dx}px, ${dy}px) scale(${startScaleX}, ${startScaleY})`, boxShadow: '0 24px 52px rgba(37,99,235,.24)' },
+            { transform: 'translate(0, 0) scale(1.035)', offset: .78, boxShadow: '0 20px 42px rgba(37,99,235,.18)' },
+            { transform: 'none', boxShadow: '0 7px 18px rgba(23,59,104,.08)' }
+          ], { duration, easing: 'cubic-bezier(.22,1,.36,1)' });
+          moved.finished.catch(() => {}).finally(() => element.classList.remove('motion-active'));
+        });
+      }
+
+      function stagePoint(element) {
+        const rect = element.getBoundingClientRect();
+        const stageRect = stage.getBoundingClientRect();
+        return {
+          x: (rect.left + rect.width / 2 - stageRect.left) * BASE_W / stageRect.width,
+          y: (rect.top + rect.height / 2 - stageRect.top) * BASE_H / stageRect.height
+        };
+      }
+
+      function flyGhost(source, target, text, className, delay = 0, targetOffset = { x: 0, y: 0 }) {
+        if (!motionEnabled()) return Promise.resolve();
+        const start = stagePoint(source);
+        const end = stagePoint(target);
+        const ghost = document.createElement('span');
+        ghost.className = `motion-ghost ${className}`;
+        ghost.textContent = text;
+        ghost.style.left = `${start.x}px`;
+        ghost.style.top = `${start.y}px`;
+        stage.appendChild(ghost);
+        const dx = end.x - start.x + targetOffset.x;
+        const dy = end.y - start.y + targetOffset.y;
+        const flight = ghost.animate([
+          { opacity: 0, transform: 'translate(-50%, -50%) scale(.72)' },
+          { opacity: 1, transform: 'translate(-50%, -50%) scale(1.04)', offset: .16 },
+          { opacity: 1, transform: `translate(calc(-50% + ${dx * .84}px), calc(-50% + ${dy * .84}px)) scale(.92)`, offset: .76 },
+          { opacity: 0, transform: `translate(calc(-50% + ${dx}px), calc(-50% + ${dy}px)) scale(.38)` }
+        ], { duration: 760, delay, easing: 'cubic-bezier(.22,1,.36,1)', fill: 'both' });
+        return flight.finished.catch(() => {}).finally(() => ghost.remove());
+      }
+
+      // Lightweight WebAudio sounds: self-contained and activated only by user interaction.
+      let audioCtx = null;
+      function ensureAudio() {
+        if (!soundOn) return null;
+        if (!audioCtx) {
+          const AC = window.AudioContext || window.webkitAudioContext;
+          if (!AC) return null;
+          audioCtx = new AC();
+        }
+        if (audioCtx.state === 'suspended') audioCtx.resume();
+        return audioCtx;
+      }
+
+      function tone(kind = 'nav') {
+        if (!soundOn) return;
+        const ctx = ensureAudio();
+        if (!ctx) return;
+        const now = ctx.currentTime;
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        const specs = {
+          nav: [360, 510, .055, .055],
+          back: [420, 300, .055, .045],
+          select: [520, 670, .07, .06],
+          reveal: [460, 760, .11, .07],
+          reset: [330, 250, .12, .05],
+          success: [440, 880, .18, .075]
+        }[kind] || [400, 520, .06, .05];
+        osc.type = kind === 'success' ? 'sine' : 'triangle';
+        osc.frequency.setValueAtTime(specs[0], now);
+        osc.frequency.exponentialRampToValueAtTime(specs[1], now + specs[2]);
+        gain.gain.setValueAtTime(0.0001, now);
+        gain.gain.exponentialRampToValueAtTime(specs[3], now + .012);
+        gain.gain.exponentialRampToValueAtTime(0.0001, now + specs[2] + .07);
+        osc.connect(gain).connect(ctx.destination);
+        osc.start(now);
+        osc.stop(now + specs[2] + .09);
+      }
+
+      function updateChrome() {
+        const n = current + 1;
+        slideCount.textContent = `${String(n).padStart(2, '0')} / ${String(scenes.length).padStart(2, '0')}`;
+        progressFill.style.width = `${(n / scenes.length) * 100}%`;
+        chromeTitle.textContent = `Pengantar Sistem Informasi Manajemen · ${scenes[current].dataset.title}`;
+        prevBtn.disabled = current === 0;
+        nextBtn.disabled = current === scenes.length - 1;
+        stage.classList.toggle('cover-mode', current === 0);
+        stage.classList.toggle('closing-mode', current === scenes.length - 1);
+      }
+
+      function showScene(index, direction = 1, withSound = true) {
+        if (transitionLock || index < 0 || index >= scenes.length || index === current) return;
+        transitionLock = true;
+        const old = scenes[current];
+        const next = scenes[index];
+        old.classList.remove('active', 'from-left');
+        old.classList.add(direction > 0 ? 'leaving-next' : 'leaving-prev');
+        old.setAttribute('aria-hidden', 'true');
+        next.classList.remove('leaving-next', 'leaving-prev', 'from-left');
+        if (direction < 0) next.classList.add('from-left');
+        next.classList.add('active');
+        next.setAttribute('aria-hidden', 'false');
+        current = index;
+        updateChrome();
+        if (withSound) tone(direction > 0 ? 'nav' : 'back');
+        window.setTimeout(() => {
+          old.classList.remove('leaving-next', 'leaving-prev');
+          transitionLock = false;
+        }, 520);
+      }
+
+      function nextScene() { showScene(current + 1, 1); }
+      function prevScene() { showScene(current - 1, -1); }
+
+      prevBtn.addEventListener('click', prevScene);
+      nextBtn.addEventListener('click', nextScene);
+      document.getElementById('startBtn').addEventListener('click', nextScene);
+
+      function togglePause() {
+        paused = !paused;
+        stage.classList.toggle('paused', paused);
+        playBtn.querySelector('.pause-icon').style.display = paused ? 'none' : '';
+        playBtn.querySelector('.play-icon').style.display = paused ? '' : 'none';
+        playBtn.setAttribute('aria-label', paused ? 'Lanjutkan animasi' : 'Jeda animasi');
+        tone('select');
+      }
+      playBtn.addEventListener('click', togglePause);
+
+      function resetInteractiveStates() {
+        revealTimers.forEach(timer => window.clearTimeout(timer));
+        revealTimers = [];
+        resetClassification(false);
+        resetLab(false);
+        document.getElementById('dataTransform').classList.remove('contextualized');
+        document.getElementById('transformData').textContent = '→';
+        document.querySelectorAll('[data-answer]').forEach(card => card.classList.remove('revealed'));
+        document.querySelectorAll('.reflection-choice').forEach((button, i) => button.classList.toggle('active', i === 0));
+        document.getElementById('reflectionTitle').textContent = 'Menganalisis: SIAKAD';
+        selectComponent('people', false);
+      }
+
+      function restartDeck() {
+        resetInteractiveStates();
+        if (paused) togglePause();
+        if (current !== 0) showScene(0, -1, false);
+        tone('reset');
+      }
+      resetBtn.addEventListener('click', restartDeck);
+
+      async function toggleFullscreen() {
+        try {
+          if (!document.fullscreenElement) await document.documentElement.requestFullscreen();
+          else await document.exitFullscreen();
+          tone('select');
+        } catch (_) { /* Browser may block fullscreen in embedded previews. */ }
+      }
+      fullscreenBtn.addEventListener('click', toggleFullscreen);
+      document.addEventListener('fullscreenchange', fitStage);
+
+      function toggleSound() {
+        soundOn = !soundOn;
+        soundBtn.classList.toggle('sound-off', !soundOn);
+        soundBtn.querySelector('.sound-on-icon').style.display = soundOn ? '' : 'none';
+        soundBtn.querySelector('.sound-off-icon').style.display = soundOn ? 'none' : '';
+        soundBtn.setAttribute('aria-label', soundOn ? 'Matikan suara' : 'Nyalakan suara');
+        if (soundOn) tone('select');
+      }
+      soundBtn.addEventListener('click', toggleSound);
+
+      function setHelp(open) {
+        helpOverlay.classList.toggle('open', open);
+        if (open) closeHelp.focus();
+      }
+      helpBtn.addEventListener('click', () => setHelp(true));
+      closeHelp.addEventListener('click', () => setHelp(false));
+      helpOverlay.addEventListener('click', event => { if (event.target === helpOverlay) setHelp(false); });
+
+      window.addEventListener('keydown', event => {
+        const tag = event.target.tagName;
+        const isTyping = /INPUT|TEXTAREA|SELECT/.test(tag) || event.target.isContentEditable;
+        if (isTyping) return;
+        if (helpOverlay.classList.contains('open')) {
+          if (event.key === 'Escape' || event.key === '?') { event.preventDefault(); setHelp(false); }
+          return;
+        }
+        if (event.key === 'ArrowRight' || event.key === 'PageDown') { event.preventDefault(); nextScene(); }
+        else if (event.key === 'ArrowLeft' || event.key === 'PageUp') { event.preventDefault(); prevScene(); }
+        else if (event.key === ' ' && tag !== 'BUTTON') { event.preventDefault(); togglePause(); }
+        else if (event.key.toLowerCase() === 'f') { event.preventDefault(); toggleFullscreen(); }
+        else if (event.key.toLowerCase() === 'r') { event.preventDefault(); restartDeck(); }
+        else if (event.key.toLowerCase() === 'm') { event.preventDefault(); toggleSound(); }
+        else if (event.key === 'Home') { event.preventDefault(); showScene(0, -1); }
+        else if (event.key === 'End') { event.preventDefault(); showScene(scenes.length - 1, 1); }
+        else if (event.key === '?') { event.preventDefault(); setHelp(true); }
+      });
+
+      // Classification activity.
+      const sortBank = document.getElementById('sortBank');
+      const sortCards = [...document.querySelectorAll('.sort-card')];
+      const zones = [...document.querySelectorAll('.drop-zone')];
+      const classifierStatus = document.getElementById('classifierStatus');
+      let selectedSortCard = null;
+      let draggedCard = null;
+
+      function selectSortCard(card) {
+        sortCards.forEach(c => c.classList.toggle('selected', c === card));
+        selectedSortCard = card;
+        tone('select');
+      }
+
+      sortCards.forEach(card => {
+        card.addEventListener('click', event => { event.stopPropagation(); selectSortCard(card); });
+        card.addEventListener('dragstart', event => {
+          draggedCard = card;
+          card.classList.add('dragging');
+          event.dataTransfer.effectAllowed = 'move';
+          event.dataTransfer.setData('text/plain', card.dataset.card);
+        });
+        card.addEventListener('dragend', () => { card.classList.remove('dragging'); draggedCard = null; });
+      });
+
+      function placeCard(card, zone) {
+        if (!card || !zone) return;
+        let placed = 0;
+        animateLayoutChange(sortCards, () => {
+          zone.querySelector('.drop-slot').appendChild(card);
+          card.classList.remove('selected', 'dragging');
+          selectedSortCard = null;
+          placed = updateClassifier();
+        });
+        replayClass(zone, 'receiving', 720);
+        tone(placed === sortCards.length ? 'success' : 'reveal');
+      }
+
+      zones.forEach(zone => {
+        zone.addEventListener('click', () => placeCard(selectedSortCard, zone));
+        zone.addEventListener('keydown', event => {
+          if ((event.key === 'Enter' || event.key === ' ') && selectedSortCard) { event.preventDefault(); placeCard(selectedSortCard, zone); }
+        });
+        zone.addEventListener('dragover', event => { event.preventDefault(); zone.classList.add('over'); event.dataTransfer.dropEffect = 'move'; });
+        zone.addEventListener('dragleave', () => zone.classList.remove('over'));
+        zone.addEventListener('drop', event => { event.preventDefault(); zone.classList.remove('over'); placeCard(draggedCard, zone); });
+      });
+
+      sortBank.addEventListener('click', () => {
+        if (selectedSortCard && selectedSortCard.parentElement !== sortBank) {
+          animateLayoutChange(sortCards, () => {
+            sortBank.appendChild(selectedSortCard);
+            selectedSortCard.classList.remove('selected');
+            selectedSortCard = null;
+            updateClassifier();
+          });
+          replayClass(sortBank, 'receiving', 680);
+          tone('back');
+        }
+      });
+      sortBank.addEventListener('dragover', event => event.preventDefault());
+      sortBank.addEventListener('drop', event => {
+        event.preventDefault();
+        if (draggedCard) {
+          animateLayoutChange(sortCards, () => { sortBank.appendChild(draggedCard); updateClassifier(); });
+          replayClass(sortBank, 'receiving', 680);
+          tone('back');
+        }
+      });
+
+      function updateClassifier() {
+        zones.forEach(zone => zone.querySelector('.zone-count').textContent = zone.querySelectorAll('.sort-card').length);
+        const placed = sortCards.filter(card => card.parentElement !== sortBank).length;
+        classifierStatus.innerHTML = `<strong>${placed} dari ${sortCards.length}</strong> kartu telah ditempatkan${placed === sortCards.length ? ' — siap didiskusikan.' : '.'}`;
+        return placed;
+      }
+
+      function resetClassification(withSound = true) {
+        const resetCards = () => {
+          sortCards.forEach(card => { sortBank.appendChild(card); card.classList.remove('selected'); });
+          selectedSortCard = null;
+          updateClassifier();
+        };
+        if (withSound) {
+          animateLayoutChange(sortCards, resetCards, 760);
+          replayClass(sortBank, 'receiving', 780);
+        } else {
+          resetCards();
+        }
+        if (withSound) tone('reset');
+      }
+      document.getElementById('resetClassifier').addEventListener('click', () => resetClassification(true));
+
+      // Form-to-system laboratory.
+      const labButtons = [...document.querySelectorAll('.lab-add')];
+      const labNodes = [...document.querySelectorAll('.module-node')];
+      const labCore = document.getElementById('labCore');
+      const labMeter = document.getElementById('labMeter');
+      function updateLab(deferredNode = null) {
+        const count = labButtons.filter(button => button.classList.contains('on')).length;
+        labNodes.forEach(node => {
+          const source = document.querySelector(`.lab-add[data-module="${node.dataset.node}"]`);
+          node.classList.toggle('on', source.classList.contains('on') && node.dataset.node !== deferredNode);
+        });
+        labMeter.style.width = `${count * 25}%`;
+        labCore.classList.toggle('complete', count === 4);
+        labCore.textContent = count === 0 ? 'Alat pengumpul data' : count < 4 ? 'Komponen sistem mulai terbentuk' : 'Bagian dari sistem informasi presensi';
+        if (count === 4) {
+          replayClass(labCore, 'just-completed', 850);
+        }
+        return count;
+      }
+      labButtons.forEach(button => button.addEventListener('click', () => {
+        const turningOn = !button.classList.contains('on');
+        const key = button.dataset.module;
+        const node = labNodes.find(item => item.dataset.node === key);
+        button.classList.toggle('on', turningOn);
+        button.querySelector('.lab-plus').textContent = turningOn ? '✓' : '+';
+        const count = updateLab(turningOn ? key : null);
+        if (turningOn) {
+          const label = button.textContent.replace(/^[+✓]\s*/, '').trim();
+          flyGhost(button, node, label, 'flying-module').then(() => {
+            if (!button.classList.contains('on')) return;
+            node.classList.add('on');
+            replayClass(node, 'arrived', 650);
+          });
+        }
+        tone(count === 4 ? 'success' : 'reveal');
+      }));
+      function resetLab(withSound = true) {
+        labButtons.forEach(button => { button.classList.remove('on'); button.querySelector('.lab-plus').textContent = '+'; });
+        labNodes.forEach(node => node.classList.remove('arrived'));
+        updateLab();
+        if (withSound) tone('reset');
+      }
+      document.getElementById('resetLab').addEventListener('click', () => resetLab(true));
+
+      // Answer reveals.
+      const answerCards = [...document.querySelectorAll('[data-answer]')];
+      answerCards.forEach(card => card.addEventListener('click', () => { card.classList.toggle('revealed'); tone('reveal'); }));
+      document.getElementById('revealAll').addEventListener('click', () => {
+        revealTimers.forEach(timer => window.clearTimeout(timer));
+        revealTimers = [];
+        answerCards.filter(card => !card.classList.contains('revealed')).forEach((card, index) => {
+          revealTimers.push(window.setTimeout(() => card.classList.add('revealed'), index * 95));
+        });
+        tone('success');
+      });
+
+      // Data → information transformation.
+      document.getElementById('transformData').addEventListener('click', () => {
+        const grid = document.getElementById('dataTransform');
+        const contextualizing = !grid.classList.contains('contextualized');
+        grid.classList.toggle('contextualized', contextualizing);
+        document.getElementById('transformData').textContent = contextualizing ? '↺' : '→';
+        if (contextualizing) {
+          const infoPanel = grid.querySelector('.info-panel');
+          [...grid.querySelectorAll('.raw-number')].forEach((number, index) => {
+            flyGhost(number, infoPanel, number.textContent.trim(), 'flying-datum', index * 115, { x: (index - 1) * 82, y: 22 });
+          });
+          replayClass(infoPanel, 'receiving-data', 1050);
+        }
+        tone(contextualizing ? 'success' : 'reset');
+      });
+
+      // Component explorer.
+      const componentContent = {
+        people: ['Manusia', 'Pengguna, pengelola, dan pihak yang mengambil tindakan berdasarkan informasi yang dihasilkan.'],
+        process: ['Proses', 'Aturan dan urutan kerja yang menentukan bagaimana data dikumpulkan, divalidasi, diolah, dan digunakan.'],
+        data: ['Data', 'Fakta yang dicatat dan dipelihara sebagai bahan untuk menghasilkan informasi yang bermakna.'],
+        technology: ['Teknologi', 'Perangkat keras, perangkat lunak, dan jaringan yang membantu penyimpanan, pengolahan, serta distribusi informasi.']
+      };
+      const componentDetail = document.querySelector('.component-detail');
+      const componentTitle = document.getElementById('componentTitle');
+      const componentText = document.getElementById('componentText');
+      let componentSwitchToken = 0;
+      function selectComponent(key, withSound = true) {
+        document.querySelectorAll('.eco-node').forEach(node => node.classList.toggle('active', node.dataset.component === key));
+        const writeComponent = () => {
+          componentTitle.textContent = componentContent[key][0];
+          componentText.textContent = componentContent[key][1];
+        };
+        if (!withSound || !motionEnabled()) {
+          componentSwitchToken++;
+          componentDetail.getAnimations().forEach(animation => animation.cancel());
+          writeComponent();
+        } else {
+          const token = ++componentSwitchToken;
+          componentDetail.getAnimations().forEach(animation => animation.cancel());
+          const exit = componentDetail.animate([
+            { opacity: 1, transform: 'none', filter: 'none' },
+            { opacity: 0, transform: 'translateX(-18px) scale(.99)', filter: 'blur(4px)' }
+          ], { duration: 190, easing: 'ease-in', fill: 'forwards' });
+          exit.finished.catch(() => {}).then(() => {
+            if (token !== componentSwitchToken) return;
+            exit.cancel();
+            writeComponent();
+            replayClass(componentDetail, 'detail-switch', 540);
+          });
+        }
+        if (withSound) tone('select');
+      }
+      document.querySelectorAll('.eco-node').forEach(node => node.addEventListener('click', () => selectComponent(node.dataset.component)));
+
+      // Reflection choices.
+      const reflectionBoard = document.querySelector('.reflection-board');
+      document.querySelectorAll('.reflection-choice').forEach(button => button.addEventListener('click', () => {
+        document.querySelectorAll('.reflection-choice').forEach(b => b.classList.remove('active'));
+        button.classList.add('active');
+        document.getElementById('reflectionTitle').textContent = `Menganalisis: ${button.dataset.reflection}`;
+        replayClass(reflectionBoard, 'board-switch', 720);
+        tone('select');
+      }));
+
+      // Ambient network canvas.
+      const canvas = document.getElementById('ambient');
+      const ctx = canvas.getContext('2d');
+      const nodes = Array.from({ length: 34 }, (_, i) => ({
+        x: (i * 197.3) % BASE_W,
+        y: (i * 103.7) % BASE_H,
+        vx: ((i % 5) - 2) * .045,
+        vy: (((i * 3) % 5) - 2) * .035,
+        r: 1.6 + (i % 4) * .55
+      }));
+
+      function drawAmbient() {
+        if (!paused) {
+          ctx.clearRect(0, 0, BASE_W, BASE_H);
+          for (const node of nodes) {
+            node.x += node.vx; node.y += node.vy;
+            if (node.x < -30) node.x = BASE_W + 30;
+            if (node.x > BASE_W + 30) node.x = -30;
+            if (node.y < -30) node.y = BASE_H + 30;
+            if (node.y > BASE_H + 30) node.y = -30;
+          }
+          for (let i = 0; i < nodes.length; i++) {
+            for (let j = i + 1; j < nodes.length; j++) {
+              const dx = nodes[i].x - nodes[j].x;
+              const dy = nodes[i].y - nodes[j].y;
+              const dist = Math.hypot(dx, dy);
+              if (dist < 185) {
+                ctx.strokeStyle = `rgba(37,99,235,${(1 - dist / 185) * .12})`;
+                ctx.lineWidth = 1;
+                ctx.beginPath(); ctx.moveTo(nodes[i].x, nodes[i].y); ctx.lineTo(nodes[j].x, nodes[j].y); ctx.stroke();
+              }
+            }
+          }
+          nodes.forEach((node, i) => {
+            ctx.fillStyle = i % 6 === 0 ? 'rgba(249,115,22,.30)' : 'rgba(37,99,235,.25)';
+            ctx.beginPath(); ctx.arc(node.x, node.y, node.r, 0, Math.PI * 2); ctx.fill();
+          });
+        }
+        requestAnimationFrame(drawAmbient);
+      }
+      drawAmbient();
+
+      updateClassifier();
+      updateLab();
+      updateChrome();
+    })();
+  </script>
+</body>
+</html>

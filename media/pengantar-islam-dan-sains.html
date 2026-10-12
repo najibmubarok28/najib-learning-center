@@ -1,0 +1,2064 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#f4f7fb">
+  <title>Pengantar Islam dan Sains — Najib Mubarok, M.Sc.</title>
+  <style>
+    :root {
+      --ink: #132238;
+      --muted: #66758a;
+      --paper: #ffffff;
+      --paper-2: #f5f8fc;
+      --line: #dce5ef;
+      --navy: #173b68;
+      --blue: #2563eb;
+      --cyan: #0ea5c6;
+      --orange: #f97316;
+      --amber: #f5b51b;
+      --green: #16a36a;
+      --red: #e64b4b;
+      --purple: #7657d6;
+      --shadow: 0 22px 60px rgba(32, 59, 92, .13);
+      --soft-shadow: 0 12px 32px rgba(32, 59, 92, .10);
+      --ease: cubic-bezier(.22, 1, .36, 1);
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 16% 15%, rgba(37, 99, 235, .11), transparent 27%),
+        radial-gradient(circle at 84% 82%, rgba(249, 115, 22, .09), transparent 25%),
+        #e9eef5;
+      color: var(--ink);
+      font-family: Aptos, Inter, "Segoe UI", Helvetica, Arial, sans-serif;
+    }
+
+    button, a { font: inherit; }
+    button { color: inherit; }
+    button:focus-visible, a:focus-visible {
+      outline: 4px solid rgba(37, 99, 235, .28);
+      outline-offset: 4px;
+    }
+
+    #viewport {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 1600px;
+      height: 900px;
+      transform-origin: center;
+    }
+
+    #stage {
+      position: relative;
+      width: 1600px;
+      height: 900px;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 12% 12%, rgba(37, 99, 235, .055), transparent 24%),
+        radial-gradient(circle at 91% 88%, rgba(14, 165, 198, .06), transparent 25%),
+        linear-gradient(135deg, #ffffff 0%, #fbfdff 52%, #f5f8fc 100%);
+      box-shadow: 0 40px 120px rgba(13, 35, 62, .22);
+      isolation: isolate;
+    }
+
+    #stage::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      pointer-events: none;
+      opacity: .28;
+      background-image: radial-gradient(rgba(23, 59, 104, .15) .75px, transparent .75px);
+      background-size: 25px 25px;
+      mask-image: linear-gradient(to bottom, rgba(0,0,0,.72), transparent 72%);
+    }
+
+    #ambient {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      opacity: .42;
+      transition: opacity .5s ease;
+    }
+
+    #stage.cover-mode #ambient { opacity: .85; }
+    #stage.paused, #stage.paused * { animation-play-state: paused !important; }
+
+    .scene {
+      position: absolute;
+      inset: 0;
+      z-index: 3;
+      display: flex;
+      flex-direction: column;
+      visibility: hidden;
+      opacity: 0;
+      pointer-events: none;
+      padding: 60px 78px 104px;
+      transform: translateX(34px);
+    }
+
+    .scene.active {
+      visibility: visible;
+      opacity: 1;
+      pointer-events: auto;
+      transform: none;
+      animation: scene-in .48s var(--ease) both;
+    }
+
+    .scene.active.from-left { animation-name: scene-in-left; }
+    .scene.leaving-next, .scene.leaving-prev {
+      visibility: visible;
+      pointer-events: none;
+      animation: scene-out .34s ease both;
+    }
+    .scene.leaving-prev { animation-name: scene-out-right; }
+
+    @keyframes scene-in {
+      from { opacity: 0; transform: translateX(38px); }
+      to { opacity: 1; transform: none; }
+    }
+    @keyframes scene-in-left {
+      from { opacity: 0; transform: translateX(-38px); }
+      to { opacity: 1; transform: none; }
+    }
+    @keyframes scene-out { to { opacity: 0; transform: translateX(-28px); } }
+    @keyframes scene-out-right { to { opacity: 0; transform: translateX(28px); } }
+
+    [data-anim] { opacity: 0; transform: translateY(24px) scale(.985); }
+    .scene.active [data-anim] {
+      animation: item-in .76s var(--ease) forwards;
+      animation-delay: var(--d, 80ms);
+    }
+    @keyframes item-in { to { opacity: 1; transform: none; } }
+
+    h1, h2, h3, p { margin-top: 0; }
+    p { margin-bottom: 0; }
+    h1, h2, h3 { letter-spacing: -.035em; text-wrap: balance; }
+    h2 {
+      margin-bottom: 12px;
+      font-size: 48px;
+      line-height: 1.08;
+      font-weight: 800;
+    }
+    h3 { font-size: 24px; line-height: 1.15; }
+    .lead {
+      max-width: 1120px;
+      color: var(--muted);
+      font-size: 22px;
+      line-height: 1.45;
+    }
+    .accent { color: var(--blue); }
+    .accent-cyan { color: var(--cyan); }
+    .accent-orange { color: var(--orange); }
+    .accent-green { color: var(--green); }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      width: fit-content;
+      margin-bottom: 14px;
+      color: var(--blue);
+      font-size: 17px;
+      font-weight: 850;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+    .eyebrow::before {
+      content: "";
+      width: 32px;
+      height: 4px;
+      border-radius: 99px;
+      background: linear-gradient(90deg, var(--blue), var(--cyan));
+    }
+
+    .scene-number {
+      position: absolute;
+      right: 72px;
+      top: 34px;
+      color: rgba(23, 59, 104, .065);
+      font-size: 104px;
+      font-weight: 900;
+      letter-spacing: -.08em;
+      line-height: 1;
+      pointer-events: none;
+    }
+
+    .bodynote {
+      position: absolute;
+      left: 78px;
+      right: 78px;
+      bottom: 82px;
+      color: #718097;
+      font-size: 16px;
+      font-weight: 650;
+      line-height: 1.35;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      min-height: 36px;
+      padding: 7px 14px;
+      border: 1px solid var(--line);
+      border-radius: 99px;
+      background: rgba(255,255,255,.88);
+      color: var(--navy);
+      font-size: 16px;
+      font-weight: 780;
+      box-shadow: 0 6px 18px rgba(23, 59, 104, .06);
+    }
+    .pill-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--blue);
+      box-shadow: 0 0 0 5px rgba(37,99,235,.12);
+    }
+
+    .primary-btn, .ghost-btn, .small-btn, .choice-btn {
+      border: 0;
+      cursor: pointer;
+      transition: transform .22s var(--ease), box-shadow .22s ease, background .22s ease, color .22s ease, border-color .22s ease;
+    }
+    .primary-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 11px;
+      min-height: 56px;
+      padding: 0 24px;
+      border-radius: 16px;
+      background: linear-gradient(135deg, var(--navy), var(--blue));
+      color: #fff;
+      font-size: 18px;
+      font-weight: 800;
+      box-shadow: 0 16px 34px rgba(37, 99, 235, .24);
+    }
+    .primary-btn:hover { transform: translateY(-3px); box-shadow: 0 20px 42px rgba(37,99,235,.30); }
+    .ghost-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 9px;
+      min-height: 46px;
+      padding: 0 17px;
+      border: 1px solid var(--line);
+      border-radius: 13px;
+      background: rgba(255,255,255,.92);
+      color: var(--navy);
+      font-size: 16px;
+      font-weight: 780;
+      box-shadow: 0 7px 20px rgba(23,59,104,.07);
+    }
+    .ghost-btn:hover { transform: translateY(-2px); background: #fff; box-shadow: var(--soft-shadow); }
+    .small-btn {
+      min-height: 40px;
+      padding: 0 15px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: #fff;
+      color: var(--navy);
+      font-size: 15px;
+      font-weight: 800;
+    }
+    .small-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(23,59,104,.1); }
+    .primary-btn:active, .ghost-btn:active, .small-btn:active, .choice-btn:active { transform: translateY(1px) scale(.99); }
+
+    /* Cover */
+    .cover { padding: 68px 88px 88px; justify-content: center; }
+    .cover-grid {
+      display: grid;
+      grid-template-columns: 1.05fr .95fr;
+      align-items: center;
+      gap: 48px;
+      height: 100%;
+    }
+    .cover-copy { position: relative; z-index: 2; }
+    .cover-meta { display: flex; gap: 12px; margin-bottom: 29px; }
+    .cover h1 {
+      max-width: 780px;
+      margin: 0 0 24px;
+      font-size: 82px;
+      line-height: .98;
+      font-weight: 850;
+    }
+    .cover h1 span {
+      display: block;
+      background: linear-gradient(100deg, var(--blue), var(--cyan));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    .cover-subtitle {
+      max-width: 720px;
+      margin-bottom: 30px;
+      color: var(--muted);
+      font-size: 24px;
+      line-height: 1.42;
+      font-weight: 540;
+    }
+    .cover-byline { display: flex; align-items: center; gap: 17px; margin-bottom: 32px; }
+    .avatar-mark {
+      display: grid;
+      place-items: center;
+      width: 50px;
+      height: 50px;
+      border-radius: 15px;
+      background: linear-gradient(135deg, var(--navy), var(--blue));
+      color: #fff;
+      font-size: 17px;
+      font-weight: 900;
+      box-shadow: 0 12px 28px rgba(37,99,235,.20);
+    }
+    .byline-name { color: var(--ink); font-size: 20px; font-weight: 820; }
+    .byline-campus { margin-top: 4px; color: var(--muted); font-size: 16px; font-weight: 650; }
+    .hero-visual { position: relative; height: 680px; display: grid; place-items: center; }
+    .hero-halo {
+      position: absolute;
+      width: 590px;
+      height: 590px;
+      border-radius: 50%;
+      background:
+        radial-gradient(circle at 50% 48%, rgba(255,255,255,.98) 0 29%, rgba(37,99,235,.12) 30% 48%, rgba(14,165,198,.07) 49% 63%, transparent 64%);
+      filter: drop-shadow(0 30px 60px rgba(37,99,235,.12));
+      animation: breathe 5.5s ease-in-out infinite;
+    }
+    @keyframes breathe { 50% { transform: scale(1.04); } }
+    .islam-science-hero { position: relative; width: 660px; height: 660px; overflow: visible; filter: drop-shadow(0 24px 32px rgba(23,59,104,.12)); }
+    .hero-orbit { transform-origin: 330px 320px; animation: rotate 25s linear infinite; }
+    .hero-orbit.reverse { animation-direction: reverse; animation-duration: 19s; }
+    @keyframes rotate { to { transform: rotate(360deg); } }
+    .orbit-dash { fill: none; stroke: rgba(37,99,235,.24); stroke-width: 2; stroke-dasharray: 7 15; }
+    .signal-path { fill: none; stroke: url(#heroSignal); stroke-width: 5; stroke-linecap: round; stroke-dasharray: 10 15; animation: signal-flow 2.2s linear infinite; }
+    @keyframes signal-flow { to { stroke-dashoffset: -50; } }
+    .book-page-left { transform-origin: 327px 395px; animation: page-left 4.2s ease-in-out infinite; }
+    .book-page-right { transform-origin: 333px 395px; animation: page-right 4.2s ease-in-out infinite; }
+    @keyframes page-left { 50% { transform: skewY(-2deg) translateY(-3px); } }
+    @keyframes page-right { 50% { transform: skewY(2deg) translateY(-3px); } }
+    .hero-node { transform-box: fill-box; transform-origin: center; animation: node-float 3.7s ease-in-out infinite; }
+    .hero-node.n2 { animation-delay: -.9s; }
+    .hero-node.n3 { animation-delay: -1.7s; }
+    .hero-node.n4 { animation-delay: -2.5s; }
+    @keyframes node-float { 50% { transform: translateY(-11px) scale(1.025); } }
+
+    /* Scene 2: claim gallery */
+    .claim-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+      margin-top: 24px;
+    }
+    .claim-card {
+      position: relative;
+      min-height: 226px;
+      padding: 22px 24px 20px 112px;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 23px;
+      background: rgba(255,255,255,.92);
+      box-shadow: var(--soft-shadow);
+    }
+    .claim-card::before {
+      content: "";
+      position: absolute;
+      inset: 0 auto 0 0;
+      width: 7px;
+      background: var(--claim-color, var(--blue));
+    }
+    .claim-icon {
+      position: absolute;
+      left: 24px;
+      top: 25px;
+      display: grid;
+      place-items: center;
+      width: 64px;
+      height: 64px;
+      border-radius: 19px;
+      background: var(--claim-bg, #edf4ff);
+      color: var(--claim-color, var(--blue));
+    }
+    .claim-icon svg { width: 38px; height: 38px; }
+    .claim-card h3 { margin: 0 0 8px; font-size: 23px; }
+    .claim-card p { min-height: 57px; color: #43526a; font-size: 19px; line-height: 1.42; font-weight: 600; }
+    .verdict-track {
+      --slide-x: 100%;
+      position: relative;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0;
+      height: 43px;
+      margin-top: 16px;
+      padding: 4px;
+      border: 1px solid #dfe7f1;
+      border-radius: 13px;
+      background: #f1f5f9;
+      isolation: isolate;
+    }
+    .verdict-slider {
+      position: absolute;
+      left: 4px;
+      top: 4px;
+      z-index: 0;
+      width: calc((100% - 8px) / 3);
+      height: 33px;
+      border-radius: 9px;
+      background: #fff;
+      box-shadow: 0 5px 14px rgba(23,59,104,.14);
+      transform: translateX(var(--slide-x));
+      transition: transform .55s var(--ease), background .35s ease;
+    }
+    .verdict-track[data-state="0"] .verdict-slider { background: #eaf8f1; }
+    .verdict-track[data-state="1"] .verdict-slider { background: #fff6df; }
+    .verdict-track[data-state="2"] .verdict-slider { background: #fff0f0; }
+    .verdict-track button {
+      position: relative;
+      z-index: 1;
+      border: 0;
+      background: transparent;
+      color: #68778b;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 820;
+    }
+    .verdict-track button.active { color: var(--ink); }
+    .case-status { margin-top: 14px; color: var(--muted); font-size: 17px; font-weight: 680; }
+
+    /* Scene 3: classification */
+    .classification-wrap { margin-top: 21px; }
+    .sort-bank {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+      min-height: 112px;
+      padding: 13px;
+      border: 2px dashed #cfdbea;
+      border-radius: 19px;
+      background: rgba(239,245,252,.66);
+      transition: background .3s ease, border-color .3s ease;
+    }
+    .sort-bank.receiving { background: #edf7ff; border-color: var(--cyan); }
+    .sort-card {
+      display: flex;
+      align-items: center;
+      min-height: 82px;
+      padding: 13px 15px;
+      border: 1px solid #d8e3f0;
+      border-radius: 15px;
+      background: #fff;
+      color: #33435a;
+      font-size: 16px;
+      line-height: 1.32;
+      font-weight: 720;
+      box-shadow: 0 7px 18px rgba(23,59,104,.08);
+      cursor: grab;
+      user-select: none;
+      transition: border-color .2s ease, box-shadow .2s ease, background .2s ease;
+    }
+    .sort-card:hover { border-color: #9bb7dc; box-shadow: 0 11px 25px rgba(23,59,104,.12); }
+    .sort-card.selected { border-color: var(--blue); background: #eef5ff; box-shadow: 0 0 0 4px rgba(37,99,235,.12); }
+    .sort-card.dragging { opacity: .42; }
+    .sort-card.motion-active { z-index: 30; }
+    .drop-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 13px; margin-top: 15px; }
+    .drop-zone {
+      min-height: 250px;
+      padding: 15px;
+      border: 2px solid #dce6f1;
+      border-radius: 18px;
+      background: rgba(255,255,255,.86);
+      cursor: pointer;
+      transition: transform .25s var(--ease), border-color .25s ease, background .25s ease;
+    }
+    .drop-zone:hover, .drop-zone.over { transform: translateY(-4px); border-color: var(--zone-color, var(--blue)); background: #fff; }
+    .drop-zone.receiving { animation: zone-receive .68s var(--ease); }
+    @keyframes zone-receive { 45% { transform: translateY(-8px) scale(1.025); box-shadow: 0 18px 32px rgba(37,99,235,.16); } }
+    .drop-zone.correct { border-color: var(--green); background: #f1fbf6; }
+    .drop-zone.wrong { border-color: var(--red); background: #fff5f5; }
+    .zone-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 11px; }
+    .zone-title { color: var(--navy); font-size: 17px; font-weight: 850; }
+    .zone-count { display: grid; place-items: center; width: 29px; height: 29px; border-radius: 50%; background: #edf3fa; color: var(--navy); font-size: 14px; font-weight: 900; }
+    .drop-slot { display: flex; flex-direction: column; gap: 7px; min-height: 177px; }
+    .drop-zone .sort-card { min-height: 48px; padding: 9px 11px; border-radius: 11px; font-size: 13.5px; cursor: grab; }
+    .classifier-toolbar { display: flex; align-items: center; gap: 11px; margin-top: 13px; }
+    .classifier-status { margin-left: auto; color: var(--muted); font-size: 16px; font-weight: 700; }
+    .classifier-status strong { color: var(--navy); }
+
+    /* Scene 4: three layers */
+    .concept-workspace {
+      position: relative;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      margin-top: 16px;
+    }
+    .concept-grid {
+      position: relative;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      height: 390px;
+      isolation: isolate;
+    }
+    .concept-card {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      min-height: 350px;
+      padding: 30px 29px;
+      border: 1px solid var(--line);
+      border-radius: 25px;
+      background: rgba(255,255,255,.96);
+      box-shadow: var(--shadow);
+      transform: translateX(var(--pile-x)) translateY(var(--pile-y)) scale(.86) rotate(var(--pile-r));
+      opacity: .84;
+      transition: transform .9s var(--ease), opacity .55s ease, box-shadow .55s ease;
+    }
+    .concept-card:nth-child(1) { --pile-x: 485px; --pile-y: 18px; --pile-r: -5deg; z-index: 1; }
+    .concept-card:nth-child(2) { --pile-x: 0px; --pile-y: 0px; --pile-r: 0deg; z-index: 3; }
+    .concept-card:nth-child(3) { --pile-x: -485px; --pile-y: 18px; --pile-r: 5deg; z-index: 2; }
+    .concept-grid.open .concept-card { transform: none; opacity: 1; box-shadow: var(--soft-shadow); }
+    .concept-icon {
+      display: grid;
+      place-items: center;
+      width: 70px;
+      height: 70px;
+      margin-bottom: 20px;
+      border-radius: 21px;
+      background: var(--concept-bg);
+      color: var(--concept-color);
+      font-size: 29px;
+      font-weight: 900;
+      transition: transform .55s var(--ease);
+    }
+    .concept-grid.open .concept-card:nth-child(1) .concept-icon { transform: rotate(-6deg) scale(1.05); }
+    .concept-grid.open .concept-card:nth-child(3) .concept-icon { transform: rotate(6deg) scale(1.05); }
+    .concept-card h3 { margin-bottom: 10px; font-size: 28px; }
+    .concept-card p { color: #4e5d72; font-size: 19px; line-height: 1.48; font-weight: 600; }
+    .concept-label { margin-top: 17px; color: var(--concept-color); font-size: 15px; font-weight: 850; letter-spacing: .08em; text-transform: uppercase; }
+    .concept-action { display: flex; align-items: center; justify-content: center; gap: 16px; margin-top: 16px; }
+    .concept-hint { color: var(--muted); font-size: 17px; font-weight: 650; }
+
+    /* Scene 5: relation */
+    .relation-layout { display: grid; grid-template-columns: 1.12fr .88fr; align-items: center; gap: 38px; flex: 1; margin-top: 12px; }
+    .relation-stage {
+      position: relative;
+      height: 470px;
+      border: 1px solid var(--line);
+      border-radius: 27px;
+      background: linear-gradient(145deg, rgba(255,255,255,.94), rgba(242,247,252,.95));
+      box-shadow: var(--soft-shadow);
+      overflow: hidden;
+    }
+    .relation-circle {
+      position: absolute;
+      top: 82px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      width: 292px;
+      height: 292px;
+      padding: 43px;
+      border-radius: 50%;
+      transition: transform 1s var(--ease), box-shadow .7s ease;
+    }
+    .relation-circle.islam {
+      left: 65px;
+      border: 3px solid rgba(37,99,235,.36);
+      background: rgba(37,99,235,.09);
+      transform: translateX(-18px);
+    }
+    .relation-circle.science {
+      right: 65px;
+      border: 3px solid rgba(14,165,198,.38);
+      background: rgba(14,165,198,.09);
+      transform: translateX(18px);
+    }
+    .relation-stage.connected .relation-circle.islam { transform: translateX(84px); box-shadow: 0 18px 40px rgba(37,99,235,.13); }
+    .relation-stage.connected .relation-circle.science { transform: translateX(-84px); box-shadow: 0 18px 40px rgba(14,165,198,.13); }
+    .relation-circle h3 { margin-bottom: 11px; color: var(--navy); font-size: 28px; }
+    .relation-circle p { color: #506078; font-size: 18px; line-height: 1.45; font-weight: 650; }
+    .dialogue-core {
+      position: absolute;
+      left: 50%;
+      top: 228px;
+      z-index: 4;
+      display: grid;
+      place-items: center;
+      width: 150px;
+      height: 150px;
+      padding: 18px;
+      border: 2px solid #fff;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--navy), var(--blue));
+      color: #fff;
+      text-align: center;
+      font-size: 18px;
+      line-height: 1.2;
+      font-weight: 900;
+      box-shadow: 0 18px 42px rgba(37,99,235,.30);
+      transform: translate(-50%, -50%) scale(.4) rotate(-18deg);
+      opacity: 0;
+      transition: transform .8s .3s var(--ease), opacity .45s .3s ease;
+    }
+    .relation-stage.connected .dialogue-core { transform: translate(-50%, -50%) scale(1) rotate(0); opacity: 1; }
+    .relation-caption {
+      position: absolute;
+      left: 50%;
+      bottom: 27px;
+      width: 90%;
+      color: var(--muted);
+      text-align: center;
+      font-size: 16px;
+      font-weight: 700;
+      transform: translateX(-50%);
+    }
+    .urgency-stack { display: flex; flex-direction: column; gap: 13px; }
+    .urgency-card {
+      display: grid;
+      grid-template-columns: 55px 1fr;
+      gap: 16px;
+      align-items: center;
+      padding: 17px 18px;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: rgba(255,255,255,.93);
+      box-shadow: 0 9px 23px rgba(23,59,104,.08);
+      transform: translateX(24px);
+      opacity: .55;
+      transition: transform .7s var(--ease), opacity .5s ease;
+    }
+    .relation-layout.connected .urgency-card { transform: none; opacity: 1; }
+    .relation-layout.connected .urgency-card:nth-child(2) { transition-delay: .12s; }
+    .relation-layout.connected .urgency-card:nth-child(3) { transition-delay: .24s; }
+    .urgency-icon { display: grid; place-items: center; width: 51px; height: 51px; border-radius: 15px; background: var(--u-bg); color: var(--u-color); font-size: 24px; font-weight: 900; }
+    .urgency-card strong { display: block; margin-bottom: 4px; color: var(--navy); font-size: 19px; }
+    .urgency-card span { color: #59687c; font-size: 16px; line-height: 1.35; font-weight: 620; }
+    .relation-action { display: flex; align-items: center; gap: 15px; margin-top: 16px; }
+
+    /* Scene 6: spectrum */
+    .extreme-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; margin-top: 26px; }
+    .extreme-card {
+      position: relative;
+      min-height: 180px;
+      padding: 27px 31px 25px 96px;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 23px;
+      background: rgba(255,255,255,.94);
+      box-shadow: var(--soft-shadow);
+    }
+    .extreme-card::after { content: ""; position: absolute; inset: auto 0 0; height: 7px; background: var(--edge-color); }
+    .extreme-mark { position: absolute; left: 27px; top: 29px; color: var(--edge-color); font-size: 43px; font-weight: 900; }
+    .extreme-card h3 { margin: 0 0 9px; font-size: 24px; }
+    .extreme-card p { color: #4f5e73; font-size: 19px; line-height: 1.42; font-weight: 630; }
+    .spectrum-box {
+      --point-x: 50%;
+      margin-top: 25px;
+      padding: 24px 30px 22px;
+      border: 1px solid var(--line);
+      border-radius: 23px;
+      background: linear-gradient(140deg, #fff, #f6f9fd);
+      box-shadow: var(--soft-shadow);
+    }
+    .spectrum-labels { display: flex; justify-content: space-between; gap: 22px; color: #536177; font-size: 15px; font-weight: 760; }
+    .spectrum-labels span { width: 30%; }
+    .spectrum-labels span:nth-child(2) { text-align: center; color: var(--blue); }
+    .spectrum-labels span:last-child { text-align: right; }
+    .spectrum-track {
+      position: relative;
+      height: 16px;
+      margin: 20px 22px 14px;
+      border-radius: 99px;
+      background: linear-gradient(90deg, #f7a0a0, #ffd57d 28%, #73c9f0 50%, #ffd57d 72%, #f7a0a0);
+      box-shadow: inset 0 2px 6px rgba(23,59,104,.15);
+    }
+    .spectrum-marker {
+      position: absolute;
+      left: var(--point-x);
+      top: 50%;
+      width: 36px;
+      height: 36px;
+      border: 5px solid #fff;
+      border-radius: 50%;
+      background: var(--navy);
+      box-shadow: 0 8px 20px rgba(23,59,104,.28);
+      transform: translate(-50%, -50%);
+      transition: transform .7s var(--ease), background .3s ease;
+    }
+    .spectrum-points { display: grid; grid-template-columns: repeat(5, 1fr); margin: 0 2px; }
+    .spectrum-points button { border: 0; background: transparent; color: #7a8799; cursor: pointer; font-size: 15px; font-weight: 790; }
+    .spectrum-points button.active { color: var(--navy); }
+    .spectrum-feedback { min-height: 54px; margin-top: 15px; padding: 13px 17px; border-radius: 14px; background: #edf5ff; color: #294b72; font-size: 17px; line-height: 1.42; font-weight: 680; }
+
+    /* Scene 7: focal case */
+    .comparison-grid { display: grid; grid-template-columns: 1fr 116px 1fr; align-items: stretch; gap: 16px; margin-top: 23px; }
+    .evidence-panel {
+      position: relative;
+      min-height: 306px;
+      padding: 24px 25px;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      background: rgba(255,255,255,.94);
+      box-shadow: var(--soft-shadow);
+    }
+    .evidence-tag { display: inline-flex; padding: 6px 11px; border-radius: 99px; background: var(--tag-bg); color: var(--tag-color); font-size: 14px; font-weight: 850; letter-spacing: .06em; text-transform: uppercase; }
+    .evidence-panel h3 { margin: 18px 0 11px; font-size: 26px; }
+    .evidence-panel p { color: #4b5b71; font-size: 18px; line-height: 1.48; font-weight: 620; }
+    .verse-lines { margin-top: 17px; }
+    .verse-line { height: 8px; margin-bottom: 11px; border-radius: 99px; background: linear-gradient(90deg, rgba(37,99,235,.18), rgba(37,99,235,.55)); transform-origin: left; transform: scaleX(.08); opacity: .3; transition: transform .75s var(--ease), opacity .5s ease; }
+    .verse-line:nth-child(2) { width: 88%; transition-delay: .12s; }
+    .verse-line:nth-child(3) { width: 66%; transition-delay: .24s; }
+    .comparison-grid.running .verse-line { transform: scaleX(1); opacity: 1; }
+    .cosmos-mini { position: relative; height: 103px; margin-top: 13px; overflow: hidden; border-radius: 15px; background: radial-gradient(circle at center, #263b68 0, #111a32 58%, #080e1c 100%); }
+    .cosmos-core { position: absolute; left: 50%; top: 50%; width: 15px; height: 15px; border-radius: 50%; background: #fff; box-shadow: 0 0 18px #fff, 0 0 35px var(--amber); transform: translate(-50%,-50%) scale(.5); transition: transform 1.1s var(--ease); }
+    .comparison-grid.running .cosmos-core { transform: translate(-50%,-50%) scale(2); }
+    .cosmos-dot { position: absolute; left: 50%; top: 50%; width: 6px; height: 6px; border-radius: 50%; background: var(--dot-color); transform: translate(-50%,-50%); transition: transform 1.35s var(--delay) var(--ease), opacity .4s ease; opacity: .2; }
+    .comparison-grid.running .cosmos-dot { transform: translate(calc(-50% + var(--dx)), calc(-50% + var(--dy))); opacity: 1; }
+    .compare-center { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px; }
+    .compare-lens { position: relative; width: 76px; height: 76px; border: 8px solid var(--blue); border-radius: 50%; background: rgba(255,255,255,.72); box-shadow: 0 13px 28px rgba(37,99,235,.22); transform: rotate(-12deg) scale(.86); transition: transform .75s var(--ease); }
+    .compare-lens::after { content: ""; position: absolute; right: -30px; bottom: -17px; width: 38px; height: 10px; border-radius: 99px; background: var(--navy); transform: rotate(45deg); }
+    .comparison-grid.running .compare-lens { transform: rotate(12deg) scale(1.08); animation: lens-scan 2.2s .6s ease-in-out infinite; }
+    @keyframes lens-scan { 50% { transform: translateX(10px) rotate(-6deg) scale(1.08); } }
+    .compare-center span { color: var(--muted); font-size: 14px; font-weight: 800; text-align: center; }
+    .comparison-options { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-top: 17px; opacity: .45; transform: translateY(15px); pointer-events: none; transition: opacity .5s .65s ease, transform .65s .65s var(--ease); }
+    .comparison-grid.running + .comparison-options { opacity: 1; transform: none; pointer-events: auto; }
+    .choice-btn { min-height: 58px; padding: 10px 14px; border: 1px solid var(--line); border-radius: 15px; background: #fff; color: #506078; font-size: 16px; font-weight: 800; box-shadow: 0 7px 18px rgba(23,59,104,.07); }
+    .choice-btn:hover { transform: translateY(-3px); border-color: #9eb7d7; }
+    .choice-btn:disabled { opacity: .55; cursor: not-allowed; transform: none; }
+    .choice-btn.active { border-color: var(--blue); background: #edf5ff; color: var(--navy); box-shadow: 0 0 0 4px rgba(37,99,235,.11); }
+    .comparison-feedback { min-height: 44px; margin-top: 11px; color: var(--muted); font-size: 16px; font-weight: 680; text-align: center; }
+
+    /* Scene 8: lens lab */
+    .lens-lab { display: grid; grid-template-columns: 420px 1fr; gap: 28px; flex: 1; margin-top: 22px; }
+    .lens-selector {
+      --lens-y: 0px;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      padding: 18px;
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      background: rgba(246,249,253,.92);
+      box-shadow: var(--soft-shadow);
+      overflow: hidden;
+    }
+    .lens-selector::before {
+      content: "";
+      position: absolute;
+      left: 18px;
+      top: 18px;
+      width: calc(100% - 36px);
+      height: 106px;
+      border-radius: 17px;
+      background: #fff;
+      box-shadow: 0 10px 26px rgba(23,59,104,.12);
+      transform: translateY(var(--lens-y));
+      transition: transform .7s var(--ease);
+    }
+    .lens-button {
+      position: relative;
+      z-index: 2;
+      display: grid;
+      grid-template-columns: 68px 1fr 27px;
+      align-items: center;
+      gap: 14px;
+      min-height: 106px;
+      padding: 13px 17px;
+      border: 0;
+      border-radius: 17px;
+      background: transparent;
+      cursor: pointer;
+      text-align: left;
+    }
+    .lens-button-icon { display: grid; place-items: center; width: 61px; height: 61px; border-radius: 18px; background: var(--lens-bg); color: var(--lens-color); font-size: 25px; font-weight: 900; }
+    .lens-button strong { display: block; margin-bottom: 4px; color: var(--navy); font-size: 21px; }
+    .lens-button > span:not(.lens-button-icon) { color: #68768a; font-size: 15px; line-height: 1.25; font-weight: 650; }
+    .lens-visited { display: grid; place-items: center; width: 25px; height: 25px; border-radius: 50%; background: #e8eef5; color: #8b98a8; font-size: 14px; font-weight: 900; transition: background .3s ease, color .3s ease, transform .35s var(--ease); }
+    .lens-button.visited .lens-visited { background: var(--green); color: #fff; transform: scale(1.12); }
+    .lens-detail {
+      position: relative;
+      padding: 30px 34px;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      background: rgba(255,255,255,.95);
+      box-shadow: var(--shadow);
+    }
+    .moving-lens {
+      position: absolute;
+      right: 54px;
+      top: 46px;
+      width: 118px;
+      height: 118px;
+      border: 12px solid rgba(37,99,235,.18);
+      border-radius: 50%;
+      transition: transform .75s var(--ease), border-color .4s ease;
+    }
+    .moving-lens::after { content: ""; position: absolute; right: -45px; bottom: -23px; width: 57px; height: 14px; border-radius: 99px; background: rgba(23,59,104,.28); transform: rotate(45deg); }
+    .lens-detail[data-lens="1"] .moving-lens { transform: translate(-180px, 188px) rotate(22deg); border-color: rgba(14,165,198,.22); }
+    .lens-detail[data-lens="2"] .moving-lens { transform: translate(-410px, 28px) rotate(-18deg); border-color: rgba(249,115,22,.22); }
+    .detail-kicker { color: var(--blue); font-size: 16px; font-weight: 850; letter-spacing: .08em; text-transform: uppercase; }
+    .lens-detail h3 { margin: 11px 0 18px; font-size: 34px; }
+    .question-list { display: flex; flex-direction: column; gap: 12px; max-width: 760px; }
+    .question-row { display: grid; grid-template-columns: 38px 1fr; gap: 13px; align-items: start; padding: 13px 15px; border-radius: 14px; background: #f5f8fc; color: #4b5b70; font-size: 18px; line-height: 1.4; font-weight: 650; animation: question-in .55s var(--ease) both; }
+    .question-row:nth-child(2) { animation-delay: .08s; }
+    .question-row:nth-child(3) { animation-delay: .16s; }
+    @keyframes question-in { from { opacity: 0; transform: translateX(28px); } }
+    .qnum { display: grid; place-items: center; width: 32px; height: 32px; border-radius: 10px; background: #fff; color: var(--blue); font-size: 14px; font-weight: 900; box-shadow: 0 4px 12px rgba(23,59,104,.08); }
+    .lens-progress { position: absolute; left: 34px; right: 34px; bottom: 27px; display: flex; align-items: center; gap: 13px; }
+    .lens-progress-track { flex: 1; height: 9px; overflow: hidden; border-radius: 99px; background: #e8eef5; }
+    .lens-progress-fill { width: 0; height: 100%; border-radius: inherit; background: linear-gradient(90deg, var(--blue), var(--cyan), var(--green)); transition: width .7s var(--ease); }
+    .lens-progress-text { min-width: 148px; color: var(--muted); font-size: 15px; font-weight: 800; text-align: right; }
+    .lens-conclusion { position: absolute; left: 34px; right: 34px; bottom: 62px; padding: 13px 16px; border-radius: 14px; background: #edf9f4; color: #176b4b; font-size: 17px; line-height: 1.35; font-weight: 750; transform: translateY(18px); opacity: 0; transition: transform .7s var(--ease), opacity .5s ease; }
+    .lens-detail.complete .lens-conclusion { transform: none; opacity: 1; }
+
+    /* Scene 9: bridge */
+    .bridge-wrap { position: relative; height: 330px; margin-top: 23px; }
+    .bridge-bank {
+      position: absolute;
+      left: 0;
+      top: 28px;
+      width: 310px;
+      min-height: 208px;
+      padding: 25px;
+      border: 1px solid #f1caca;
+      border-radius: 24px;
+      background: linear-gradient(145deg, #fff8f8, #fff);
+      box-shadow: var(--soft-shadow);
+    }
+    .bridge-bank.target { left: auto; right: 0; border-color: #c7e8d7; background: linear-gradient(145deg, #f3fbf7, #fff); }
+    .bridge-bank .bank-label { color: var(--red); font-size: 15px; font-weight: 850; letter-spacing: .08em; text-transform: uppercase; }
+    .bridge-bank.target .bank-label { color: var(--green); }
+    .bridge-bank h3 { margin: 11px 0 9px; font-size: 27px; }
+    .bridge-bank p { color: #5b687b; font-size: 17px; line-height: 1.43; font-weight: 630; }
+    .bridge-gap { position: absolute; left: 334px; right: 334px; top: 0; bottom: 0; }
+    .bridge-line { position: absolute; left: 0; right: 0; top: 218px; height: 10px; border-radius: 99px; background: #d8e3ef; }
+    .bridge-plank {
+      position: absolute;
+      left: 50%;
+      top: 260px;
+      width: 205px;
+      min-height: 73px;
+      padding: 12px 13px;
+      border: 1px solid #cddcf0;
+      border-radius: 14px;
+      background: #fff;
+      color: #40516a;
+      font-size: 14px;
+      line-height: 1.28;
+      font-weight: 760;
+      text-align: center;
+      box-shadow: 0 10px 24px rgba(23,59,104,.11);
+      transform: translate(-50%, 0) rotate(var(--start-r));
+      opacity: .4;
+      transition: left .9s var(--delay) var(--ease), top .9s var(--delay) var(--ease), transform .9s var(--delay) var(--ease), opacity .5s var(--delay) ease, background .4s ease;
+    }
+    .bridge-plank:nth-of-type(2) { --start-r: -8deg; --delay: .05s; }
+    .bridge-plank:nth-of-type(3) { --start-r: 7deg; --delay: .16s; }
+    .bridge-plank:nth-of-type(4) { --start-r: -6deg; --delay: .27s; }
+    .bridge-plank:nth-of-type(5) { --start-r: 8deg; --delay: .38s; }
+    .bridge-wrap.built .bridge-plank { top: 174px; transform: translate(-50%, 0) rotate(0); opacity: 1; background: #f9fcff; }
+    .bridge-wrap.built .bridge-plank:nth-of-type(2) { left: 13%; }
+    .bridge-wrap.built .bridge-plank:nth-of-type(3) { left: 38%; }
+    .bridge-wrap.built .bridge-plank:nth-of-type(4) { left: 63%; }
+    .bridge-wrap.built .bridge-plank:nth-of-type(5) { left: 88%; }
+    .bridge-signal { position: absolute; left: 10%; top: 135px; width: 28px; height: 28px; border-radius: 50%; background: var(--blue); box-shadow: 0 0 0 8px rgba(37,99,235,.12); opacity: 0; }
+    .bridge-wrap.built .bridge-signal { opacity: 1; animation: cross-bridge 3.1s .65s ease-in-out infinite; }
+    @keyframes cross-bridge { 0%, 8% { left: 10%; } 50% { left: 50%; background: var(--cyan); } 92%, 100% { left: 88%; background: var(--green); } }
+    .bridge-principles { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-top: 7px; }
+    .principle-chip { padding: 12px 14px; border: 1px solid var(--line); border-radius: 14px; background: rgba(255,255,255,.92); color: #4c5c72; font-size: 15px; line-height: 1.3; font-weight: 700; text-align: center; transform: translateY(12px); opacity: .45; transition: transform .6s var(--ease), opacity .45s ease; }
+    .bridge-scene.ready .principle-chip { transform: none; opacity: 1; }
+    .bridge-scene.ready .principle-chip:nth-child(2) { transition-delay: .08s; }
+    .bridge-scene.ready .principle-chip:nth-child(3) { transition-delay: .16s; }
+    .bridge-scene.ready .principle-chip:nth-child(4) { transition-delay: .24s; }
+    .bridge-action { position: absolute; left: 50%; top: 286px; transform: translateX(-50%); z-index: 5; }
+
+    /* Scene 10: summary */
+    .summary-flow { display: grid; grid-template-columns: repeat(3, 1fr); gap: 17px; margin-top: 22px; }
+    .summary-card { position: relative; min-height: 133px; padding: 21px 22px 19px 79px; overflow: hidden; border: 1px solid var(--line); border-radius: 20px; background: #fff; box-shadow: var(--soft-shadow); }
+    .summary-num { position: absolute; left: 20px; top: 22px; display: grid; place-items: center; width: 43px; height: 43px; border-radius: 14px; background: var(--s-bg); color: var(--s-color); font-size: 18px; font-weight: 900; }
+    .summary-card strong { display: block; margin-bottom: 7px; color: var(--navy); font-size: 20px; }
+    .summary-card span { color: #58677c; font-size: 16px; line-height: 1.35; font-weight: 630; }
+    .exit-ticket { display: grid; grid-template-columns: 1.08fr .92fr; gap: 21px; margin-top: 20px; padding: 22px 24px; border: 1px solid var(--line); border-radius: 23px; background: linear-gradient(140deg, #f7faff, #fff); box-shadow: var(--soft-shadow); }
+    .ticket-question .ticket-label { display: inline-flex; margin-bottom: 10px; padding: 5px 10px; border-radius: 99px; background: #eaf2ff; color: var(--blue); font-size: 14px; font-weight: 850; letter-spacing: .07em; text-transform: uppercase; }
+    .ticket-question h3 { margin: 0 0 9px; font-size: 25px; line-height: 1.22; }
+    .ticket-question p { color: var(--muted); font-size: 16px; line-height: 1.4; font-weight: 650; }
+    .ticket-options { display: flex; flex-direction: column; gap: 8px; }
+    .ticket-option { display: grid; grid-template-columns: 32px 1fr; gap: 10px; align-items: center; min-height: 48px; padding: 8px 12px; border: 1px solid var(--line); border-radius: 13px; background: #fff; cursor: pointer; color: #4a5a70; font-size: 15px; line-height: 1.3; font-weight: 700; text-align: left; transition: transform .25s var(--ease), border-color .25s ease, background .25s ease; }
+    .ticket-option:hover { transform: translateX(-5px); border-color: #9eb6d4; }
+    .ticket-option.active { border-color: var(--blue); background: #edf5ff; }
+    .ticket-option.correct { border-color: var(--green); background: #effaf5; }
+    .option-letter { display: grid; place-items: center; width: 29px; height: 29px; border-radius: 9px; background: #eef3f8; color: var(--navy); font-size: 14px; font-weight: 900; }
+    .ticket-feedback { min-height: 34px; margin-top: 10px; color: var(--muted); font-size: 15px; line-height: 1.35; font-weight: 700; }
+
+    /* Scene 11: bibliography + closing */
+    .bibliography-scene { padding-top: 52px; }
+    .bibliography-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px 18px; margin-top: 18px; }
+    .reference-card { display: grid; grid-template-columns: 42px 1fr; gap: 13px; align-items: start; min-height: 87px; padding: 14px 15px; border: 1px solid var(--line); border-radius: 15px; background: rgba(255,255,255,.92); box-shadow: 0 6px 17px rgba(23,59,104,.06); }
+    .reference-index { display: grid; place-items: center; width: 38px; height: 38px; border-radius: 12px; background: #edf4ff; color: var(--blue); font-size: 14px; font-weight: 900; }
+    .reference-card p { color: #526176; font-size: 14.5px; line-height: 1.34; font-weight: 620; }
+    .reference-card a { color: var(--blue); font-weight: 800; text-decoration: none; }
+    .reference-card a:hover { text-decoration: underline; }
+    .closing-strip { display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 30px; margin-top: 17px; padding: 18px 22px; border-radius: 19px; background: linear-gradient(120deg, var(--navy), var(--blue)); color: #fff; box-shadow: 0 17px 36px rgba(37,99,235,.24); }
+    .closing-strip strong { display: block; margin-bottom: 4px; font-size: 22px; }
+    .closing-strip span { color: rgba(255,255,255,.82); font-size: 16px; font-weight: 620; }
+    .closing-strip .primary-btn { background: #fff; color: var(--navy); box-shadow: none; min-height: 48px; }
+
+    /* Motion helper */
+    .motion-ghost { position: absolute; z-index: 80; display: grid; place-items: center; min-width: 150px; max-width: 260px; min-height: 48px; padding: 10px 14px; border: 1px solid #bcd0e8; border-radius: 13px; background: #fff; color: var(--navy); font-size: 14px; font-weight: 800; text-align: center; box-shadow: 0 20px 45px rgba(23,59,104,.22); pointer-events: none; }
+
+    /* Bottom chrome */
+    .chrome {
+      position: absolute;
+      left: 24px;
+      right: 24px;
+      bottom: 18px;
+      z-index: 20;
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+      gap: 18px;
+      min-height: 56px;
+      padding: 7px 10px 7px 18px;
+      border: 1px solid rgba(199,211,225,.88);
+      border-radius: 18px;
+      background: rgba(255,255,255,.87);
+      box-shadow: 0 15px 38px rgba(23,59,104,.13);
+      backdrop-filter: blur(16px);
+    }
+    .chrome-title { overflow: hidden; color: var(--navy); font-size: 16px; font-weight: 800; white-space: nowrap; text-overflow: ellipsis; }
+    .progress-center { display: flex; align-items: center; gap: 12px; }
+    .slide-count { min-width: 68px; color: var(--navy); font-size: 16px; font-weight: 900; text-align: center; }
+    .progress-track { width: 220px; height: 7px; overflow: hidden; border-radius: 99px; background: #e6edf5; }
+    .progress-fill { width: 9%; height: 100%; border-radius: inherit; background: linear-gradient(90deg, var(--blue), var(--cyan)); transition: width .55s var(--ease); }
+    .chrome-actions { display: flex; justify-content: flex-end; gap: 7px; }
+    .icon-btn {
+      display: grid;
+      place-items: center;
+      width: 42px;
+      height: 42px;
+      padding: 0;
+      border: 1px solid #dbe5ef;
+      border-radius: 12px;
+      background: #fff;
+      color: var(--navy);
+      cursor: pointer;
+      transition: transform .2s var(--ease), background .2s ease, box-shadow .2s ease;
+    }
+    .icon-btn:hover { transform: translateY(-2px); background: #f5f9ff; box-shadow: 0 7px 17px rgba(23,59,104,.11); }
+    .icon-btn:disabled { opacity: .32; cursor: default; transform: none; box-shadow: none; }
+    .icon-btn svg { width: 21px; height: 21px; }
+    .keycap { font-size: 14px; font-weight: 900; }
+
+    /* Help */
+    .help-overlay {
+      position: absolute;
+      inset: 0;
+      z-index: 100;
+      display: grid;
+      place-items: center;
+      background: rgba(10,25,45,.42);
+      backdrop-filter: blur(10px);
+      visibility: hidden;
+      opacity: 0;
+      transition: opacity .25s ease, visibility .25s ease;
+    }
+    .help-overlay.open { visibility: visible; opacity: 1; }
+    .help-card { width: 720px; padding: 31px; border-radius: 26px; background: #fff; box-shadow: 0 35px 90px rgba(13,35,62,.30); }
+    .help-card h3 { margin-bottom: 8px; font-size: 31px; }
+    .help-card > p { color: var(--muted); font-size: 18px; line-height: 1.4; }
+    .shortcut-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px 14px; margin: 22px 0; }
+    .shortcut { display: grid; grid-template-columns: 75px 1fr; align-items: center; padding: 11px 13px; border-radius: 13px; background: #f4f7fb; color: #536278; font-size: 16px; font-weight: 680; }
+    .shortcut kbd { width: fit-content; padding: 5px 9px; border: 1px solid #cdd9e6; border-radius: 8px; background: #fff; color: var(--navy); font: 850 14px/1 Aptos, Inter, sans-serif; box-shadow: 0 3px 0 #dce5ef; }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: .001ms !important; animation-iteration-count: 1 !important; scroll-behavior: auto !important; transition-duration: .001ms !important; }
+    }
+  </style>
+</head>
+<body>
+  <div id="viewport">
+    <main id="stage" class="cover-mode" aria-label="Media pembelajaran Pengantar Islam dan Sains">
+      <canvas id="ambient" width="1600" height="900" aria-hidden="true"></canvas>
+
+      <!-- 01 — Sampul -->
+      <section class="scene cover active" data-title="Sampul" aria-hidden="false">
+        <div class="cover-grid">
+          <div class="cover-copy">
+            <div class="cover-meta" data-anim style="--d:80ms">
+              <span class="pill"><span class="pill-dot"></span>Pertemuan 01</span>
+              <span class="pill">Islam dan Sains</span>
+            </div>
+            <h1 data-anim style="--d:170ms">Pengantar <span>Islam dan Sains</span></h1>
+            <p class="cover-subtitle" data-anim style="--d:270ms">Haruskah Al-Qur’an membuktikan sains—dan haruskah sains membuktikan Al-Qur’an?</p>
+            <div class="cover-byline" data-anim style="--d:370ms">
+              <div class="avatar-mark">NM</div>
+              <div>
+                <p class="byline-name">Najib Mubarok, M.Sc.</p>
+                <p class="byline-campus">INISNU Temanggung</p>
+              </div>
+            </div>
+            <button class="primary-btn" id="startBtn" type="button" data-anim style="--d:470ms">
+              Mulai pembelajaran
+              <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            </button>
+          </div>
+
+          <div class="hero-visual" data-anim style="--d:220ms" aria-hidden="true">
+            <div class="hero-halo"></div>
+            <svg class="islam-science-hero" viewBox="0 0 660 660" role="img" aria-label="Ilustrasi buku terbuka, kosmos, penelitian, dan jembatan dialog">
+              <defs>
+                <linearGradient id="heroSignal" x1="0" x2="1"><stop stop-color="#2563eb"/><stop offset=".52" stop-color="#0ea5c6"/><stop offset="1" stop-color="#f97316"/></linearGradient>
+                <linearGradient id="bookBlue" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#173b68"/><stop offset="1" stop-color="#2563eb"/></linearGradient>
+                <filter id="heroGlow"><feGaussianBlur stdDeviation="7" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+              </defs>
+              <g class="hero-orbit"><ellipse class="orbit-dash" cx="330" cy="318" rx="265" ry="224"/><circle cx="90" cy="235" r="9" fill="#2563eb"/><circle cx="550" cy="170" r="8" fill="#f97316"/><circle cx="523" cy="472" r="10" fill="#16a36a"/></g>
+              <g class="hero-orbit reverse"><ellipse class="orbit-dash" cx="330" cy="318" rx="205" ry="276" transform="rotate(52 330 318)"/><circle cx="330" cy="43" r="8" fill="#0ea5c6"/><circle cx="478" cy="535" r="7" fill="#7657d6"/></g>
+              <path class="signal-path" d="M126 184 C188 205 208 252 247 290"/>
+              <path class="signal-path" d="M535 188 C477 215 454 259 416 295"/>
+              <path class="signal-path" d="M116 467 C192 441 211 394 257 369"/>
+              <path class="signal-path" d="M544 461 C477 432 455 394 407 369"/>
+
+              <g class="hero-node n1" transform="translate(67 110)">
+                <rect width="128" height="112" rx="27" fill="#fff" stroke="#cad8e9" stroke-width="2"/>
+                <circle cx="64" cy="53" r="29" fill="#edf5ff" stroke="#2563eb" stroke-width="3"/>
+                <ellipse cx="64" cy="53" rx="43" ry="14" fill="none" stroke="#2563eb" stroke-width="3" transform="rotate(28 64 53)"/>
+                <circle cx="93" cy="69" r="6" fill="#f97316"/>
+              </g>
+              <g class="hero-node n2" transform="translate(465 112)">
+                <rect width="128" height="112" rx="27" fill="#fff" stroke="#cad8e9" stroke-width="2"/>
+                <path d="M31 82h66M41 82l10-29h26l10 29M58 53V34h12v19" fill="none" stroke="#0ea5c6" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+                <circle cx="64" cy="28" r="7" fill="#f5b51b"/>
+              </g>
+              <g class="hero-node n3" transform="translate(55 410)">
+                <rect width="128" height="112" rx="27" fill="#fff" stroke="#cad8e9" stroke-width="2"/>
+                <path d="M28 72c18-36 42-36 72 0M32 84h64" fill="none" stroke="#16a36a" stroke-width="4" stroke-linecap="round"/>
+                <path d="M45 64l12-13 12 8 18-26" fill="none" stroke="#16a36a" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+              </g>
+              <g class="hero-node n4" transform="translate(477 405)">
+                <rect width="128" height="112" rx="27" fill="#fff" stroke="#cad8e9" stroke-width="2"/>
+                <circle cx="64" cy="54" r="30" fill="#fff6ed" stroke="#f97316" stroke-width="3"/>
+                <path d="M44 54h40M64 34v40M49 39c10 8 20 8 30 0M49 69c10-8 20-8 30 0" fill="none" stroke="#f97316" stroke-width="3" stroke-linecap="round"/>
+              </g>
+
+              <g filter="url(#heroGlow)">
+                <circle cx="330" cy="330" r="123" fill="#fff" stroke="#d2e0ef" stroke-width="3"/>
+                <path class="book-page-left" d="M323 285c-38-26-79-31-119-14v124c44-13 81-7 119 18z" fill="url(#bookBlue)"/>
+                <path class="book-page-right" d="M337 285c38-26 79-31 119-14v124c-44-13-81-7-119 18z" fill="#0ea5c6"/>
+                <path d="M330 291v121" stroke="#fff" stroke-width="5" stroke-linecap="round"/>
+                <path d="M230 310c28-8 52-5 75 8M230 335c28-8 52-5 75 8M355 318c23-13 47-16 75-8M355 343c23-13 47-16 75-8" fill="none" stroke="rgba(255,255,255,.75)" stroke-width="5" stroke-linecap="round"/>
+                <circle cx="330" cy="241" r="12" fill="#f5b51b"/>
+                <path d="M330 217v-18M305 225l-13-13M355 225l13-13" stroke="#f5b51b" stroke-width="5" stroke-linecap="round"/>
+              </g>
+              <text x="330" y="590" text-anchor="middle" fill="#173b68" font-size="21" font-weight="850">WAHYU • NALAR • ALAM</text>
+            </svg>
+          </div>
+        </div>
+      </section>
+
+      <!-- 02 — Kasus populer -->
+      <section class="scene" data-title="Galeri klaim populer" aria-hidden="true">
+        <span class="scene-number">01</span>
+        <div class="eyebrow" data-anim>Kasus · Putaran pertama</div>
+        <h2 data-anim style="--d:110ms">Empat klaim yang sering terdengar</h2>
+        <p class="lead" data-anim style="--d:170ms">Pilih respons awal Anda. Belum perlu mencari jawaban benar—perhatikan alasan di balik pilihan.</p>
+
+        <div class="claim-grid">
+          <article class="claim-card" data-anim style="--d:230ms;--claim-color:#2563eb;--claim-bg:#edf4ff">
+            <div class="claim-icon"><svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3"><circle cx="32" cy="32" r="7" fill="currentColor" stroke="none"/><path d="M8 32h48M32 8v48M14 17l36 30M50 17L14 47"/></svg></div>
+            <h3>Asal-usul kosmos</h3>
+            <p>“QS Al-Anbiyā’ [21]:30 adalah teori Big Bang.”</p>
+            <div class="verdict-track" data-state="1" style="--slide-x:100%">
+              <span class="verdict-slider"></span>
+              <button type="button" data-value="0">Setuju</button>
+              <button type="button" class="active" data-value="1">Ragu</button>
+              <button type="button" data-value="2">Tidak</button>
+            </div>
+          </article>
+          <article class="claim-card" data-anim style="--d:300ms;--claim-color:#0ea5c6;--claim-bg:#eaf9fc">
+            <div class="claim-icon"><svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3"><path d="M18 12c19 0 30 12 28 29-2 13-12 18-23 13-13-6-17-25-5-42z"/><path d="M24 23c10 2 15 9 13 19M21 36c6-4 12-3 17 2"/></svg></div>
+            <h3>Embriologi</h3>
+            <p>“Tahapan embrio modern sudah dijelaskan lengkap di dalam Al-Qur’an.”</p>
+            <div class="verdict-track" data-state="1" style="--slide-x:100%">
+              <span class="verdict-slider"></span>
+              <button type="button" data-value="0">Setuju</button>
+              <button type="button" class="active" data-value="1">Ragu</button>
+              <button type="button" data-value="2">Tidak</button>
+            </div>
+          </article>
+          <article class="claim-card" data-anim style="--d:370ms;--claim-color:#16a36a;--claim-bg:#ecf9f3">
+            <div class="claim-icon"><svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3"><path d="M7 51l17-28 9 13 9-20 15 35z"/><path d="M7 51h50M17 55c8-4 22-4 30 0"/></svg></div>
+            <h3>Gunung dan gempa</h3>
+            <p>“Gunung diciptakan untuk mencegah terjadinya gempa bumi.”</p>
+            <div class="verdict-track" data-state="1" style="--slide-x:100%">
+              <span class="verdict-slider"></span>
+              <button type="button" data-value="0">Setuju</button>
+              <button type="button" class="active" data-value="1">Ragu</button>
+              <button type="button" data-value="2">Tidak</button>
+            </div>
+          </article>
+          <article class="claim-card" data-anim style="--d:440ms;--claim-color:#f97316;--claim-bg:#fff3e9">
+            <div class="claim-icon"><svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3"><path d="M13 10h28l10 10v34H13z"/><path d="M41 10v11h10M22 31h20M22 40h20M22 49h12"/><circle cx="47" cy="47" r="9" fill="#fff"/><path d="M47 42v10M42 47h10"/></svg></div>
+            <h3>Semua sudah tersedia</h3>
+            <p>“Semua penemuan sains sebenarnya telah ada dalam Al-Qur’an dan hadis.”</p>
+            <div class="verdict-track" data-state="1" style="--slide-x:100%">
+              <span class="verdict-slider"></span>
+              <button type="button" data-value="0">Setuju</button>
+              <button type="button" class="active" data-value="1">Ragu</button>
+              <button type="button" data-value="2">Tidak</button>
+            </div>
+          </article>
+        </div>
+        <p class="case-status" id="caseStatus" data-anim style="--d:510ms">Empat respons awal masih berada pada posisi “ragu”.</p>
+      </section>
+
+      <!-- 03 — Klasifikasi -->
+      <section class="scene" data-title="Pisahkan empat lapisan klaim" aria-hidden="true">
+        <span class="scene-number">02</span>
+        <div class="eyebrow" data-anim>Analisis · Jangan campurkan lapisan</div>
+        <h2 data-anim style="--d:105ms">Apa yang sebenarnya sedang kita hubungkan?</h2>
+        <p class="lead" data-anim style="--d:165ms">Klik satu kartu lalu klik kotak tujuan—atau seret langsung. Kartu dan susunannya akan benar-benar berpindah.</p>
+
+        <div class="classification-wrap" data-anim style="--d:230ms">
+          <div class="sort-bank" id="sortBank" aria-label="Bank kartu klasifikasi">
+            <div class="sort-card" draggable="true" tabindex="0" data-card="text" data-answer="text">“Langit dan bumi dahulu padu, kemudian dipisahkan.”</div>
+            <div class="sort-card" draggable="true" tabindex="0" data-card="interpretation" data-answer="interpretation">“Ayat tersebut secara pasti menjelaskan teori Big Bang.”</div>
+            <div class="sort-card" draggable="true" tabindex="0" data-card="science" data-answer="science">“Alam semesta awal sangat panas dan rapat, kemudian mengembang.”</div>
+            <div class="sort-card" draggable="true" tabindex="0" data-card="popular" data-answer="popular">“Karena tampak serupa, semua teori modern pasti ada dalam Al-Qur’an.”</div>
+          </div>
+
+          <div class="drop-grid">
+            <div class="drop-zone" tabindex="0" data-zone="text" style="--zone-color:#2563eb">
+              <div class="zone-head"><span class="zone-title">Teks wahyu</span><span class="zone-count">0</span></div>
+              <div class="drop-slot"></div>
+            </div>
+            <div class="drop-zone" tabindex="0" data-zone="interpretation" style="--zone-color:#7657d6">
+              <div class="zone-head"><span class="zone-title">Penafsiran</span><span class="zone-count">0</span></div>
+              <div class="drop-slot"></div>
+            </div>
+            <div class="drop-zone" tabindex="0" data-zone="science" style="--zone-color:#0ea5c6">
+              <div class="zone-head"><span class="zone-title">Model ilmiah</span><span class="zone-count">0</span></div>
+              <div class="drop-slot"></div>
+            </div>
+            <div class="drop-zone" tabindex="0" data-zone="popular" style="--zone-color:#f97316">
+              <div class="zone-head"><span class="zone-title">Simpulan populer</span><span class="zone-count">0</span></div>
+              <div class="drop-slot"></div>
+            </div>
+          </div>
+          <div class="classifier-toolbar">
+            <button class="small-btn" id="checkClassifier" type="button">Periksa susunan</button>
+            <button class="small-btn" id="resetClassifier" type="button">Atur ulang</button>
+            <div class="classifier-status" id="classifierStatus"><strong>0 dari 4</strong> kartu telah ditempatkan.</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 04 — Definisi -->
+      <section class="scene" data-title="Wahyu, tafsir, dan sains" aria-hidden="true">
+        <span class="scene-number">03</span>
+        <div class="eyebrow" data-anim>Abstraksi I · Definisi kerja</div>
+        <h2 data-anim style="--d:105ms">Tiga lapisan yang perlu dibedakan</h2>
+        <p class="lead" data-anim style="--d:165ms">Perdebatan menjadi kabur ketika wahyu, penafsiran manusia, dan model ilmiah ditumpuk sebagai hal yang sama.</p>
+
+        <div class="concept-workspace" data-anim style="--d:220ms">
+          <div class="concept-grid" id="conceptGrid">
+            <article class="concept-card" style="--concept-color:#2563eb;--concept-bg:#edf4ff">
+              <div class="concept-icon">W</div>
+              <h3>Wahyu</h3>
+              <p>Al-Qur’an dan Sunnah sebagai sumber dasar keimanan, petunjuk, serta orientasi normatif dalam Islam.</p>
+              <div class="concept-label">Sumber dan petunjuk</div>
+            </article>
+            <article class="concept-card" style="--concept-color:#7657d6;--concept-bg:#f2efff">
+              <div class="concept-icon">T</div>
+              <h3>Tafsir</h3>
+              <p>Upaya manusia memahami teks melalui bahasa, konteks, tradisi keilmuan, dan metode penafsiran.</p>
+              <div class="concept-label">Pemahaman manusia</div>
+            </article>
+            <article class="concept-card" style="--concept-color:#0ea5c6;--concept-bg:#eaf9fc">
+              <div class="concept-icon">S</div>
+              <h3>Sains</h3>
+              <p>Penyelidikan empiris yang sistematis; penjelasan dan modelnya diuji serta terbuka terhadap revisi.</p>
+              <div class="concept-label">Data dan mekanisme</div>
+            </article>
+          </div>
+          <div class="concept-action">
+            <button class="primary-btn" id="separateConcepts" type="button">Pisahkan ketiga lapisan</button>
+            <span class="concept-hint" id="conceptHint">Mulai dari tumpukan yang sering tercampur.</span>
+          </div>
+        </div>
+        <p class="bodynote">Kerangka: Guessoum (2008); Mir (2004). Definisi digunakan sebagai batas kerja dalam pertemuan ini.</p>
+      </section>
+
+      <!-- 05 — Posisi dan ruang dialog -->
+      <section class="scene" data-title="Posisi dan ruang dialog" aria-hidden="true">
+        <span class="scene-number">04</span>
+        <div class="eyebrow" data-anim>Abstraksi I · Posisi, ruang lingkup, urgensi</div>
+        <h2 data-anim style="--d:105ms">Berbeda wilayah kerja, memiliki ruang perjumpaan</h2>
+        <p class="lead" data-anim style="--d:165ms">Hubungan yang sehat mengakui perbedaan metode sekaligus membuka percakapan pada persoalan yang saling bersinggungan.</p>
+
+        <div class="relation-layout" id="relationLayout" data-anim style="--d:220ms">
+          <div>
+            <div class="relation-stage" id="relationStage">
+              <div class="relation-circle islam">
+                <h3>Islam</h3>
+                <p>Makna, tujuan, pandangan tentang manusia dan alam, nilai, serta tanggung jawab etis.</p>
+              </div>
+              <div class="relation-circle science">
+                <h3>Sains</h3>
+                <p>Observasi, pengukuran, data, model, pengujian, prediksi, dan penjelasan mekanisme alam.</p>
+              </div>
+              <div class="dialogue-core">RUANG<br>DIALOG</div>
+              <div class="relation-caption">Alam • manusia • teknologi • konsekuensi dan tanggung jawab</div>
+            </div>
+            <div class="relation-action">
+              <button class="primary-btn" id="connectDialogue" type="button">Temukan ruang dialog</button>
+              <span class="concept-hint" id="relationHint">Dua lingkaran masih dipisahkan.</span>
+            </div>
+          </div>
+          <div class="urgency-stack">
+            <article class="urgency-card" style="--u-color:#2563eb;--u-bg:#edf4ff">
+              <div class="urgency-icon">≠</div><div><strong>Mencegah konflik semu</strong><span>Sering kali yang berhadapan adalah tafsir manusia dan klaim ilmiah—bukan wahyu dan fakta.</span></div>
+            </article>
+            <article class="urgency-card" style="--u-color:#f97316;--u-bg:#fff3e9">
+              <div class="urgency-icon">!</div><div><strong>Menghindari pseudosains</strong><span>Kemiripan bahasa tidak otomatis membuktikan identitas ilmiah.</span></div>
+            </article>
+            <article class="urgency-card" style="--u-color:#16a36a;--u-bg:#ecf9f3">
+              <div class="urgency-icon">✓</div><div><strong>Mengarahkan penggunaan ilmu</strong><span>Etika dan tujuan membantu menilai dampak sains serta teknologi bagi kehidupan.</span></div>
+            </article>
+          </div>
+        </div>
+        <p class="bodynote">Abdullah (2014) menawarkan relasi integrasi–interkoneksi; Bakar (2003) menempatkan dimensi epistemologis dan etis sains dalam dialog dengan pandangan dunia Islam.</p>
+      </section>
+
+      <!-- 06 — Dilema -->
+      <section class="scene" data-title="Dua posisi ekstrem" aria-hidden="true">
+        <span class="scene-number">05</span>
+        <div class="eyebrow" data-anim>Kasus · Putaran kedua</div>
+        <h2 data-anim style="--d:105ms">Dua jalan pintas yang sama-sama bermasalah</h2>
+        <p class="lead" data-anim style="--d:165ms">Letakkan posisi awal Anda pada spektrum. Apakah salah satu bidang harus menjadi hakim tunggal bagi bidang lainnya?</p>
+
+        <div class="extreme-grid">
+          <article class="extreme-card" data-anim style="--d:230ms;--edge-color:#e64b4b">
+            <div class="extreme-mark">A</div>
+            <h3>Sains sebagai hakim tunggal</h3>
+            <p>“Semua ayat harus ditafsirkan melalui sains; yang tidak dapat diuji secara empiris tidak layak dipercaya.”</p>
+          </article>
+          <article class="extreme-card" data-anim style="--d:300ms;--edge-color:#f97316">
+            <div class="extreme-mark">B</div>
+            <h3>Kitab suci sebagai ensiklopedia</h3>
+            <p>“Seluruh temuan sains harus sudah ditemukan jawabannya secara rinci di dalam Al-Qur’an dan hadis.”</p>
+          </article>
+        </div>
+
+        <div class="spectrum-box" id="spectrumBox" data-anim style="--d:370ms">
+          <div class="spectrum-labels"><span>Sains menentukan seluruh kebenaran</span><span>Dialog kritis dengan batas metode</span><span>Teks memuat seluruh detail sains</span></div>
+          <div class="spectrum-track"><div class="spectrum-marker"></div></div>
+          <div class="spectrum-points">
+            <button type="button" data-point="0">Ekstrem A</button>
+            <button type="button" data-point="1">Condong A</button>
+            <button type="button" class="active" data-point="2">Tengah</button>
+            <button type="button" data-point="3">Condong B</button>
+            <button type="button" data-point="4">Ekstrem B</button>
+          </div>
+          <div class="spectrum-feedback" id="spectrumFeedback">Posisi tengah bukan kompromi tanpa prinsip: ia menuntut dialog, pengujian bukti, dan kejelasan batas masing-masing metode.</div>
+        </div>
+      </section>
+
+      <!-- 07 — Kasus Big Bang -->
+      <section class="scene" data-title="Uji kasus QS 21:30 dan Big Bang" aria-hidden="true">
+        <span class="scene-number">06</span>
+        <div class="eyebrow" data-anim>Kasus terfokus · Jangan langsung menyamakan</div>
+        <h2 data-anim style="--d:105ms">QS Al-Anbiyā’ [21]:30 dan model Big Bang</h2>
+        <p class="lead" data-anim style="--d:165ms">Bandingkan dua sumber informasi. Apakah kemiripan memungkinkan dialog—atau sudah cukup membuktikan bahwa maknanya identik?</p>
+
+        <div class="comparison-grid" id="comparisonGrid" data-anim style="--d:225ms">
+          <article class="evidence-panel">
+            <span class="evidence-tag" style="--tag-bg:#edf4ff;--tag-color:#2563eb">Teks</span>
+            <h3>Makna umum ayat</h3>
+            <p>Langit dan bumi disebut dahulu sebagai sesuatu yang padu, kemudian Allah memisahkan keduanya. Ayat juga mengarahkan perhatian pada kehidupan yang berasal dari air.</p>
+            <div class="verse-lines" aria-hidden="true"><div class="verse-line"></div><div class="verse-line"></div><div class="verse-line"></div></div>
+            <p style="margin-top:14px;color:#78869a;font-size:15px">Parafrasa ringkas; penafsiran lengkap memerlukan bahasa, konteks, dan tradisi tafsir.</p>
+          </article>
+
+          <div class="compare-center">
+            <div class="compare-lens" aria-hidden="true"></div>
+            <span>bandingkan<br>bukan samakan</span>
+            <button class="small-btn" id="runComparison" type="button">Mulai</button>
+          </div>
+
+          <article class="evidence-panel">
+            <span class="evidence-tag" style="--tag-bg:#eaf9fc;--tag-color:#0ea5c6">Model sains</span>
+            <h3>Kosmologi modern</h3>
+            <p>Model kosmologi menggambarkan alam semesta awal yang sangat panas dan rapat, lalu berevolusi melalui ekspansi serta pendinginan.</p>
+            <div class="cosmos-mini" aria-hidden="true">
+              <div class="cosmos-core"></div>
+              <i class="cosmos-dot" style="--dx:-210px;--dy:-28px;--delay:.05s;--dot-color:#79c6ff"></i>
+              <i class="cosmos-dot" style="--dx:185px;--dy:-31px;--delay:.12s;--dot-color:#ffd678"></i>
+              <i class="cosmos-dot" style="--dx:-145px;--dy:34px;--delay:.20s;--dot-color:#8ae0bd"></i>
+              <i class="cosmos-dot" style="--dx:125px;--dy:38px;--delay:.28s;--dot-color:#d0a8ff"></i>
+              <i class="cosmos-dot" style="--dx:-65px;--dy:-39px;--delay:.36s;--dot-color:#fff"></i>
+              <i class="cosmos-dot" style="--dx:64px;--dy:18px;--delay:.44s;--dot-color:#ff9277"></i>
+            </div>
+            <p style="margin-top:11px;color:#78869a;font-size:15px">Model ilmiah menjelaskan mekanisme fisik dan tetap terbuka terhadap pengembangan.</p>
+          </article>
+        </div>
+
+        <div class="comparison-options" id="comparisonOptions">
+          <button class="choice-btn" type="button" data-comparison="identical" disabled>Maknanya identik</button>
+          <button class="choice-btn" type="button" data-comparison="compatible" disabled>Mungkin kompatibel</button>
+          <button class="choice-btn" type="button" data-comparison="conflict" disabled>Pasti bertentangan</button>
+          <button class="choice-btn" type="button" data-comparison="insufficient" disabled>Belum cukup disimpulkan</button>
+        </div>
+        <div class="comparison-feedback" id="comparisonFeedback">Jalankan perbandingan, lalu pilih simpulan sementara.</div>
+        <p class="bodynote">Rujukan kosmologi: NASA Science, “Overview: The Universe’s History”. Perdebatan tafsir ilmiah: Guessoum (2008); Mir (2004).</p>
+      </section>
+
+      <!-- 08 — Lab tiga lensa -->
+      <section class="scene" data-title="Laboratorium tiga lensa" aria-hidden="true">
+        <span class="scene-number">07</span>
+        <div class="eyebrow" data-anim>Analisis · Uji sebelum menyimpulkan</div>
+        <h2 data-anim style="--d:105ms">Periksa klaim melalui tiga lensa</h2>
+        <p class="lead" data-anim style="--d:165ms">Buka seluruh lensa. Setiap lensa menguji jenis pertanyaan yang berbeda.</p>
+
+        <div class="lens-lab" data-anim style="--d:225ms">
+          <div class="lens-selector" id="lensSelector">
+            <button class="lens-button active" type="button" data-lens="0" style="--lens-color:#2563eb;--lens-bg:#edf4ff">
+              <span class="lens-button-icon">T</span><span><strong>Lensa teks</strong>Bahasa, konteks, tujuan, tradisi tafsir</span><i class="lens-visited">✓</i>
+            </button>
+            <button class="lens-button" type="button" data-lens="1" style="--lens-color:#0ea5c6;--lens-bg:#eaf9fc">
+              <span class="lens-button-icon">S</span><span><strong>Lensa sains</strong>Data, model, konsensus, ketidakpastian</span><i class="lens-visited">✓</i>
+            </button>
+            <button class="lens-button" type="button" data-lens="2" style="--lens-color:#f97316;--lens-bg:#fff3e9">
+              <span class="lens-button-icon">L</span><span><strong>Lensa logika</strong>Kekuatan bukti dan lompatan simpulan</span><i class="lens-visited">✓</i>
+            </button>
+          </div>
+
+          <div class="lens-detail" id="lensDetail" data-lens="0">
+            <div class="moving-lens" aria-hidden="true"></div>
+            <div class="detail-kicker" id="detailKicker">Lensa 1 dari 3</div>
+            <h3 id="detailTitle">Apa yang benar-benar dinyatakan teks?</h3>
+            <div class="question-list" id="questionList">
+              <div class="question-row"><span class="qnum">01</span><span>Bagaimana makna kata dan susunan kalimat dalam bahasa aslinya?</span></div>
+              <div class="question-row"><span class="qnum">02</span><span>Apa konteks, tujuan, dan tema ayat secara keseluruhan?</span></div>
+              <div class="question-row"><span class="qnum">03</span><span>Bagaimana tradisi tafsir memahami ayat; jika hadis digunakan, bagaimana validitas dan konteksnya?</span></div>
+            </div>
+            <div class="lens-conclusion">Kemiripan dapat menjadi bahan dialog, tetapi identitas makna memerlukan bukti tekstual, ilmiah, dan logis yang lebih kuat.</div>
+            <div class="lens-progress"><div class="lens-progress-track"><div class="lens-progress-fill" id="lensProgressFill"></div></div><span class="lens-progress-text" id="lensProgressText">1 dari 3 lensa</span></div>
+          </div>
+        </div>
+        <p class="bodynote">Mir (2004) menilai tafsir ilmiah perlu berakar autentik pada tradisi Islam; Rehman (2003) memperingatkan risiko saintisme dalam perburuan “fakta ilmiah” di dalam teks.</p>
+      </section>
+
+      <!-- 09 — Abstraksi II -->
+      <section class="scene bridge-scene" id="bridgeScene" data-title="Jembatan dialog bagi generasi kini" aria-hidden="true">
+        <span class="scene-number">08</span>
+        <div class="eyebrow" data-anim>Abstraksi II · Mengapa dialog ini mendesak?</div>
+        <h2 data-anim style="--d:105ms">Membangun jembatan: kritis, rasional, tetap spiritual</h2>
+        <p class="lead" data-anim style="--d:165ms">Generasi yang dekat dengan teknologi membutuhkan alasan yang dapat ditelaah—bukan jawaban yang menutup pertanyaan.</p>
+
+        <div class="bridge-wrap" id="bridgeWrap" data-anim style="--d:225ms">
+          <article class="bridge-bank">
+            <span class="bank-label">Persepsi awal</span>
+            <h3>Agama = dogma atau mitos?</h3>
+            <p>Persepsi dapat muncul ketika ajaran, tafsir, tradisi lokal, dan cerita turun-temurun tidak dibedakan.</p>
+          </article>
+
+          <div class="bridge-gap">
+            <div class="bridge-line"></div>
+            <div class="bridge-plank">Bedakan wahyu, tafsir, dan tradisi</div>
+            <div class="bridge-plank">Bedakan gaib, mitos, dan klaim empiris</div>
+            <div class="bridge-plank">Uji klaim faktual dengan bukti</div>
+            <div class="bridge-plank">Jaga batas setiap metode</div>
+            <div class="bridge-signal"></div>
+          </div>
+
+          <article class="bridge-bank target">
+            <span class="bank-label">Pemahaman matang</span>
+            <h3>Iman yang mau berpikir</h3>
+            <p>Rasional dan kontekstual, tetapi tidak mereduksi makna, moral, serta realitas metafisik menjadi data semata.</p>
+          </article>
+          <div class="bridge-action"><button class="primary-btn" id="buildBridge" type="button">Bangun jembatan dialog</button></div>
+        </div>
+
+        <div class="bridge-principles" data-anim style="--d:330ms">
+          <div class="principle-chip">Sains menguji aspek empiris—bukan seluruh makna agama.</div>
+          <div class="principle-chip">Tidak teruji secara empiris tidak otomatis berarti salah.</div>
+          <div class="principle-chip">Tidak setiap teori harus dicari di dalam kitab suci.</div>
+          <div class="principle-chip">Teori sementara bukan satu-satunya makna sebuah ayat.</div>
+        </div>
+        <p class="bodynote">Sintesis pedagogis berdasarkan Abdullah (2014), Bakar (2003), Guessoum (2015), Mir (2004), dan Rehman (2003).</p>
+      </section>
+
+      <!-- 10 — Ringkasan dan refleksi -->
+      <section class="scene" data-title="Rangkuman dan refleksi" aria-hidden="true">
+        <span class="scene-number">09</span>
+        <div class="eyebrow" data-anim>Refleksi akhir · Tiga pegangan</div>
+        <h2 data-anim style="--d:105ms">Dialog tanpa pemaksaan</h2>
+        <p class="lead" data-anim style="--d:165ms">Sebelum menerima atau menolak sebuah klaim, pastikan kita mengetahui lapisan yang sedang dinilai.</p>
+
+        <div class="summary-flow">
+          <article class="summary-card" data-anim style="--d:230ms;--s-color:#2563eb;--s-bg:#edf4ff"><span class="summary-num">1</span><strong>Bedakan wahyu dari tafsir</strong><span>Teks suci dan pemahaman manusia terhadap teks tidak identik.</span></article>
+          <article class="summary-card" data-anim style="--d:300ms;--s-color:#0ea5c6;--s-bg:#eaf9fc"><span class="summary-num">2</span><strong>Bedakan data dari klaim</strong><span>Data, model, teori, dan simpulan populer memiliki tingkat kepastian berbeda.</span></article>
+          <article class="summary-card" data-anim style="--d:370ms;--s-color:#16a36a;--s-bg:#ecf9f3"><span class="summary-num">3</span><strong>Bangun dialog kritis</strong><span>Islam memberi orientasi makna dan etika; sains menjelaskan mekanisme empiris.</span></article>
+        </div>
+
+        <div class="exit-ticket" data-anim style="--d:440ms">
+          <div class="ticket-question">
+            <span class="ticket-label">Exit ticket · 60 detik</span>
+            <h3>“Karena AI tidak disebut secara eksplisit dalam Al-Qur’an, Islam tidak memiliki panduan tentang AI.”</h3>
+            <p>Pilih respons yang paling bertanggung jawab menurut kerangka pertemuan ini.</p>
+          </div>
+          <div>
+            <div class="ticket-options">
+              <button class="ticket-option" type="button" data-ticket="a"><span class="option-letter">A</span><span>Cari ayat yang sebenarnya menyebut AI secara tersembunyi.</span></button>
+              <button class="ticket-option" type="button" data-ticket="b"><span class="option-letter">B</span><span>Tolak AI karena tidak disebutkan secara eksplisit.</span></button>
+              <button class="ticket-option" type="button" data-ticket="c"><span class="option-letter">C</span><span>Kaji cara kerja AI, lalu gunakan nilai Islam untuk menilai tujuan dan dampaknya.</span></button>
+            </div>
+            <div class="ticket-feedback" id="ticketFeedback">Pilih satu respons untuk membuka umpan balik.</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 11 — Bibliografi dan penutup -->
+      <section class="scene bibliography-scene" data-title="Bibliografi dan penutup" aria-hidden="true">
+        <span class="scene-number">10</span>
+        <div class="eyebrow" data-anim>Bibliografi · Dasar penarikan benang merah</div>
+        <h2 data-anim style="--d:105ms">Bacaan utama</h2>
+        <p class="lead" data-anim style="--d:165ms">Relasi Islam dan sains adalah medan perdebatan akademik; simpulan materi ini disusun dari percakapan antarpandangan.</p>
+
+        <div class="bibliography-grid">
+          <article class="reference-card" data-anim style="--d:220ms"><span class="reference-index">01</span><p>Abdullah, M. A. (2014). <a href="https://doi.org/10.14421/ajis.2014.521.175-203" target="_blank" rel="noopener">Religion, Science, and Culture</a>. <em>Al-Jāmi‘ah, 52</em>(1), 175–203.</p></article>
+          <article class="reference-card" data-anim style="--d:260ms"><span class="reference-index">02</span><p>Bakar, O. (2003). <a href="https://jis.cis-ca.org/reformulating-a-comprehensive-relationship-between-religion-and-science-an-islamic-perspective.html" target="_blank" rel="noopener">Reformulating a Comprehensive Relationship Between Religion and Science</a>. <em>Islam &amp; Science, 1</em>(1).</p></article>
+          <article class="reference-card" data-anim style="--d:300ms"><span class="reference-index">03</span><p>Guessoum, N. (2008). <a href="https://doi.org/10.1111/j.1467-9744.2008.00925.x" target="_blank" rel="noopener">The Qur’an, Science, and the Contemporary Muslim Discourse</a>. <em>Zygon, 43</em>(2), 411–431.</p></article>
+          <article class="reference-card" data-anim style="--d:340ms"><span class="reference-index">04</span><p>Guessoum, N. (2015). <a href="https://doi.org/10.1111/zygo.12213" target="_blank" rel="noopener">Islam and Science: The Next Phase of Debates</a>. <em>Zygon, 50</em>(4), 854–876.</p></article>
+          <article class="reference-card" data-anim style="--d:380ms"><span class="reference-index">05</span><p>Guessoum, N., &amp; Bigliardi, S. (2023). <a href="https://doi.org/10.1017/9781009266550" target="_blank" rel="noopener"><em>Islam and Science: Past, Present, and Future Debates</em></a>. Cambridge University Press.</p></article>
+          <article class="reference-card" data-anim style="--d:420ms"><span class="reference-index">06</span><p>Mir, M. (2004). <a href="https://jis.cis-ca.org/scientific-exegesis-of-the-quran-a-viable-project.html" target="_blank" rel="noopener">Scientific Exegesis of the Qur’an—A Viable Project?</a> <em>Islam &amp; Science, 2</em>(1), 33–42.</p></article>
+          <article class="reference-card" data-anim style="--d:460ms"><span class="reference-index">07</span><p>Rehman, J. (2003). <a href="https://jis.cis-ca.org/searching-for-scientific-facts-in-the-quran-islamization-of-knowledge-or-a-new-form-of-scientism.html" target="_blank" rel="noopener">Searching for “Scientific Facts” in the Qur’an</a>. <em>Islam &amp; Science, 1</em>(2).</p></article>
+          <article class="reference-card" data-anim style="--d:500ms"><span class="reference-index">08</span><p>NASA Science. <a href="https://science.nasa.gov/universe/overview/" target="_blank" rel="noopener">Overview: The Universe’s History</a>. Rujukan ringkas untuk model kosmologi modern.</p></article>
+        </div>
+
+        <div class="closing-strip" data-anim style="--d:560ms">
+          <div><strong>Terima kasih</strong><span>Beriman tanpa takut berpikir; meneliti tanpa kehilangan tanggung jawab.</span></div>
+          <button class="primary-btn" id="replayBtn" type="button">Ulang dari awal</button>
+        </div>
+      </section>
+
+      <!-- Kontrol -->
+      <nav class="chrome" aria-label="Kontrol presentasi">
+        <div class="chrome-title" id="chromeTitle">Pengantar Islam dan Sains · Sampul</div>
+        <div class="progress-center"><span class="slide-count" id="slideCount">01 / 11</span><div class="progress-track"><div class="progress-fill" id="progressFill"></div></div></div>
+        <div class="chrome-actions">
+          <button class="icon-btn" id="prevBtn" type="button" aria-label="Scene sebelumnya" disabled><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M15 18l-6-6 6-6"/></svg></button>
+          <button class="icon-btn" id="playBtn" type="button" aria-label="Jeda animasi"><svg class="pause-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M7 5h4v14H7zM13 5h4v14h-4z"/></svg><svg class="play-icon" style="display:none" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></button>
+          <button class="icon-btn" id="nextBtn" type="button" aria-label="Scene berikutnya"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M9 18l6-6-6-6"/></svg></button>
+          <button class="icon-btn" id="resetBtn" type="button" aria-label="Ulang dari awal"><span class="keycap">R</span></button>
+          <button class="icon-btn" id="fullscreenBtn" type="button" aria-label="Layar penuh"><span class="keycap">F</span></button>
+          <button class="icon-btn" id="soundBtn" type="button" aria-label="Matikan suara"><svg class="sound-on-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 9v6h4l5 4V5L9 9zM17 9c1.2 1.2 1.2 4.8 0 6M19.5 6.5c3 3 3 8 0 11"/></svg><svg class="sound-off-icon" style="display:none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 9v6h4l5 4V5L9 9zM17 9l5 6M22 9l-5 6"/></svg></button>
+          <button class="icon-btn" id="helpBtn" type="button" aria-label="Buka petunjuk"><span class="keycap">?</span></button>
+        </div>
+      </nav>
+
+      <div class="help-overlay" id="helpOverlay" role="dialog" aria-modal="true" aria-labelledby="helpTitle">
+        <div class="help-card">
+          <h3 id="helpTitle">Kontrol media</h3>
+          <p>Gunakan tombol layar atau pintasan keyboard berikut.</p>
+          <div class="shortcut-grid">
+            <div class="shortcut"><kbd>← / →</kbd><span>Scene sebelumnya / berikutnya</span></div>
+            <div class="shortcut"><kbd>Space</kbd><span>Jeda / lanjutkan animasi</span></div>
+            <div class="shortcut"><kbd>R</kbd><span>Ulang materi dari awal</span></div>
+            <div class="shortcut"><kbd>F</kbd><span>Masuk / keluar layar penuh</span></div>
+            <div class="shortcut"><kbd>M</kbd><span>Nyalakan / matikan suara</span></div>
+            <div class="shortcut"><kbd>?</kbd><span>Buka / tutup petunjuk</span></div>
+          </div>
+          <button class="primary-btn" id="closeHelp" type="button">Tutup petunjuk</button>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    (function () {
+      "use strict";
+
+      var BASE_W = 1600;
+      var BASE_H = 900;
+      var viewport = document.getElementById("viewport");
+      var stage = document.getElementById("stage");
+      var scenes = Array.prototype.slice.call(document.querySelectorAll(".scene"));
+      var current = 0;
+      var transitionLock = false;
+      var paused = false;
+      var soundOn = true;
+      var reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      var activeMotionAnimations = new Set();
+
+      var prevBtn = document.getElementById("prevBtn");
+      var nextBtn = document.getElementById("nextBtn");
+      var playBtn = document.getElementById("playBtn");
+      var resetBtn = document.getElementById("resetBtn");
+      var fullscreenBtn = document.getElementById("fullscreenBtn");
+      var soundBtn = document.getElementById("soundBtn");
+      var helpBtn = document.getElementById("helpBtn");
+      var helpOverlay = document.getElementById("helpOverlay");
+      var closeHelp = document.getElementById("closeHelp");
+      var slideCount = document.getElementById("slideCount");
+      var progressFill = document.getElementById("progressFill");
+      var chromeTitle = document.getElementById("chromeTitle");
+
+      function fitStage() {
+        var scale = Math.min(window.innerWidth / BASE_W, window.innerHeight / BASE_H);
+        viewport.style.transform = "translate(-50%, -50%) scale(" + scale + ")";
+      }
+      window.addEventListener("resize", fitStage);
+      fitStage();
+
+      function motionEnabled() { return !reducedMotion; }
+
+      function replayClass(element, className, duration) {
+        if (!element || !motionEnabled()) return;
+        element.classList.remove(className);
+        void element.offsetWidth;
+        element.classList.add(className);
+        window.setTimeout(function () { element.classList.remove(className); }, duration || 700);
+      }
+
+      function animateLayoutChange(elements, mutation, duration) {
+        var stageRect = stage.getBoundingClientRect();
+        var scaleX = BASE_W / stageRect.width;
+        var scaleY = BASE_H / stageRect.height;
+        var first = new Map();
+        elements.forEach(function (element) { first.set(element, element.getBoundingClientRect()); });
+        mutation();
+        if (!motionEnabled()) return;
+        elements.forEach(function (element) {
+          var before = first.get(element);
+          var after = element.getBoundingClientRect();
+          if (!before || !before.width || !after.width) return;
+          var dx = (before.left + before.width / 2 - after.left - after.width / 2) * scaleX;
+          var dy = (before.top + before.height / 2 - after.top - after.height / 2) * scaleY;
+          var sx = before.width / after.width;
+          var sy = before.height / after.height;
+          if (Math.abs(dx) < 1 && Math.abs(dy) < 1 && Math.abs(sx - 1) < .01 && Math.abs(sy - 1) < .01) return;
+          element.classList.add("motion-active");
+          var animation = element.animate([
+            { transform: "translate(" + dx + "px," + dy + "px) scale(" + sx + "," + sy + ")", boxShadow: "0 25px 54px rgba(37,99,235,.24)" },
+            { transform: "translate(0,0) scale(1.035)", offset: .80, boxShadow: "0 18px 38px rgba(37,99,235,.17)" },
+            { transform: "none", boxShadow: "0 7px 18px rgba(23,59,104,.08)" }
+          ], { duration: duration || 720, easing: "cubic-bezier(.22,1,.36,1)" });
+          activeMotionAnimations.add(animation);
+          animation.finished.catch(function () {}).then(function () {
+            activeMotionAnimations.delete(animation);
+            element.classList.remove("motion-active");
+          });
+        });
+      }
+
+      var audioCtx = null;
+      function ensureAudio() {
+        if (!soundOn) return null;
+        var AC = window.AudioContext || window.webkitAudioContext;
+        if (!AC) return null;
+        if (!audioCtx) audioCtx = new AC();
+        if (audioCtx.state === "suspended") audioCtx.resume();
+        return audioCtx;
+      }
+      function tone(kind) {
+        if (!soundOn) return;
+        var ctx = ensureAudio();
+        if (!ctx) return;
+        var specs = {
+          nav: [360, 510, .06, .052], back: [420, 300, .06, .045], select: [520, 660, .07, .055],
+          reveal: [460, 760, .11, .065], reset: [330, 245, .12, .048], success: [440, 880, .18, .072], warn: [430, 350, .12, .05]
+        }[kind || "nav"];
+        var now = ctx.currentTime;
+        var osc = ctx.createOscillator();
+        var gain = ctx.createGain();
+        osc.type = kind === "success" ? "sine" : "triangle";
+        osc.frequency.setValueAtTime(specs[0], now);
+        osc.frequency.exponentialRampToValueAtTime(specs[1], now + specs[2]);
+        gain.gain.setValueAtTime(.0001, now);
+        gain.gain.exponentialRampToValueAtTime(specs[3], now + .012);
+        gain.gain.exponentialRampToValueAtTime(.0001, now + specs[2] + .07);
+        osc.connect(gain).connect(ctx.destination);
+        osc.start(now);
+        osc.stop(now + specs[2] + .09);
+      }
+
+      function updateChrome() {
+        var n = current + 1;
+        slideCount.textContent = String(n).padStart(2, "0") + " / " + String(scenes.length).padStart(2, "0");
+        progressFill.style.width = ((n / scenes.length) * 100) + "%";
+        chromeTitle.textContent = "Pengantar Islam dan Sains · " + scenes[current].dataset.title;
+        prevBtn.disabled = current === 0;
+        nextBtn.disabled = current === scenes.length - 1;
+        stage.classList.toggle("cover-mode", current === 0);
+      }
+
+      function showScene(index, direction, withSound) {
+        if (transitionLock || index < 0 || index >= scenes.length || index === current) return;
+        transitionLock = true;
+        var oldScene = scenes[current];
+        var newScene = scenes[index];
+        oldScene.classList.remove("active", "from-left");
+        oldScene.classList.add(direction > 0 ? "leaving-next" : "leaving-prev");
+        oldScene.setAttribute("aria-hidden", "true");
+        newScene.classList.remove("leaving-next", "leaving-prev", "from-left");
+        if (direction < 0) newScene.classList.add("from-left");
+        newScene.classList.add("active");
+        newScene.setAttribute("aria-hidden", "false");
+        current = index;
+        updateChrome();
+        if (withSound !== false) tone(direction > 0 ? "nav" : "back");
+        window.setTimeout(function () {
+          oldScene.classList.remove("leaving-next", "leaving-prev");
+          transitionLock = false;
+        }, 360);
+      }
+      function nextScene() { showScene(current + 1, 1, true); }
+      function prevScene() { showScene(current - 1, -1, true); }
+      prevBtn.addEventListener("click", prevScene);
+      nextBtn.addEventListener("click", nextScene);
+      document.getElementById("startBtn").addEventListener("click", nextScene);
+
+      function togglePause() {
+        paused = !paused;
+        stage.classList.toggle("paused", paused);
+        activeMotionAnimations.forEach(function (animation) {
+          try { if (paused) animation.pause(); else animation.play(); } catch (_) {}
+        });
+        playBtn.querySelector(".pause-icon").style.display = paused ? "none" : "";
+        playBtn.querySelector(".play-icon").style.display = paused ? "" : "none";
+        playBtn.setAttribute("aria-label", paused ? "Lanjutkan animasi" : "Jeda animasi");
+        tone("select");
+      }
+      playBtn.addEventListener("click", togglePause);
+
+      async function toggleFullscreen() {
+        try {
+          if (!document.fullscreenElement) await document.documentElement.requestFullscreen();
+          else await document.exitFullscreen();
+          tone("select");
+        } catch (_) {}
+      }
+      fullscreenBtn.addEventListener("click", toggleFullscreen);
+      document.addEventListener("fullscreenchange", fitStage);
+
+      function toggleSound() {
+        soundOn = !soundOn;
+        soundBtn.querySelector(".sound-on-icon").style.display = soundOn ? "" : "none";
+        soundBtn.querySelector(".sound-off-icon").style.display = soundOn ? "none" : "";
+        soundBtn.setAttribute("aria-label", soundOn ? "Matikan suara" : "Nyalakan suara");
+        if (soundOn) tone("select");
+      }
+      soundBtn.addEventListener("click", toggleSound);
+
+      function setHelp(open) {
+        helpOverlay.classList.toggle("open", open);
+        if (open) closeHelp.focus();
+      }
+      helpBtn.addEventListener("click", function () { setHelp(true); });
+      closeHelp.addEventListener("click", function () { setHelp(false); });
+      helpOverlay.addEventListener("click", function (event) { if (event.target === helpOverlay) setHelp(false); });
+
+      window.addEventListener("keydown", function (event) {
+        var tag = event.target.tagName;
+        var isTyping = /INPUT|TEXTAREA|SELECT/.test(tag) || event.target.isContentEditable;
+        if (isTyping) return;
+        if (helpOverlay.classList.contains("open")) {
+          if (event.key === "Escape" || event.key === "?") { event.preventDefault(); setHelp(false); }
+          return;
+        }
+        if (event.key === "ArrowRight" || event.key === "PageDown") { event.preventDefault(); nextScene(); }
+        else if (event.key === "ArrowLeft" || event.key === "PageUp") { event.preventDefault(); prevScene(); }
+        else if (event.key === " " && tag !== "BUTTON") { event.preventDefault(); togglePause(); }
+        else if (event.key.toLowerCase() === "f") { event.preventDefault(); toggleFullscreen(); }
+        else if (event.key.toLowerCase() === "r") { event.preventDefault(); restartDeck(); }
+        else if (event.key.toLowerCase() === "m") { event.preventDefault(); toggleSound(); }
+        else if (event.key === "Home") { event.preventDefault(); showScene(0, -1, true); }
+        else if (event.key === "End") { event.preventDefault(); showScene(scenes.length - 1, 1, true); }
+        else if (event.key === "?") { event.preventDefault(); setHelp(true); }
+      });
+
+      /* Claim verdict sliders */
+      var verdictTracks = Array.prototype.slice.call(document.querySelectorAll(".verdict-track"));
+      function updateCaseStatus() {
+        var counts = [0, 0, 0];
+        verdictTracks.forEach(function (track) { counts[Number(track.dataset.state)] += 1; });
+        document.getElementById("caseStatus").textContent = "Pilihan saat ini: " + counts[0] + " setuju · " + counts[1] + " ragu · " + counts[2] + " tidak setuju. Simpan alasannya untuk diskusi.";
+      }
+      verdictTracks.forEach(function (track) {
+        Array.prototype.forEach.call(track.querySelectorAll("button"), function (button) {
+          button.addEventListener("click", function () {
+            var value = Number(button.dataset.value);
+            track.dataset.state = String(value);
+            track.style.setProperty("--slide-x", (value * 100) + "%");
+            Array.prototype.forEach.call(track.querySelectorAll("button"), function (b) { b.classList.toggle("active", b === button); });
+            updateCaseStatus();
+            tone("select");
+          });
+        });
+      });
+
+      /* Classification with FLIP movement */
+      var sortBank = document.getElementById("sortBank");
+      var sortCards = Array.prototype.slice.call(document.querySelectorAll(".sort-card"));
+      var zones = Array.prototype.slice.call(document.querySelectorAll(".drop-zone"));
+      var selectedSortCard = null;
+      var draggedCard = null;
+      var classifierStatus = document.getElementById("classifierStatus");
+
+      function clearZoneMarks() { zones.forEach(function (zone) { zone.classList.remove("correct", "wrong"); }); }
+      function selectSortCard(card) {
+        sortCards.forEach(function (item) { item.classList.toggle("selected", item === card); });
+        selectedSortCard = card;
+        tone("select");
+      }
+      sortCards.forEach(function (card) {
+        card.addEventListener("click", function (event) { event.stopPropagation(); selectSortCard(card); });
+        card.addEventListener("keydown", function (event) { if (event.key === "Enter" || event.key === " ") { event.preventDefault(); event.stopPropagation(); selectSortCard(card); } });
+        card.addEventListener("dragstart", function (event) {
+          draggedCard = card;
+          card.classList.add("dragging");
+          event.dataTransfer.effectAllowed = "move";
+          event.dataTransfer.setData("text/plain", card.dataset.card);
+        });
+        card.addEventListener("dragend", function () { card.classList.remove("dragging"); draggedCard = null; });
+      });
+      function updateClassifier() {
+        zones.forEach(function (zone) { zone.querySelector(".zone-count").textContent = String(zone.querySelectorAll(".sort-card").length); });
+        var placed = sortCards.filter(function (card) { return card.parentElement !== sortBank; }).length;
+        classifierStatus.innerHTML = "<strong>" + placed + " dari " + sortCards.length + "</strong> kartu telah ditempatkan" + (placed === sortCards.length ? " — siap diperiksa." : ".");
+        return placed;
+      }
+      function placeCard(card, zone) {
+        if (!card || !zone) return;
+        clearZoneMarks();
+        animateLayoutChange(sortCards, function () {
+          zone.querySelector(".drop-slot").appendChild(card);
+          card.classList.remove("selected", "dragging");
+          selectedSortCard = null;
+          updateClassifier();
+        }, 760);
+        replayClass(zone, "receiving", 720);
+        tone("reveal");
+      }
+      zones.forEach(function (zone) {
+        zone.addEventListener("click", function () { placeCard(selectedSortCard, zone); });
+        zone.addEventListener("keydown", function (event) { if ((event.key === "Enter" || event.key === " ") && selectedSortCard) { event.preventDefault(); event.stopPropagation(); placeCard(selectedSortCard, zone); } });
+        zone.addEventListener("dragover", function (event) { event.preventDefault(); zone.classList.add("over"); });
+        zone.addEventListener("dragleave", function () { zone.classList.remove("over"); });
+        zone.addEventListener("drop", function (event) { event.preventDefault(); zone.classList.remove("over"); placeCard(draggedCard, zone); });
+      });
+      sortBank.addEventListener("click", function () {
+        if (selectedSortCard && selectedSortCard.parentElement !== sortBank) {
+          animateLayoutChange(sortCards, function () { sortBank.appendChild(selectedSortCard); selectedSortCard.classList.remove("selected"); selectedSortCard = null; updateClassifier(); }, 760);
+          replayClass(sortBank, "receiving", 700);
+          tone("back");
+        }
+      });
+      sortBank.addEventListener("dragover", function (event) { event.preventDefault(); });
+      sortBank.addEventListener("drop", function (event) {
+        event.preventDefault();
+        if (draggedCard) animateLayoutChange(sortCards, function () { sortBank.appendChild(draggedCard); updateClassifier(); }, 760);
+      });
+      document.getElementById("checkClassifier").addEventListener("click", function () {
+        var placed = updateClassifier();
+        if (placed < sortCards.length) { classifierStatus.innerHTML = "<strong>Belum lengkap.</strong> Tempatkan seluruh kartu terlebih dahulu."; tone("warn"); return; }
+        var correct = 0;
+        zones.forEach(function (zone) {
+          var cards = Array.prototype.slice.call(zone.querySelectorAll(".sort-card"));
+          var zoneCorrect = cards.length === 1 && cards[0].dataset.answer === zone.dataset.zone;
+          zone.classList.toggle("correct", zoneCorrect);
+          zone.classList.toggle("wrong", !zoneCorrect);
+          if (zoneCorrect) correct += 1;
+        });
+        classifierStatus.innerHTML = correct === zones.length ? "<strong>Tepat.</strong> Empat lapisan sudah terpisah." : "<strong>" + correct + " dari 4 tepat.</strong> Periksa lagi: teks, tafsir, model, atau simpulan?";
+        tone(correct === zones.length ? "success" : "warn");
+      });
+      function resetClassification(withSound) {
+        animateLayoutChange(sortCards, function () {
+          sortCards.forEach(function (card) { sortBank.appendChild(card); card.classList.remove("selected", "dragging"); });
+          selectedSortCard = null;
+          clearZoneMarks();
+          updateClassifier();
+        }, 760);
+        if (withSound) tone("reset");
+      }
+      document.getElementById("resetClassifier").addEventListener("click", function () { resetClassification(true); });
+
+      /* Three-layer separation */
+      var conceptGrid = document.getElementById("conceptGrid");
+      var conceptOpen = false;
+      document.getElementById("separateConcepts").addEventListener("click", function () {
+        conceptOpen = !conceptOpen;
+        conceptGrid.classList.toggle("open", conceptOpen);
+        this.textContent = conceptOpen ? "Satukan kembali" : "Pisahkan ketiga lapisan";
+        document.getElementById("conceptHint").textContent = conceptOpen ? "Berbeda status, tetapi dapat saling berkomunikasi." : "Lapisan kembali bertumpuk—sumber salah paham.";
+        tone(conceptOpen ? "success" : "reset");
+      });
+
+      /* Relation circles */
+      var relationStage = document.getElementById("relationStage");
+      var relationLayout = document.getElementById("relationLayout");
+      var relationConnected = false;
+      document.getElementById("connectDialogue").addEventListener("click", function () {
+        relationConnected = !relationConnected;
+        relationStage.classList.toggle("connected", relationConnected);
+        relationLayout.classList.toggle("connected", relationConnected);
+        this.textContent = relationConnected ? "Pisahkan kembali" : "Temukan ruang dialog";
+        document.getElementById("relationHint").textContent = relationConnected ? "Perjumpaan tidak menghapus perbedaan metode." : "Dua lingkaran kembali dipisahkan.";
+        tone(relationConnected ? "success" : "reset");
+      });
+
+      /* Spectrum */
+      var spectrumBox = document.getElementById("spectrumBox");
+      var spectrumFeedbacks = [
+        "Di titik ini, metode empiris dipaksa menjawab juga makna, moral, dan metafisika—wilayah yang tidak seluruhnya dapat diukur.",
+        "Sains mendapat otoritas terlalu luas; pertanyaan tentang batas metode masih perlu diajukan.",
+        "Dialog kritis: klaim empiris diuji secara ilmiah, sedangkan makna dan nilai dibaca dengan metode keagamaan yang bertanggung jawab.",
+        "Teks mulai dipaksa menjadi katalog teori. Risiko mengikat ayat pada teori yang dapat berubah semakin besar.",
+        "Di titik ini, kitab suci diperlakukan sebagai ensiklopedia teknis dan perbedaan tujuan antara wahyu dan sains menghilang."
+      ];
+      Array.prototype.forEach.call(spectrumBox.querySelectorAll("[data-point]"), function (button) {
+        button.addEventListener("click", function () {
+          var point = Number(button.dataset.point);
+          spectrumBox.style.setProperty("--point-x", (point * 25) + "%");
+          Array.prototype.forEach.call(spectrumBox.querySelectorAll("[data-point]"), function (b) { b.classList.toggle("active", b === button); });
+          document.getElementById("spectrumFeedback").textContent = spectrumFeedbacks[point];
+          tone(point === 2 ? "success" : "select");
+        });
+      });
+
+      /* Focused comparison */
+      var comparisonGrid = document.getElementById("comparisonGrid");
+      var comparisonRunning = false;
+      document.getElementById("runComparison").addEventListener("click", function () {
+        comparisonRunning = !comparisonRunning;
+        comparisonGrid.classList.toggle("running", comparisonRunning);
+        this.textContent = comparisonRunning ? "Ulangi" : "Mulai";
+        Array.prototype.forEach.call(document.querySelectorAll("[data-comparison]"), function (b) { b.disabled = !comparisonRunning; });
+        if (!comparisonRunning) {
+          Array.prototype.forEach.call(document.querySelectorAll("[data-comparison]"), function (b) { b.classList.remove("active"); });
+          document.getElementById("comparisonFeedback").textContent = "Jalankan perbandingan, lalu pilih simpulan sementara.";
+        }
+        tone(comparisonRunning ? "reveal" : "reset");
+      });
+      var comparisonFeedbacks = {
+        identical: "Terlalu jauh: kemiripan belum membuktikan bahwa ayat hanya memiliki satu makna ilmiah yang identik dengan model modern.",
+        compatible: "Posisi yang mungkin dipertimbangkan: keduanya dapat dibaca sebagai kompatibel, tetapi tidak otomatis identik.",
+        conflict: "Belum cukup dasar untuk menyatakan konflik; makna teks dan status model ilmiah masih harus diperiksa.",
+        insufficient: "Sikap metodologis yang aman: data ini belum cukup untuk menetapkan identitas atau pertentangan secara pasti."
+      };
+      Array.prototype.forEach.call(document.querySelectorAll("[data-comparison]"), function (button) {
+        button.addEventListener("click", function () {
+          Array.prototype.forEach.call(document.querySelectorAll("[data-comparison]"), function (b) { b.classList.toggle("active", b === button); });
+          document.getElementById("comparisonFeedback").textContent = comparisonFeedbacks[button.dataset.comparison];
+          tone(button.dataset.comparison === "compatible" || button.dataset.comparison === "insufficient" ? "success" : "select");
+        });
+      });
+
+      /* Three-lens analysis */
+      var lensData = [
+        {
+          kicker: "Lensa 1 dari 3",
+          title: "Apa yang benar-benar dinyatakan teks?",
+          questions: [
+            "Bagaimana makna kata dan susunan kalimat dalam bahasa aslinya?",
+            "Apa konteks, tujuan, dan tema ayat secara keseluruhan?",
+            "Bagaimana tradisi tafsir memahami ayat; jika hadis digunakan, bagaimana validitas dan konteksnya?"
+          ]
+        },
+        {
+          kicker: "Lensa 2 dari 3",
+          title: "Seberapa kuat status klaim ilmiahnya?",
+          questions: [
+            "Apakah pernyataan itu berupa hasil observasi, model, teori, atau baru spekulasi?",
+            "Seberapa luas bukti dan konsensus komunitas ilmiahnya?",
+            "Bagian mana yang mapan, masih tidak pasti, atau terbuka untuk revisi?"
+          ]
+        },
+        {
+          kicker: "Lensa 3 dari 3",
+          title: "Apakah simpulan melebihi buktinya?",
+          questions: [
+            "Apakah kemiripan bahasa sedang dianggap sebagai identitas makna?",
+            "Adakah alternatif penjelasan atau penafsiran yang belum diperiksa?",
+            "Apakah kata ‘mungkin selaras’ telah meloncat menjadi ‘pasti membuktikan’?"
+          ]
+        }
+      ];
+      var lensButtons = Array.prototype.slice.call(document.querySelectorAll(".lens-button"));
+      var lensVisited = new Set([0]);
+      var lensDetail = document.getElementById("lensDetail");
+      function renderLens(index, withSound) {
+        var data = lensData[index];
+        document.getElementById("detailKicker").textContent = data.kicker;
+        document.getElementById("detailTitle").textContent = data.title;
+        var list = document.getElementById("questionList");
+        list.innerHTML = "";
+        data.questions.forEach(function (question, i) {
+          var row = document.createElement("div");
+          row.className = "question-row";
+          var num = document.createElement("span");
+          num.className = "qnum";
+          num.textContent = "0" + (i + 1);
+          var text = document.createElement("span");
+          text.textContent = question;
+          row.appendChild(num);
+          row.appendChild(text);
+          list.appendChild(row);
+        });
+        lensDetail.dataset.lens = String(index);
+        document.getElementById("lensSelector").style.setProperty("--lens-y", (index * 118) + "px");
+        lensVisited.add(index);
+        lensButtons.forEach(function (button, i) {
+          button.classList.toggle("active", i === index);
+          button.classList.toggle("visited", lensVisited.has(i));
+        });
+        var count = lensVisited.size;
+        document.getElementById("lensProgressFill").style.width = (count / 3 * 100) + "%";
+        document.getElementById("lensProgressText").textContent = count + " dari 3 lensa";
+        lensDetail.classList.toggle("complete", count === 3);
+        if (withSound !== false) tone(count === 3 ? "success" : "reveal");
+      }
+      lensButtons.forEach(function (button) { button.addEventListener("click", function () { renderLens(Number(button.dataset.lens), true); }); });
+      renderLens(0, false);
+
+      /* Bridge */
+      var bridgeBuilt = false;
+      document.getElementById("buildBridge").addEventListener("click", function () {
+        bridgeBuilt = !bridgeBuilt;
+        document.getElementById("bridgeWrap").classList.toggle("built", bridgeBuilt);
+        document.getElementById("bridgeScene").classList.toggle("ready", bridgeBuilt);
+        this.textContent = bridgeBuilt ? "Bongkar dan tinjau ulang" : "Bangun jembatan dialog";
+        tone(bridgeBuilt ? "success" : "reset");
+      });
+
+      /* Exit ticket */
+      Array.prototype.forEach.call(document.querySelectorAll("[data-ticket]"), function (button) {
+        button.addEventListener("click", function () {
+          Array.prototype.forEach.call(document.querySelectorAll("[data-ticket]"), function (b) { b.classList.remove("active", "correct"); });
+          button.classList.add("active");
+          var isCorrect = button.dataset.ticket === "c";
+          if (isCorrect) button.classList.add("correct");
+          document.getElementById("ticketFeedback").textContent = isCorrect
+            ? "Tepat. Sains membantu memahami teknologi; nilai Islam menilai tujuan, tanggung jawab, keadilan, dan dampaknya."
+            : "Tinjau kembali: kitab suci tidak harus menyebut setiap teknologi untuk memberi orientasi nilai terhadap penggunaannya.";
+          tone(isCorrect ? "success" : "warn");
+        });
+      });
+
+      function resetInteractiveStates() {
+        verdictTracks.forEach(function (track) {
+          track.dataset.state = "1";
+          track.style.setProperty("--slide-x", "100%");
+          Array.prototype.forEach.call(track.querySelectorAll("button"), function (button) { button.classList.toggle("active", button.dataset.value === "1"); });
+        });
+        document.getElementById("caseStatus").textContent = "Empat respons awal masih berada pada posisi “ragu”.";
+        resetClassification(false);
+        conceptOpen = false;
+        conceptGrid.classList.remove("open");
+        document.getElementById("separateConcepts").textContent = "Pisahkan ketiga lapisan";
+        document.getElementById("conceptHint").textContent = "Mulai dari tumpukan yang sering tercampur.";
+        relationConnected = false;
+        relationStage.classList.remove("connected");
+        relationLayout.classList.remove("connected");
+        document.getElementById("connectDialogue").textContent = "Temukan ruang dialog";
+        document.getElementById("relationHint").textContent = "Dua lingkaran masih dipisahkan.";
+        spectrumBox.style.setProperty("--point-x", "50%");
+        Array.prototype.forEach.call(spectrumBox.querySelectorAll("[data-point]"), function (b) { b.classList.toggle("active", b.dataset.point === "2"); });
+        document.getElementById("spectrumFeedback").textContent = spectrumFeedbacks[2];
+        comparisonRunning = false;
+        comparisonGrid.classList.remove("running");
+        document.getElementById("runComparison").textContent = "Mulai";
+        Array.prototype.forEach.call(document.querySelectorAll("[data-comparison]"), function (b) { b.classList.remove("active"); b.disabled = true; });
+        document.getElementById("comparisonFeedback").textContent = "Jalankan perbandingan, lalu pilih simpulan sementara.";
+        lensVisited = new Set([0]);
+        renderLens(0, false);
+        bridgeBuilt = false;
+        document.getElementById("bridgeWrap").classList.remove("built");
+        document.getElementById("bridgeScene").classList.remove("ready");
+        document.getElementById("buildBridge").textContent = "Bangun jembatan dialog";
+        Array.prototype.forEach.call(document.querySelectorAll("[data-ticket]"), function (b) { b.classList.remove("active", "correct"); });
+        document.getElementById("ticketFeedback").textContent = "Pilih satu respons untuk membuka umpan balik.";
+      }
+
+      function restartDeck() {
+        resetInteractiveStates();
+        if (paused) togglePause();
+        if (current !== 0) showScene(0, -1, false);
+        tone("reset");
+      }
+      resetBtn.addEventListener("click", restartDeck);
+      document.getElementById("replayBtn").addEventListener("click", restartDeck);
+
+      /* Ambient particles */
+      var canvas = document.getElementById("ambient");
+      var ctx = canvas.getContext("2d");
+      var particles = [];
+      var colors = ["37,99,235", "14,165,198", "249,115,22", "22,163,106"];
+      for (var p = 0; p < 34; p += 1) {
+        particles.push({
+          x: Math.random() * BASE_W,
+          y: Math.random() * BASE_H,
+          r: 1.2 + Math.random() * 2.4,
+          vx: -.08 + Math.random() * .16,
+          vy: -.06 + Math.random() * .12,
+          a: .08 + Math.random() * .13,
+          c: colors[p % colors.length]
+        });
+      }
+      function drawAmbient() {
+        ctx.clearRect(0, 0, BASE_W, BASE_H);
+        particles.forEach(function (point, i) {
+          if (!paused && !reducedMotion) {
+            point.x += point.vx;
+            point.y += point.vy;
+            if (point.x < -10) point.x = BASE_W + 10;
+            if (point.x > BASE_W + 10) point.x = -10;
+            if (point.y < -10) point.y = BASE_H + 10;
+            if (point.y > BASE_H + 10) point.y = -10;
+          }
+          ctx.beginPath();
+          ctx.fillStyle = "rgba(" + point.c + "," + point.a + ")";
+          ctx.arc(point.x, point.y, point.r, 0, Math.PI * 2);
+          ctx.fill();
+          for (var j = i + 1; j < particles.length; j += 1) {
+            var other = particles[j];
+            var dx = point.x - other.x;
+            var dy = point.y - other.y;
+            var dist = Math.sqrt(dx * dx + dy * dy);
+            if (dist < 125) {
+              ctx.beginPath();
+              ctx.strokeStyle = "rgba(37,99,235," + ((1 - dist / 125) * .045) + ")";
+              ctx.lineWidth = 1;
+              ctx.moveTo(point.x, point.y);
+              ctx.lineTo(other.x, other.y);
+              ctx.stroke();
+            }
+          }
+        });
+        window.requestAnimationFrame(drawAmbient);
+      }
+      drawAmbient();
+      updateChrome();
+    })();
+  </script>
+</body>
+</html>
