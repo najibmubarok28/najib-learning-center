@@ -29,6 +29,10 @@
     if (!meta || !ID.test(meta.id) || meta.postSlug !== 'rb-access-' + meta.id) fail('config');
     return wpOrigin(meta.wordpressSite);
   }
+  function wpApiBase(site) {
+    const origin = wpOrigin(site);
+    return 'https://public-api.wordpress.com/wp/v2/sites/' + new URL(origin).hostname;
+  }
   async function requestJson(url, fetcher) {
     try {
       url.searchParams.set('_rbts', String(Date.now()));
@@ -43,8 +47,8 @@
     }
   }
   async function accessPage(meta, fetcher = fetch) {
-    const origin = validate(meta);
-    const url = new URL(origin + '/wp-json/wp/v2/pages');
+    validate(meta);
+    const url = new URL(wpApiBase(meta.wordpressSite) + '/pages');
     url.searchParams.set('slug', meta.postSlug);
     url.searchParams.set('_fields', 'id,status,content.protected');
     const data = await requestJson(url, fetcher);
@@ -58,7 +62,7 @@
   async function releaseKey(meta, password, fetcher = fetch) {
     if (typeof password !== 'string' || !password) fail('password');
     const page = await accessPage(meta, fetcher);
-    const url = new URL(wpOrigin(meta.wordpressSite) + '/wp-json/wp/v2/pages/' + page.id);
+    const url = new URL(wpApiBase(meta.wordpressSite) + '/pages/' + page.id);
     url.searchParams.set('password', password);
     url.searchParams.set('_fields', 'id,status,content');
     const data = await requestJson(url, fetcher);
@@ -96,7 +100,7 @@
   async function unlock(envelope, password, fetcher = fetch) {
     return decrypt(envelope, await releaseKey(envelope, password, fetcher));
   }
-  const api = { encrypt, decrypt, unlock, accessPage, releaseKey, wpOrigin, validate, errors };
+  const api = { encrypt, decrypt, unlock, accessPage, releaseKey, wpOrigin, wpApiBase, validate, errors };
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
   else root.RBBridge = api;
 })(typeof window === 'undefined' ? globalThis : window);
