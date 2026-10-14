@@ -34,9 +34,11 @@
     return 'https://public-api.wordpress.com/wp/v2/sites/' + new URL(origin).hostname;
   }
   async function requestJson(url, fetcher) {
+    const controller = typeof AbortController === 'function' ? new AbortController() : null;
+    const timeout = controller ? setTimeout(() => controller.abort(), 12000) : null;
     try {
       url.searchParams.set('_rbts', String(Date.now()));
-      const response = await fetcher(url.toString(), { credentials: 'omit', cache: 'no-store', referrerPolicy: 'no-referrer', signal: AbortSignal.timeout(12000) });
+      const response = await fetcher(url.toString(), { credentials: 'omit', cache: 'no-store', referrerPolicy: 'no-referrer', ...(controller ? {signal: controller.signal} : {}) });
       if (response.status === 404) fail('closed');
       if (response.status === 401 || response.status === 403) fail('password');
       if (!response.ok) fail('network');
@@ -44,6 +46,8 @@
     } catch (e) {
       if (e.code) throw e;
       return fail('network');
+    } finally {
+      if (timeout !== null) clearTimeout(timeout);
     }
   }
   async function accessPage(meta, fetcher = fetch) {
@@ -62,10 +66,15 @@
   async function releaseKey(meta, password, fetcher = fetch) {
     if (typeof password !== 'string' || !password) fail('password');
     const page = await accessPage(meta, fetcher);
-    const url = new URL(wpApiBase(meta.wordpressSite) + '/pages/' + page.id);
+    const url = new URL(wpApiBase(meta.wordpressSite) + '/pages');
+    url.searchParams.set('slug', meta.postSlug);
     url.searchParams.set('password', password);
     url.searchParams.set('_fields', 'id,status,content');
-    const data = await requestJson(url, fetcher);
+    const items = await requestJson(url, fetcher);
+    if (!Array.isArray(items)) fail('config');
+    if (!items.length) fail('closed');
+    if (items.length !== 1 || items[0].id !== page.id) fail('config');
+    const data = items[0];
     if (data.status !== 'publish') fail('closed');
     if (data.content?.protected !== true) fail('config');
     const match = String(data.content?.rendered || '').match(/RBKEY1\|([a-f0-9-]{36})\|([A-Za-z0-9+/=]{44})\|/i);
