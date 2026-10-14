@@ -93,7 +93,34 @@
       "wordpressSite": "https://najiblearningcenter.wordpress.com",
       "postSlug": "rb-access-24c3e0e7-1949-469c-92a9-476eaff6abb6",
       "encryptedFile": "data/24c3e0e7-1949-469c-92a9-476eaff6abb6.json",
-      "accessConfigured": false
+      "accessConfigured": true
+    },
+    {
+      "id": "8ae55f14-caea-45ee-b0c5-187489d05077",
+      "title": "Usul Fikih · Tes Formatif 2",
+      "course": "Usul Fikih",
+      "wordpressSite": "https://najiblearningcenter.wordpress.com",
+      "postSlug": "rb-access-8ae55f14-caea-45ee-b0c5-187489d05077",
+      "encryptedFile": "data/8ae55f14-caea-45ee-b0c5-187489d05077.json",
+      "accessConfigured": true
+    },
+    {
+      "id": "6322ca39-c285-455a-be75-23bf00f6b0a2",
+      "title": "Usul Fikih · Tes Formatif 3",
+      "course": "Usul Fikih",
+      "wordpressSite": "https://najiblearningcenter.wordpress.com",
+      "postSlug": "rb-access-6322ca39-c285-455a-be75-23bf00f6b0a2",
+      "encryptedFile": "data/6322ca39-c285-455a-be75-23bf00f6b0a2.json",
+      "accessConfigured": true
+    },
+    {
+      "id": "45c71669-fafb-4805-ac98-3bebb44b7f72",
+      "title": "Usul Fikih · Tes Formatif 4",
+      "course": "Usul Fikih",
+      "wordpressSite": "https://najiblearningcenter.wordpress.com",
+      "postSlug": "rb-access-45c71669-fafb-4805-ac98-3bebb44b7f72",
+      "encryptedFile": "data/45c71669-fafb-4805-ac98-3bebb44b7f72.json",
+      "accessConfigured": true
     },
     {
       "id": "28556bae-5bd8-4453-a101-da5d3d6fc2fc",
@@ -102,25 +129,34 @@
       "wordpressSite": "https://najiblearningcenter.wordpress.com",
       "postSlug": "rb-access-28556bae-5bd8-4453-a101-da5d3d6fc2fc",
       "encryptedFile": "data/28556bae-5bd8-4453-a101-da5d3d6fc2fc.json",
-      "accessConfigured": false
+      "accessConfigured": true
     },
     {
-      "id": "7776338a-7af5-4570-93d5-4245c4dfd1e5",
-      "title": "Metodologi Penelitian Kuantitatif · Tes Formatif 2",
-      "course": "Metodologi Penelitian Kuantitatif",
+      "id": "21e4f3e8-9485-451d-af00-0bae541eb3cb",
+      "title": "Ekonometrika · Tes Formatif 2",
+      "course": "Ekonometrika",
       "wordpressSite": "https://najiblearningcenter.wordpress.com",
-      "postSlug": "rb-access-7776338a-7af5-4570-93d5-4245c4dfd1e5",
-      "encryptedFile": "data/7776338a-7af5-4570-93d5-4245c4dfd1e5.json",
-      "accessConfigured": false
+      "postSlug": "rb-access-21e4f3e8-9485-451d-af00-0bae541eb3cb",
+      "encryptedFile": "data/21e4f3e8-9485-451d-af00-0bae541eb3cb.json",
+      "accessConfigured": true
     },
     {
-      "id": "7a958c87-c8f4-450b-99d5-14833065cb41",
-      "title": "Islam dan Sains · Evaluasi Materi 1–3",
-      "course": "Islam dan Sains",
+      "id": "61a69c05-1b4e-4133-a1f9-4366982e8ee9",
+      "title": "Ekonometrika · Tes Formatif 3",
+      "course": "Ekonometrika",
       "wordpressSite": "https://najiblearningcenter.wordpress.com",
-      "postSlug": "rb-access-7a958c87-c8f4-450b-99d5-14833065cb41",
-      "encryptedFile": "data/7a958c87-c8f4-450b-99d5-14833065cb41.json",
-      "accessConfigured": false
+      "postSlug": "rb-access-61a69c05-1b4e-4133-a1f9-4366982e8ee9",
+      "encryptedFile": "data/61a69c05-1b4e-4133-a1f9-4366982e8ee9.json",
+      "accessConfigured": true
+    },
+    {
+      "id": "3b706770-7699-4296-9372-378dbb44231d",
+      "title": "Ekonometrika · Tes Formatif 4",
+      "course": "Ekonometrika",
+      "wordpressSite": "https://najiblearningcenter.wordpress.com",
+      "postSlug": "rb-access-3b706770-7699-4296-9372-378dbb44231d",
+      "encryptedFile": "data/3b706770-7699-4296-9372-378dbb44231d.json",
+      "accessConfigured": true
     },
     {
       "id": "a1bda74c-cdc6-4fc5-a3c6-3d92264a9ea9",
@@ -129,25 +165,16 @@
       "wordpressSite": "https://najiblearningcenter.wordpress.com",
       "postSlug": "rb-access-a1bda74c-cdc6-4fc5-a3c6-3d92264a9ea9",
       "encryptedFile": "data/a1bda74c-cdc6-4fc5-a3c6-3d92264a9ea9.json",
-      "accessConfigured": false
+      "accessConfigured": true
     },
     {
-      "id": "a78cdf39-0d29-4822-82ae-d54b9dc02a0a",
-      "title": "Islam dan Sains · Evaluasi Pertemuan 9–12",
-      "course": "Islam dan Sains",
+      "id": "7776338a-7af5-4570-93d5-4245c4dfd1e5",
+      "title": "Metodologi Penelitian Kuantitatif · Tes Formatif 2",
+      "course": "Metodologi Penelitian Kuantitatif",
       "wordpressSite": "https://najiblearningcenter.wordpress.com",
-      "postSlug": "rb-access-a78cdf39-0d29-4822-82ae-d54b9dc02a0a",
-      "encryptedFile": "data/a78cdf39-0d29-4822-82ae-d54b9dc02a0a.json",
-      "accessConfigured": false
-    },
-    {
-      "id": "0f57761c-70e9-4c95-a191-dad25bd3602e",
-      "title": "Islam dan Sains · Evaluasi Pertemuan 5–7",
-      "course": "Islam dan Sains",
-      "wordpressSite": "https://najiblearningcenter.wordpress.com",
-      "postSlug": "rb-access-0f57761c-70e9-4c95-a191-dad25bd3602e",
-      "encryptedFile": "data/0f57761c-70e9-4c95-a191-dad25bd3602e.json",
-      "accessConfigured": false
+      "postSlug": "rb-access-7776338a-7af5-4570-93d5-4245c4dfd1e5",
+      "encryptedFile": "data/7776338a-7af5-4570-93d5-4245c4dfd1e5.json",
+      "accessConfigured": true
     },
     {
       "id": "37951d24-0e43-4283-9ca5-3cb1997631e4",
@@ -156,7 +183,43 @@
       "wordpressSite": "https://najiblearningcenter.wordpress.com",
       "postSlug": "rb-access-37951d24-0e43-4283-9ca5-3cb1997631e4",
       "encryptedFile": "data/37951d24-0e43-4283-9ca5-3cb1997631e4.json",
-      "accessConfigured": false
+      "accessConfigured": true
+    },
+    {
+      "id": "7a958c87-c8f4-450b-99d5-14833065cb41",
+      "title": "Islam dan Sains · Evaluasi Materi 1–3",
+      "course": "Islam dan Sains",
+      "wordpressSite": "https://najiblearningcenter.wordpress.com",
+      "postSlug": "rb-access-7a958c87-c8f4-450b-99d5-14833065cb41",
+      "encryptedFile": "data/7a958c87-c8f4-450b-99d5-14833065cb41.json",
+      "accessConfigured": true
+    },
+    {
+      "id": "010d1a78-3d73-493a-aa55-91fcdf261a0f",
+      "title": "Islam dan Sains · Evaluasi Materi 1–3 · Versi B",
+      "course": "Islam dan Sains",
+      "wordpressSite": "https://najiblearningcenter.wordpress.com",
+      "postSlug": "rb-access-010d1a78-3d73-493a-aa55-91fcdf261a0f",
+      "encryptedFile": "data/010d1a78-3d73-493a-aa55-91fcdf261a0f.json",
+      "accessConfigured": true
+    },
+    {
+      "id": "0f57761c-70e9-4c95-a191-dad25bd3602e",
+      "title": "Islam dan Sains · Evaluasi Pertemuan 5–7",
+      "course": "Islam dan Sains",
+      "wordpressSite": "https://najiblearningcenter.wordpress.com",
+      "postSlug": "rb-access-0f57761c-70e9-4c95-a191-dad25bd3602e",
+      "encryptedFile": "data/0f57761c-70e9-4c95-a191-dad25bd3602e.json",
+      "accessConfigured": true
+    },
+    {
+      "id": "a78cdf39-0d29-4822-82ae-d54b9dc02a0a",
+      "title": "Islam dan Sains · Evaluasi Pertemuan 9–12",
+      "course": "Islam dan Sains",
+      "wordpressSite": "https://najiblearningcenter.wordpress.com",
+      "postSlug": "rb-access-a78cdf39-0d29-4822-82ae-d54b9dc02a0a",
+      "encryptedFile": "data/a78cdf39-0d29-4822-82ae-d54b9dc02a0a.json",
+      "accessConfigured": true
     }
   ]
 }
